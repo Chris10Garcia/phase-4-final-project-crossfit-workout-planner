@@ -173,11 +173,12 @@ class Workout_Plan(db.Model):
 class Crossfit_Class(db.Model):
     __tablename__ = "crossfit_classes"
 
-    # columns
-    """
-    id (not sure if this is needed)
-    day
-    """
+    id = db.Column(db.Integer, primary_key = True)
+    day = db.Column(db.String)
+
+    exercise_move_id = db.Column(db.Integer, db.ForeignKey('exercise_moves.id'))
+    coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'))
+    workout_plan_id = db.Column(db.Integer, db.ForeignKey('workout_plans.id'))
 
     # foreign columns
     """
