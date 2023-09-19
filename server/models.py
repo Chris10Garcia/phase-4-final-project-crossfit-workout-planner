@@ -128,12 +128,13 @@ class Coach(db.Model):
 class Workout_Plan(db.Model):
     __tablename__ = "workout_plans"
 
-    # columns
-    """
-    id
-    difficulty
-    description [can't be less than 20 characters]
-    """
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String)
+    difficulty = db.Column(db.String)
+    description = db.Column(db.String)
+
+    def __repr__(self):
+        return f"<Workout Plan: {self.name}, ID: {self.id}>"
 
     # DB data validation
     """
@@ -168,13 +169,6 @@ class Workout_Plan(db.Model):
                 raise error
             return address
     """
-
-    # repr
-    """
-    def __repr__
-        <Move: Bench Press ID: 10>
-    """
-
 
 class Crossfit_Class(db.Model):
     __tablename__ = "crossfit_classes"
