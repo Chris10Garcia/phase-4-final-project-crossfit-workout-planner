@@ -18,6 +18,9 @@ class Exercise_Move(db.Model):
     description = db.Column(db.String)
     video_link = db.Column(db.String)
 
+    def __repr__(self):
+        return f"<Exercise Move: {self.name}, ID: {self.id}>"
+
     # relationship
     """
     # one exercise move to many classes
@@ -32,8 +35,6 @@ class Exercise_Move(db.Model):
     # DONT FORGET THIS IS A TUPLE, NEEDS THE COMA AT THE END  
     __table_args__ = (db.CheckConstraint()  ,)
     """
-
-
 
     # ORM data validation
     """
@@ -61,14 +62,14 @@ class Exercise_Move(db.Model):
 class Coach(db.Model):
     __tablename__ = 'coaches'
 
-    # columns
-    """
-    id
-    name
-    age
-    picture
-    created_at
-    """
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String)
+    age = db.Column(db.Integer)
+    picture = db.Column(db.String) #URL at first. Should this be a blob / binary data for actual pictures?
+    created_at = db.Column(db.DataTime, server_default=db.func.now())
+
+    def __repr__(self):
+        return f"<Coach: {self.name}, ID: {self.id}>"
 
     # columns for authentication (add later)
     """
@@ -121,12 +122,6 @@ class Coach(db.Model):
             if condition_1_against_address
                 raise error
             return address
-    """
-
-    # repr
-    """
-    def __repr__
-        <Coach: Name, ID: number>
     """
 
 
