@@ -66,7 +66,7 @@ class Coach(db.Model):
     name = db.Column(db.String)
     age = db.Column(db.Integer)
     picture = db.Column(db.String) #URL at first. Should this be a blob / binary data for actual pictures?
-    created_at = db.Column(db.DataTime, server_default=db.func.now())
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     def __repr__(self):
         return f"<Coach: {self.name}, ID: {self.id}>"
@@ -180,12 +180,9 @@ class Crossfit_Class(db.Model):
     coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'))
     workout_plan_id = db.Column(db.Integer, db.ForeignKey('workout_plans.id'))
 
-    # foreign columns
-    """
-    exercise_move_id
-    coach_id
-    workout_plan_id
-    """
+    #need to redo this when the other classes are available
+    def __repr__(self):
+        return f"<Crossfit Class. Scheduled on {self.day}, ID: {self.id}"
 
     # DB data validation
     """
