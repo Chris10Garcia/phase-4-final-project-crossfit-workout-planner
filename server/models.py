@@ -7,25 +7,16 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 from config import db
 
-# Models go here!
 
 class Exercise_Move(db.Model):
     __tablename__ = "exercise_moves"
 
     # columns
-    """
-    id
-    name [required]
-    focus [required]
-    description [can't be less than 20 characters]
-    youtube_link [optional]
-    """
-
-    # DB data validation
-    """
-    # DONT FORGET THIS IS A TUPLE, NEEDS THE COMA AT THE END  
-    __table_args__ = (db.CheckConstraint()  ,)
-    """
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    focus = db.Column(db.String)
+    description = db.Column(db.String)
+    video_link = db.Column(db.String)
 
     # relationship
     """
@@ -35,6 +26,14 @@ class Exercise_Move(db.Model):
     # many exercise move to many workout plans
     workout_plans = association proxy
     """
+
+    # DB data validation
+    """
+    # DONT FORGET THIS IS A TUPLE, NEEDS THE COMA AT THE END  
+    __table_args__ = (db.CheckConstraint()  ,)
+    """
+
+
 
     # ORM data validation
     """
@@ -55,11 +54,8 @@ class Exercise_Move(db.Model):
             return address
     """
 
-    # repr
-    """
-    def __repr__
-        <Move: Bench Press ID: 10>
-    """
+    def __repr__(self):
+        return f"<Exercise Move: {self.name}, ID: {self.id}>"
 
 
 class Coach(db.Model):
