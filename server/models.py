@@ -18,6 +18,8 @@ class Exercise_Move(db.Model):
     description = db.Column(db.String)
     video_link = db.Column(db.String)
 
+    classes = db.relationship("Crossfit_Class", backref="exercise_move")
+
     def __repr__(self):
         return f"<Exercise Move: {self.name}, ID: {self.id}>"
 
@@ -68,6 +70,8 @@ class Coach(db.Model):
     picture = db.Column(db.String) #URL at first. Should this be a blob / binary data for actual pictures?
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
+    classes = db.relationship("Crossfit_Class", backref="coach")
+
     def __repr__(self):
         return f"<Coach: {self.name}, ID: {self.id}>"
 
@@ -81,12 +85,6 @@ class Coach(db.Model):
     """
     # DONT FORGET THIS IS A TUPLE, NEEDS THE COMA AT THE END  
     __table_args__ = (db.CheckConstraint()  ,)
-    """
-
-    # relationship
-    """
-    # one coach to many classes
-    classes = relationship backref = coach
     """
 
     # Authentication
@@ -132,6 +130,8 @@ class Workout_Plan(db.Model):
     name = db.Column(db.String)
     difficulty = db.Column(db.String)
     description = db.Column(db.String)
+
+    classes = db.relationship("Crossfit_Class", backref="workout_plan")
 
     def __repr__(self):
         return f"<Workout Plan: {self.name}, ID: {self.id}>"
