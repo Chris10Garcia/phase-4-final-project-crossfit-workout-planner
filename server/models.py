@@ -18,16 +18,16 @@ class Exercise_Move(db.Model):
     description = db.Column(db.String)
     video_link = db.Column(db.String)
 
-    classes = db.relationship("Crossfit_Class", backref="exercise_move")
-
+    crossfit_classes = db.relationship("Crossfit_Class", backref="exercise_move")
+    workout_plans = association_proxy("crossfit_classes", "workout_plan",
+                                    creator= lambda wp : Crossfit_Class(workout_plan = wp)
+                                    )
+    
     def __repr__(self):
         return f"<Exercise Move: {self.name}, ID: {self.id}>"
 
     # relationship
     """
-    # one exercise move to many classes
-    classes = relationship backref= exercise_move
-
     # many exercise move to many workout plans
     workout_plans = association proxy
     """
@@ -70,7 +70,7 @@ class Coach(db.Model):
     picture = db.Column(db.String) #URL at first. Should this be a blob / binary data for actual pictures?
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
-    classes = db.relationship("Crossfit_Class", backref="coach")
+    crossfit_classes = db.relationship("Crossfit_Class", backref="coach")
 
     def __repr__(self):
         return f"<Coach: {self.name}, ID: {self.id}>"
@@ -131,7 +131,17 @@ class Workout_Plan(db.Model):
     difficulty = db.Column(db.String)
     description = db.Column(db.String)
 
-    classes = db.relationship("Crossfit_Class", backref="workout_plan")
+    crossfit_classes = db.relationship("Crossfit_Class", backref="workout_plan")
+    exercise_moves = association_proxy("crossfit_classes", "exercise_move",
+                                    creator= lambda em : Crossfit_Class(exercise_move = em)
+                                    )
+
+
+    # relationship
+    """
+    # many workout plans to many exercise moves
+    exercise_moves = association proxy
+    """
 
     def __repr__(self):
         return f"<Workout Plan: {self.name}, ID: {self.id}>"
@@ -140,15 +150,6 @@ class Workout_Plan(db.Model):
     """
     # DONT FORGET THIS IS A TUPLE, NEEDS THE COMMA AT THE END  
     __table_args__ = (db.CheckConstraint()  ,)
-    """
-
-    # relationship
-    """
-    # one workout plan to many classes
-    classes = relationship backref = workout_plan
-
-    # many workout plans to many exercise moves
-    exercise_moves = association proxy
     """
 
     # ORM data validation
@@ -174,11 +175,16 @@ class Crossfit_Class(db.Model):
     __tablename__ = "crossfit_classes"
 
     id = db.Column(db.Integer, primary_key = True)
+    
     day = db.Column(db.String)
 
     exercise_move_id = db.Column(db.Integer, db.ForeignKey('exercise_moves.id'))
     coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'))
     workout_plan_id = db.Column(db.Integer, db.ForeignKey('workout_plans.id'))
+
+    # relationship
+    """
+    """
 
     #need to redo this when the other classes are available
     def __repr__(self):
@@ -188,20 +194,6 @@ class Crossfit_Class(db.Model):
     """
     # DONT FORGET THIS IS A TUPLE, NEEDS THE COMMA AT THE END  
     __table_args__ = (db.CheckConstraint()  ,)
-    """
-
-    # relationship
-    """
-    # many crossfit classes to 
-        one workout plan
-    workout_plan = relationship back_populates workout_plans
-
-        one coach
-    coach = relatinoship back_populates coaches
-
-        one exercise
-    exercise_move = relationship back_populates exercise_moves
-
     """
 
     # ORM data validation

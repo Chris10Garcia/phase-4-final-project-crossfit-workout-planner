@@ -99,7 +99,60 @@ if __name__ == '__main__':
         coaches = [coach_rose, coach_dan]
         moves = [bench_press, dead_lift, burpee, clean, snatch, running]
         plans = [leg_burner, beginner]
+        
+  
+        
         db.session.add_all(coaches + moves + plans)
         db.session.commit()
 
-        print("Records added to db")
+        print("Coach, workout plan, and exercise move records added to db")
+
+        # class_1_sunday = Crossfit_Class(
+        #     day = "Sunday"
+        # )
+        
+        # class_2_sunday = Crossfit_Class(
+        #     day = "Sunday"
+        # )
+
+        # class_3_sunday = Crossfit_Class(
+        #     day = "Sunday"
+        # )
+
+        # classes = [class_1_sunday, class_2_sunday, class_3_sunday]
+
+        # classes = [class_1_sunday, class_2_monday, class_3_wednesday, class_4_saturday, class_5_saturday, class_6_wednesday]
+
+        # db.session.add_all(classes)
+        # db.session.commit()
+        # class_1_sunday.exercise_move.append(dead_lift)
+        # class_1_sunday.exercise_move.append(bench_press)
+        days = ["Sunday", "Monday"]
+        leg_burner.exercise_moves.append(dead_lift)
+        leg_burner.exercise_moves.append(bench_press)
+        leg_burner.exercise_moves.append(running)
+        for xfit_class in leg_burner.crossfit_classes:
+            xfit_class.day = "Sunday"
+            xfit_class.coach = coach_dan
+        db.session.add(leg_burner)
+        db.session.commit()
+
+        leg_burner.exercise_moves.append(dead_lift)
+        leg_burner.exercise_moves.append(bench_press)
+        leg_burner.exercise_moves.append(running)
+        for xfit_class in leg_burner.crossfit_classes:
+            if not xfit_class.day:
+                xfit_class.day = "Monday"
+                xfit_class.coach = coach_dan
+        db.session.add(leg_burner)
+        db.session.commit()
+
+        
+        print(leg_burner.crossfit_classes)
+        # leg_burner.crossfit_classes.append(class_1_sunday)
+        # leg_burner.exercise_moves.append(dead_lift)
+        
+        # leg_burner.exercise_moves.append(clean)
+        # leg_burner.exercise_moves.append(running)
+        # db.session.add(leg_burner)
+        # db.session.commit()
