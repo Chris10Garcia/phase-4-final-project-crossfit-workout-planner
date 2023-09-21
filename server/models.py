@@ -149,6 +149,9 @@ class Workout_Plan(db.Model):
     description = db.Column(db.String)
 
     crossfit_classes = db.relationship("Crossfit_Class", backref="workout_plan")
+
+
+    ######### I HAVE THIS SET UP REQURING A LIST WITH 2 ARGUMENTS!!!!
     exercise_moves = association_proxy("crossfit_classes", "exercise_move",
                                     creator= lambda data: Crossfit_Class(exercise_move = data[0], schedule=data[1])
                                     )
