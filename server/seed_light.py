@@ -8,7 +8,7 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan
+from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan, Schedule
 
 def delete_all_records():
     print("Deleting all records...")
@@ -16,7 +16,8 @@ def delete_all_records():
     Crossfit_Class.query.delete()
     Exercise_Move.query.delete()
     Workout_Plan.query.delete()
-    db.session.commit() #is this necessary?
+    Schedule.query.delete()
+    # db.session.commit() #is this necessary?
 
 
 # basic for now, maybe later on create records that are more accurate to fitness and crossfit?
@@ -91,7 +92,7 @@ if __name__ == '__main__':
         )
 
         beginner = Workout_Plan(
-            name = "Beginner Crossfit Class",
+            name = "Beginner Routine",
             difficulty = "Beginner",
             description = "An entry level class to teach you the basics"
         )
@@ -100,55 +101,118 @@ if __name__ == '__main__':
         moves = [bench_press, dead_lift, burpee, clean, snatch, running]
         plans = [leg_burner, beginner]
         
-  
-        
+
         db.session.add_all(coaches + moves + plans)
         db.session.commit()
 
         print("Coach, workout plan, and exercise move records added to db")
 
-        # class_1_sunday = Crossfit_Class(
-        #     day = "Sunday"
-        # )
-        
-        # class_2_sunday = Crossfit_Class(
-        #     day = "Sunday"
-        # )
 
-        # class_3_sunday = Crossfit_Class(
-        #     day = "Sunday"
-        # )
-
-        # classes = [class_1_sunday, class_2_sunday, class_3_sunday]
-
-        # classes = [class_1_sunday, class_2_monday, class_3_wednesday, class_4_saturday, class_5_saturday, class_6_wednesday]
-
-        # db.session.add_all(classes)
+        # leg_burner.exercise_moves.append(dead_lift)
+        # leg_burner.exercise_moves.append(bench_press)
+        # leg_burner.exercise_moves.append(running)
+        # for xfit_class in leg_burner.crossfit_classes:
+        #     # xfit_class.day = "Sunday"
+        #     xfit_class.coach = coach_dan
+        # db.session.add(leg_burner)
         # db.session.commit()
-        # class_1_sunday.exercise_move.append(dead_lift)
-        # class_1_sunday.exercise_move.append(bench_press)
-        days = ["Sunday", "Monday"]
-        leg_burner.exercise_moves.append(dead_lift)
-        leg_burner.exercise_moves.append(bench_press)
-        leg_burner.exercise_moves.append(running)
-        for xfit_class in leg_burner.crossfit_classes:
-            xfit_class.day = "Sunday"
-            xfit_class.coach = coach_dan
-        db.session.add(leg_burner)
+
+        mondays = [Schedule(day = "Monday", coach=rc(coaches)) for i in range(0,5)]
+        tuesdays = [Schedule(day = "Tuesday", coach=rc(coaches)) for i in range(0,6)]
+        wednesday = [Schedule(day = "Wednesday", coach=rc(coaches)) for i in range(0,7)]
+        # mondays + tuesdays + wednesday
+
+        db.session.add_all(mondays + tuesdays + wednesday)
         db.session.commit()
 
-        leg_burner.exercise_moves.append(dead_lift)
-        leg_burner.exercise_moves.append(bench_press)
-        leg_burner.exercise_moves.append(running)
-        for xfit_class in leg_burner.crossfit_classes:
-            if not xfit_class.day:
-                xfit_class.day = "Monday"
-                xfit_class.coach = coach_dan
-        db.session.add(leg_burner)
+        monday = mondays[0]
+
+        beginner.exercise_moves.append((burpee, monday))
+        beginner.exercise_moves.append((dead_lift, monday))
+        beginner.exercise_moves.append((clean, monday))
+
+        beginner.exercise_moves.append((dead_lift, mondays[1]))
+        beginner.exercise_moves.append((dead_lift, mondays[1]))
+        beginner.exercise_moves.append((dead_lift, mondays[1]))
+
+        # for test in beginner.crossfit_classes:
+        #     test.schedule = monday
+        # beginner.schedules.append(monday)
+        db.session.add(beginner)
         db.session.commit()
+
+        # mondays[1].workout_plans.append(beginner)
+        # beginner.exercise_moves.append(clean)
+        # beginner.exercise_moves.append(running)
+        # beginner.exercise_moves.append(burpee)
+        # for test in beginner.crossfit_classes:
+        #     test.schedule = mondays[2]
+        # beginner.schedules.append(monday)
+        # db.session.add(mondays[1])
+        # db.session.commit()
+
+
+
+
+
+        # test_1 = Crossfit_Class(
+        #     schedule = monday,
+        #     workout_plan = beginner,
+        #     exercise_move = running
+        # )
+
+        # test_2 = Crossfit_Class(
+        #     schedule = monday,
+        #     workout_plan = beginner,
+        #     exercise_move = burpee
+        # )
+
+        # test_3 = Crossfit_Class(
+        #     schedule = monday,
+        #     workout_plan = beginner,
+        #     exercise_move = clean
+        # )
+
+        # db.session.add_all([test_1, test_2, test_3])
+        # db.session.commit()
+
+        # print(beginner.schedules)
+        # print(monday.crossfit_classes)
+        # beginner.exercise_moves.append(clean)
+        # beginner.exercise_moves.append(burpee)
+        # beginner.exercise_moves.append(running)
+        # beginner.schedules.append(monday)
+        # for xfit_class in beginner.crossfit_classes:
+        #     xfit_class.coach = coach_dan
+
 
         
-        print(leg_burner.crossfit_classes)
+        # beginner.schedules.append(mondays[0])
+
+        # db.session.add(beginner)
+        # db.session.commit()
+
+        # monday = mondays[0]
+        # monday.workout_plans.append(beginner)
+        # db.session.add(monday)
+        # db.session.commit()
+
+        # leg_burner.exercise_moves.append(dead_lift)
+        # leg_burner.exercise_moves.append(bench_press)
+        # leg_burner.exercise_moves.append(running)
+        # for xfit_class in leg_burner.crossfit_classes:
+        #     xfit_class.coach = coach_rose
+        #     if not xfit_class.day:
+        #         xfit_class.day = "Monday"
+        #         xfit_class.coach = coach_rose
+        # db.session.add(leg_burner)
+        # db.session.commit()
+
+
+        # print(coach_rose.workout_plans)
+
+        
+        # print(leg_burner.crossfit_classes)
         # leg_burner.crossfit_classes.append(class_1_sunday)
         # leg_burner.exercise_moves.append(dead_lift)
         

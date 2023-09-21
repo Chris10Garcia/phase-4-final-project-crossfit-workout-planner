@@ -8,6 +8,21 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from config import db
 
 
+class Schedule(db.Model):
+    __tablename__ = "schedules"
+
+    id = db.Column(db.Integer, primary_key = True)
+    day = db.Column(db.String)
+    coach_id = db.Column(db.Integer, db.ForeignKey("coaches.id"))
+
+    crossfit_classes = db.relationship("Crossfit_Class", backref="schedule")
+    workout_plans = association_proxy("crossfit_classes", "workout_plan",
+                                    creator= lambda wp : Crossfit_Class(workout_plan = wp)
+                                    )
+
+    def __repr__(self):
+        return f"Day: {self.day}"
+
 class Exercise_Move(db.Model):
     __tablename__ = "exercise_moves"
 
@@ -19,9 +34,9 @@ class Exercise_Move(db.Model):
     video_link = db.Column(db.String)
 
     crossfit_classes = db.relationship("Crossfit_Class", backref="exercise_move")
-    workout_plans = association_proxy("crossfit_classes", "workout_plan",
-                                    creator= lambda wp : Crossfit_Class(workout_plan = wp)
-                                    )
+    # workout_plans = association_proxy("crossfit_classes", "workout_plan",
+    #                                 creator= lambda wp : Crossfit_Class(workout_plan = wp)
+    #                                 )
     
     def __repr__(self):
         return f"<Exercise Move: {self.name}, ID: {self.id}>"
@@ -57,9 +72,6 @@ class Exercise_Move(db.Model):
             return address
     """
 
-    def __repr__(self):
-        return f"<Exercise Move: {self.name}, ID: {self.id}>"
-
 
 class Coach(db.Model):
     __tablename__ = 'coaches'
@@ -70,8 +82,13 @@ class Coach(db.Model):
     picture = db.Column(db.String) #URL at first. Should this be a blob / binary data for actual pictures?
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
-    crossfit_classes = db.relationship("Crossfit_Class", backref="coach")
+    schedules = db.relationship("Schedule", backref="coach")
 
+    # testing this feature out
+    # workout_plans = association_proxy("crossfit_classes", "workout_plan",
+    #                                 creator= lambda wp : Crossfit_Class(workout_plan = wp)
+    #                                 )
+    
     def __repr__(self):
         return f"<Coach: {self.name}, ID: {self.id}>"
 
@@ -133,9 +150,14 @@ class Workout_Plan(db.Model):
 
     crossfit_classes = db.relationship("Crossfit_Class", backref="workout_plan")
     exercise_moves = association_proxy("crossfit_classes", "exercise_move",
-                                    creator= lambda em : Crossfit_Class(exercise_move = em)
+                                    creator= lambda data: Crossfit_Class(exercise_move = data[0], schedule=data[1])
                                     )
-
+    schedules = association_proxy("crossfit_classes", "schedule",
+                                    creator= lambda sc : Crossfit_Class(schedule = sc)
+                                    )
+    # coaches = association_proxy("crossfit_classes", "coach",
+    #                                 creator= lambda co : Crossfit_Class(coach= co)
+    #                                 )
 
     # relationship
     """
@@ -176,19 +198,20 @@ class Crossfit_Class(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     
-    day = db.Column(db.String)
+    # day = db.Column(db.String)
 
     exercise_move_id = db.Column(db.Integer, db.ForeignKey('exercise_moves.id'))
-    coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'))
+    schedule_id = db.Column(db.Integer, db.ForeignKey('schedules.id'))
     workout_plan_id = db.Column(db.Integer, db.ForeignKey('workout_plans.id'))
 
+    # coach = db.relationship('Coach', backref="crossfit_classes")
     # relationship
     """
     """
 
     #need to redo this when the other classes are available
     def __repr__(self):
-        return f"<Crossfit Class. Scheduled on {self.day}, ID: {self.id}"
+        return f"<Crossfit Class Workout: {self.workout_plan.name}>"
 
     # DB data validation
     """
