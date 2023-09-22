@@ -117,41 +117,44 @@ if __name__ == '__main__':
         # db.session.add(leg_burner)
         # db.session.commit()
 
-        mondays = [Schedule(day = "Monday", coach=rc(coaches)) for i in range(0,5)]
-        tuesdays = [Schedule(day = "Tuesday", coach=rc(coaches)) for i in range(0,6)]
-        wednesday = [Schedule(day = "Wednesday", coach=rc(coaches)) for i in range(0,7)]
+        # mondays = [Schedule(day = "Monday", coach=rc(coaches)) for i in range(0,5)]
+        # tuesdays = [Schedule(day = "Tuesday", coach=rc(coaches)) for i in range(0,6)]
+        # wednesday = [Schedule(day = "Wednesday", coach=rc(coaches)) for i in range(0,7)]
         # mondays + tuesdays + wednesday
 
-        db.session.add_all(mondays + tuesdays + wednesday)
-        db.session.commit()
+        # db.session.add_all(mondays + tuesdays + wednesday)
+        # db.session.commit()
 
-        monday = mondays[0]
+        # monday = mondays[0]
 
-        beginner.exercise_moves.append((burpee, monday))
-        beginner.exercise_moves.append((dead_lift, monday))
-        beginner.exercise_moves.append((clean, monday))
+        # beginner.exercise_moves.append((burpee,))
+        # beginner.exercise_moves.append((dead_lift,))   
+        # print(beginner.exercise_moves[0])
+        # beginner.exercise_moves.append((burpee, monday))
+        # beginner.exercise_moves.append((dead_lift, monday))
+        # beginner.exercise_moves.append((clean, monday))
 
-        beginner.exercise_moves.append((dead_lift, mondays[1]))
-        beginner.exercise_moves.append((dead_lift, mondays[1]))
-        beginner.exercise_moves.append((dead_lift, mondays[1]))
+        # beginner.exercise_moves.append((dead_lift, mondays[1]))
+        # beginner.exercise_moves.append((dead_lift, mondays[1]))
+        # beginner.exercise_moves.append((dead_lift, mondays[1]))
 
+        # for test in beginner.crossfit_classes:
+        #     test.schedule = monday
+        # beginner.schedules.append(monday)
+        # db.session.add(beginner)
+        # db.session.commit()
+
+        # mondays[1].workout_plans.append(beginner)
+        beginner.exercise_moves.append(clean)
+        beginner.exercise_moves.append(running)
+        beginner.exercise_moves.append(burpee)
         # for test in beginner.crossfit_classes:
         #     test.schedule = monday
         # beginner.schedules.append(monday)
         db.session.add(beginner)
         db.session.commit()
 
-        # mondays[1].workout_plans.append(beginner)
-        # beginner.exercise_moves.append(clean)
-        # beginner.exercise_moves.append(running)
-        # beginner.exercise_moves.append(burpee)
-        # for test in beginner.crossfit_classes:
-        #     test.schedule = mondays[2]
-        # beginner.schedules.append(monday)
-        # db.session.add(mondays[1])
-        # db.session.commit()
-
-
+        print(beginner.exercise_moves)
 
 
 

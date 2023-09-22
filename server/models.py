@@ -140,6 +140,17 @@ class Coach(db.Model):
     """
 
 
+# def check_or_create_workout_plan(item):
+
+#     test = Crossfit_Class(exercise_move= item)
+#     return test
+
+# def check_or_create_schedule(item):
+#     # print(self)
+#     test = Crossfit_Class(schedule = item)
+#     return test
+    
+
 class Workout_Plan(db.Model):
     __tablename__ = "workout_plans"
 
@@ -150,17 +161,23 @@ class Workout_Plan(db.Model):
 
     crossfit_classes = db.relationship("Crossfit_Class", backref="workout_plan")
 
-
-    ######### I HAVE THIS SET UP REQURING A LIST WITH 2 ARGUMENTS!!!!
+    # exercise_moves = association_proxy("crossfit_classes", "exercise_move",
+    #                                 creator= check_or_create_workout_plan)
+    
     exercise_moves = association_proxy("crossfit_classes", "exercise_move",
-                                    creator= lambda data: Crossfit_Class(exercise_move = data[0], schedule=data[1])
+                                    creator= lambda data: Crossfit_Class(exercise_move = data)
                                     )
-    schedules = association_proxy("crossfit_classes", "schedule",
-                                    creator= lambda sc : Crossfit_Class(schedule = sc)
-                                    )
-    # coaches = association_proxy("crossfit_classes", "coach",
-    #                                 creator= lambda co : Crossfit_Class(coach= co)
+        
+    ######### I HAVE THIS SET UP REQURING A LIST WITH 2 ARGUMENTS!!!!
+    # exercise_moves = association_proxy("crossfit_classes", "exercise_move",
+    #                                 creator= lambda data: Crossfit_Class(exercise_move = data[0], schedule=data[1])
     #                                 )
+    # schedules = association_proxy("crossfit_classes", "schedule",
+    #                                 creator= check_or_create_schedule
+    #                                 )
+    coaches = association_proxy("crossfit_classes", "coach",
+                                    creator= lambda co : Crossfit_Class(coach= co)
+                                    )
 
     # relationship
     """
