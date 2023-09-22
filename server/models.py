@@ -153,7 +153,7 @@ class Workout_Plan(db.Model):
     #                                 creator= check_or_create_workout_plan)
     
     exercise_moves = association_proxy("crossfit_classes", "exercise_move",
-                                    creator= lambda data: Crossfit_Class(exercise_move = data)
+                                    creator = lambda data: Crossfit_Class(exercise_move = data)
                                     )
         
     ######### I HAVE THIS SET UP REQURING A LIST WITH 2 ARGUMENTS!!!!

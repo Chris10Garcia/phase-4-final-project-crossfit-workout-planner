@@ -145,16 +145,17 @@ if __name__ == '__main__':
         # db.session.commit()
 
         # mondays[1].workout_plans.append(beginner)
+        leg_burner.exercise_moves.extend([dead_lift, clean, snatch])
         beginner.exercise_moves.append(clean)
         beginner.exercise_moves.append(running)
         beginner.exercise_moves.append(burpee)
         # for test in beginner.crossfit_classes:
         #     test.schedule = monday
         # beginner.schedules.append(monday)
-        db.session.add(beginner)
+        db.session.add_all([beginner, leg_burner])
         db.session.commit()
 
-        print(beginner.exercise_moves)
+        # print(beginner.exercise_moves)
 
 
 
