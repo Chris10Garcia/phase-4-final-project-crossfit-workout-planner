@@ -8,7 +8,7 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan, Schedule
+from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan
 
 def delete_all_records():
     print("Deleting all records...")
@@ -16,7 +16,7 @@ def delete_all_records():
     Crossfit_Class.query.delete()
     Exercise_Move.query.delete()
     Workout_Plan.query.delete()
-    Schedule.query.delete()
+    # Schedule.query.delete()
     # db.session.commit() #is this necessary?
 
 

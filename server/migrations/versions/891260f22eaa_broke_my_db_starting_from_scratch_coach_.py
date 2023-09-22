@@ -1,8 +1,8 @@
-"""create basic structure for all models
+"""broke my db. starting from scratch. Coach table and 3 related tables
 
-Revision ID: 3508c8dc6439
+Revision ID: 891260f22eaa
 Revises: 
-Create Date: 2023-09-19 15:30:07.936827
+Create Date: 2023-09-22 12:24:20.076805
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '3508c8dc6439'
+revision = '891260f22eaa'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -43,11 +43,8 @@ def upgrade():
     )
     op.create_table('crossfit_classes',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('day', sa.String(), nullable=True),
     sa.Column('exercise_move_id', sa.Integer(), nullable=True),
-    sa.Column('coach_id', sa.Integer(), nullable=True),
     sa.Column('workout_plan_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['coach_id'], ['coaches.id'], name=op.f('fk_crossfit_classes_coach_id_coaches')),
     sa.ForeignKeyConstraint(['exercise_move_id'], ['exercise_moves.id'], name=op.f('fk_crossfit_classes_exercise_move_id_exercise_moves')),
     sa.ForeignKeyConstraint(['workout_plan_id'], ['workout_plans.id'], name=op.f('fk_crossfit_classes_workout_plan_id_workout_plans')),
     sa.PrimaryKeyConstraint('id')

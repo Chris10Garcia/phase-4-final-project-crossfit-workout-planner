@@ -8,7 +8,7 @@ from flask_restful import Resource
 
 # Local imports
 from config import app, db, api
-from models import Coach, Crossfit_Class, Workout_Plan, Exercise_Move, Schedule
+from models import Coach, Crossfit_Class, Workout_Plan, Exercise_Move
 # Add your model imports
 
 
