@@ -8,7 +8,7 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan
+from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan, Schedule, schedule_workout_plan
 
 def delete_all_records():
     print("Deleting all records...")
@@ -16,7 +16,8 @@ def delete_all_records():
     Crossfit_Class.query.delete()
     Exercise_Move.query.delete()
     Workout_Plan.query.delete()
-    # Schedule.query.delete()
+    Schedule.query.delete()
+    db.session.query(schedule_workout_plan).delete()
     # db.session.commit() #is this necessary?
 
 
@@ -120,12 +121,17 @@ if __name__ == '__main__':
         # mondays = [Schedule(day = "Monday", coach=rc(coaches)) for i in range(0,5)]
         # tuesdays = [Schedule(day = "Tuesday", coach=rc(coaches)) for i in range(0,6)]
         # wednesday = [Schedule(day = "Wednesday", coach=rc(coaches)) for i in range(0,7)]
-        # mondays + tuesdays + wednesday
 
-        # db.session.add_all(mondays + tuesdays + wednesday)
-        # db.session.commit()
+        mondays = [Schedule(day = "Monday", hour = i * 100, coach=rc(coaches) ) for i in range(9,14)]
+        tuesdays = [Schedule(day = "Tuesday", hour = i * 100, coach=rc(coaches) ) for i in range(9,14)]
+        wednesday = [Schedule(day = "Wednesday", hour = i * 100, coach=rc(coaches) ) for i in range(9,14)]
+        mondays + tuesdays + wednesday
 
-        # monday = mondays[0]
+        db.session.add_all(mondays + tuesdays + wednesday)
+        db.session.commit()
+
+        monday = mondays[0]
+        tuesday = tuesdays[2]
 
         # beginner.exercise_moves.append((burpee,))
         # beginner.exercise_moves.append((dead_lift,))   
@@ -157,6 +163,16 @@ if __name__ == '__main__':
 
         # print(beginner.exercise_moves)
 
+        for day in mondays:
+            day.workout_plans.append(beginner)
+
+        db.session.add_all(mondays)
+        db.session.commit()
+
+        print(monday.workout_plans)
+        # print()
+
+        
 
 
         # test_1 = Crossfit_Class(
