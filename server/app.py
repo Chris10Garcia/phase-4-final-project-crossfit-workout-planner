@@ -16,9 +16,9 @@ from models import Coach, Crossfit_Class, Workout_Plan, Exercise_Move
 
 # Views go here!
 
-# @app.route('/')
-# def index():
-#     return '<h1>Project Server</h1>'
+@app.route('/')
+def index():
+    return '<h1>Project Server</h1>'
 
 class Exercise_Move_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
