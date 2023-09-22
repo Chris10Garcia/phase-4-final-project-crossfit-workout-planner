@@ -165,6 +165,7 @@ if __name__ == '__main__':
 
         for day in mondays:
             day.workout_plans.append(beginner)
+            day.workout_plans.append(leg_burner)
 
         db.session.add_all(mondays)
         db.session.commit()

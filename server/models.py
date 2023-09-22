@@ -3,6 +3,17 @@
 
 # install / check if validates is in
 
+## TO DO LIST AND THEN I WILL MOSTLY BE HAPPY WITH THIS
+## Remove schedule_workout_plan objec table
+## Remove associations and such to it
+## update seed file so that it's not generating issues
+## Remove models
+## autogenerate revision
+## upgrade flask
+## update seed
+## test
+## WORK ON APIs and VIEWS!!!!!
+
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from config import db
