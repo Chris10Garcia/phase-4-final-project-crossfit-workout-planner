@@ -38,7 +38,7 @@ class Schedule_Schema(ma.SQLAlchemyAutoSchema):
 schedule_schema_many = Schedule_Schema(many = True)
 
 
-
+a
 class Exercise_Move_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Exercise_Move

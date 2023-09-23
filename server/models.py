@@ -3,28 +3,18 @@
 
 # install / check if validates is in
 
-## TO DO LIST AND THEN I WILL MOSTLY BE HAPPY WITH THIS
-## Remove schedule_workout_plan objec table
-## Remove associations and such to it
-## update seed file so that it's not generating issues
-## Remove models
-## autogenerate revision
-## upgrade flask
-## update seed
-## test
-## WORK ON APIs and VIEWS!!!!!
 
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from config import db
 
-schedule_workout_plan = db.Table(
-    "schedule_workout_plans",
-    db.metadata,
-    db.Column('workout_plan_id', db.ForeignKey("workout_plans.id"), primary_key=True),
-    db.Column('schedule_id', db.ForeignKey("schedules.id"), primary_key=True),
-    extend_existing=True,
-)
+# schedule_workout_plan = db.Table(
+#     "schedule_workout_plans",
+#     db.metadata,
+#     db.Column('workout_plan_id', db.ForeignKey("workout_plans.id"), primary_key=True),
+#     db.Column('schedule_id', db.ForeignKey("schedules.id"), primary_key=True),
+#     extend_existing=True,
+# )
 
 
 class Exercise_Move(db.Model):
@@ -39,6 +29,8 @@ class Exercise_Move(db.Model):
 
     # change this to back_populates to make easier to keep track?
     crossfit_classes = db.relationship("Crossfit_Class", backref="exercise_move")
+
+
     # workout_plans = association_proxy("crossfit_classes", "workout_plan",
     #                                 creator= lambda wp : Crossfit_Class(workout_plan = wp)
     #                                 )
@@ -164,7 +156,7 @@ class Workout_Plan(db.Model):
     difficulty = db.Column(db.String)
     description = db.Column(db.String)
 
-    schedules = db.relationship("Schedule", back_populates = "workout_plans", secondary=schedule_workout_plan)
+    schedules = db.relationship("Schedule", back_populates = "workout_plan")
     crossfit_classes = db.relationship("Crossfit_Class", backref="workout_plan")
 
     # exercise_moves = association_proxy("crossfit_classes", "exercise_move",
@@ -287,8 +279,11 @@ class Schedule(db.Model):
     day = db.Column(db.String)
     hour = db.Column(db.String)
     coach_id = db.Column(db.Integer, db.ForeignKey("coaches.id"))
+    workout_plan_id = db.Column(db.Integer, db.ForeignKey("workout_plans.id"))
     coach = db.relationship("Coach", back_populates="schedules")
-    workout_plans = db.relationship("Workout_Plan", back_populates="schedules", secondary=schedule_workout_plan)
+
+
+    workout_plan = db.relationship("Workout_Plan", back_populates="schedules")
     
 
     # coach_id = db.Column(db.Integer, db.ForeignKey("coaches.id"))

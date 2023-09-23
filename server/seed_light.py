@@ -8,7 +8,7 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan, Schedule, schedule_workout_plan
+from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan, Schedule
 
 def delete_all_records():
     print("Deleting all records...")
@@ -17,7 +17,7 @@ def delete_all_records():
     Exercise_Move.query.delete()
     Workout_Plan.query.delete()
     Schedule.query.delete()
-    db.session.query(schedule_workout_plan).delete()
+    # db.session.query(schedule_workout_plan).delete()
     # db.session.commit() #is this necessary?
 
 
@@ -122,9 +122,9 @@ if __name__ == '__main__':
         # tuesdays = [Schedule(day = "Tuesday", coach=rc(coaches)) for i in range(0,6)]
         # wednesday = [Schedule(day = "Wednesday", coach=rc(coaches)) for i in range(0,7)]
 
-        mondays = [Schedule(day = "Monday", hour = i * 100, coach=rc(coaches) ) for i in range(9,14)]
-        tuesdays = [Schedule(day = "Tuesday", hour = i * 100, coach=rc(coaches) ) for i in range(9,14)]
-        wednesday = [Schedule(day = "Wednesday", hour = i * 100, coach=rc(coaches) ) for i in range(9,14)]
+        mondays = [Schedule(day = "Monday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans) ) for i in range(9,14)]
+        tuesdays = [Schedule(day = "Tuesday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans)  ) for i in range(9,14)]
+        wednesday = [Schedule(day = "Wednesday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans)  ) for i in range(9,14)]
         mondays + tuesdays + wednesday
 
         db.session.add_all(mondays + tuesdays + wednesday)
@@ -158,19 +158,24 @@ if __name__ == '__main__':
         # for test in beginner.crossfit_classes:
         #     test.schedule = monday
         # beginner.schedules.append(monday)
+
+
+
         db.session.add_all([beginner, leg_burner])
         db.session.commit()
 
         # print(beginner.exercise_moves)
 
-        for day in mondays:
-            day.workout_plans.append(beginner)
-            day.workout_plans.append(leg_burner)
+        # for day in mondays:
+        #     day.workout_plans.append(beginner)
+        #     day.workout_plans.append(leg_burner)
+        # # monday.workout_plan = beginner
+        # monday.workout_plan=beginner
+        # db.session.add_all(mondays)
+        # db.session.commit()
 
-        db.session.add_all(mondays)
-        db.session.commit()
-
-        print(monday.workout_plans)
+        print(coach_dan.schedules)
+        
         # print()
 
         
