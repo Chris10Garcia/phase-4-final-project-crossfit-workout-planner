@@ -7,7 +7,6 @@ from flask import request, make_response
 from flask_restful import Resource
 # from marshmallow_sqlalchemy import fields
 from marshmallow import fields
-
 # Local imports
 from config import app, db, api, ma
 from models import Coach, Crossfit_Class, Workout_Plan, Exercise_Move, Schedule
@@ -19,6 +18,29 @@ from models import Coach, Crossfit_Class, Workout_Plan, Exercise_Move, Schedule
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
+
+
+# Schema plans
+"""
+base_workout_plans
+base_exercise_moves
+base_coaches
+
+detailed_schedule
+    pluck / nest from base_coaches
+    pluck / nest from base_workout_plans
+
+detaield_workout_plans
+    pluck / nest from schedule (and only this?)
+    pluck / nest from base_coaches (is it neccessary?)
+    pluck / nest from base_workout_plans (is it neccessary?)
+
+detailed_exercise_moves
+    pluck / nest from schedule
+"""
+
+
+
 
 # basic workout_plan
 """
@@ -60,6 +82,7 @@ class Schedule_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Schedule
         load_instance = True
+        include_relationships = True
     coach = fields.Pluck(Coach_Schema, "name")
     coach_id = ma.auto_field()
     # workout_plans = fields.Str()
