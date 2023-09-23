@@ -27,16 +27,18 @@ base_exercise_moves
 base_coaches
 
 detailed_schedule
-    pluck / nest from base_coaches
     pluck / nest from base_workout_plans
+    pluck / nest from base_coaches
+    
 
 detaield_workout_plans
-    pluck / nest from schedule (and only this?)
-    pluck / nest from base_coaches (is it neccessary?)
-    pluck / nest from base_workout_plans (is it neccessary?)
+    base_workout_plans (not sure if i can bring this in or if its needed)
+    nest base_exercise_moves
+    pluck schedule
 
 detailed_exercise_moves
-    pluck / nest from schedule
+    base_exercise_moves (not sure if i can bring this in or if its needed)
+    pluck / nest from base_workout_plans
 """
 
 
