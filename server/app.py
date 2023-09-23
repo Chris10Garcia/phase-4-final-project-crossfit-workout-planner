@@ -20,6 +20,36 @@ from models import Coach, Crossfit_Class, Workout_Plan, Exercise_Move, Schedule
 def index():
     return '<h1>Project Server</h1>'
 
+# basic workout_plan
+"""
+    id
+    name
+    difficulty
+    description
+"""
+
+# basic for a lot of things
+
+# work_plan_full
+"""
+
+
+"""
+
+# schema for exercise moves
+"""
+    id
+    name
+    focus
+    description
+    video link
+    Nested(basic workout_plans)
+        name 
+"""
+
+
+
+
 class Coach_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Coach
@@ -32,13 +62,13 @@ class Schedule_Schema(ma.SQLAlchemyAutoSchema):
         load_instance = True
     coach = fields.Pluck(Coach_Schema, "name")
     coach_id = ma.auto_field()
-    workout_plans = fields.Str()
+    # workout_plans = fields.Str()
 
 
 schedule_schema_many = Schedule_Schema(many = True)
 
 
-a
+
 class Exercise_Move_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Exercise_Move
