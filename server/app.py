@@ -22,9 +22,30 @@ def index():
 
 # Schema plans
 """
-base_workout_plans
-base_exercise_moves
-base_coaches
+
+views:
+    - coaches + coaches/id
+        - id, name, age, etc
+    
+    - exercise_moves + exercise_moves/id
+        - id, name, video, etc
+        - workout plans:
+            - workout plan id
+            - workout name
+
+    - workout_plans + workout_plans/id
+        - id, name, diffculty, etc
+        - exercise_moves:
+            - move id, name, video, etc
+
+    - schedule + schedule/id
+        - id, hour, day
+        - coach
+            - id, name
+
+
+detailed_coaches
+    pluck /nest from schedule 
 
 detailed_schedule
     pluck / nest from base_workout_plans
@@ -32,12 +53,10 @@ detailed_schedule
     
 
 detaield_workout_plans
-    base_workout_plans (not sure if i can bring this in or if its needed)
     nest base_exercise_moves
     pluck schedule
 
 detailed_exercise_moves
-    base_exercise_moves (not sure if i can bring this in or if its needed)
     pluck / nest from base_workout_plans
 """
 
