@@ -26,40 +26,28 @@ class Coach_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Coach
         load_instance = True
-        # include_relationships = True
-    # schedules = fields.List(fields.Nested(lambda: Schedule_Schema(exclude = ("coach", "coach_id") )))
-    # id = fields.Int(dump_only=True)
-    # name = fields.Str()
-    # age = fields.Int()
-    # picture = fields.URL()
-    # name = ma.auto_field()
-
 
 class Schedule_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Schedule
         load_instance = True
-        include_relationships = True
-    # coach = fields.Pluck(Coach_Schema, "name")
-    # coach_id = ma.auto_field()
-    # workout_plan = fields.String()
-    # workout_plans = fields.Str()
 
+    coach = fields.Nested(lambda: Coach_Schema(only=("name", "id")))
+    workout_plan = fields.Nested(lambda: Workout_Plan_Schema(only=("name", "id", "difficulty")))
 
 class Exercise_Move_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Exercise_Move
         load_instance = True
-    # video_link = ma.auto_field()
 
 class Workout_Plan_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Workout_Plan
         load_instance = True
-        # include_relationships = True
-    # exercise_moves = fields.List(fields.Nested(Exercise_Move_Schema))
-    # schedules = fields.List(fields.Nested(Schedule_Schema))
+    exercise_moves = fields.List(fields.Nested(Exercise_Move_Schema))
 
+    # maybe keep this. depends on what I want to do on the front end
+    schedules = fields.List(fields.Nested(Schedule_Schema(exclude=("workout_plan",))))
 
 
 coach_schema = Coach_Schema()
@@ -160,45 +148,6 @@ api.add_resource(WorkoutPlansByID, "/workout_plans/<int:id>")
 api.add_resource(ExerciseMovesIndex, "/exercise_moves")
 api.add_resource(ExerciseMovesByID, "/exercise_moves/<int:id>")
 
-
-
-"""
-views:
-    - coaches + coaches/id
-        - id, name, age, etc
-    
-    - exercise_moves + exercise_moves/id
-        - id, name, video, etc
-        - workout plans:
-            - workout plan id
-            - workout name
-
-    - workout_plans + workout_plans/id
-        - id, name, diffculty, etc
-        - exercise_moves:
-            - move id, name, video, etc
-
-    - schedule + schedule/id
-        - id, hour, day
-        - coach
-            - id, name
-
-
-detailed_coaches
-    pluck /nest from schedule 
-
-detailed_schedule
-    pluck / nest from base_workout_plans
-    pluck / nest from base_coaches
-    
-
-detaield_workout_plans
-    nest base_exercise_moves
-    pluck schedule
-
-detailed_exercise_moves
-    pluck / nest from base_workout_plans
-"""
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
