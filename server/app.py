@@ -21,8 +21,148 @@ def index():
 
 
 # Schema plans
-"""
 
+class Coach_Schema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Coach
+        load_instance = True
+        # include_relationships = True
+    # schedules = fields.List(fields.Nested(lambda: Schedule_Schema(exclude = ("coach", "coach_id") )))
+    # id = fields.Int(dump_only=True)
+    # name = fields.Str()
+    # age = fields.Int()
+    # picture = fields.URL()
+    # name = ma.auto_field()
+
+
+class Schedule_Schema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Schedule
+        load_instance = True
+        include_relationships = True
+    # coach = fields.Pluck(Coach_Schema, "name")
+    # coach_id = ma.auto_field()
+    # workout_plan = fields.String()
+    # workout_plans = fields.Str()
+
+
+class Exercise_Move_Schema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Exercise_Move
+        load_instance = True
+    # video_link = ma.auto_field()
+
+class Workout_Plan_Schema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Workout_Plan
+        load_instance = True
+        # include_relationships = True
+    # exercise_moves = fields.List(fields.Nested(Exercise_Move_Schema))
+    # schedules = fields.List(fields.Nested(Schedule_Schema))
+
+
+
+coach_schema = Coach_Schema()
+coaches_schema = Coach_Schema(many=True)
+
+schedule_schema = Schedule_Schema()
+schedules_schema = Schedule_Schema(many = True)
+
+exercise_move_schema = Exercise_Move_Schema()
+exercise_moves_schema = Exercise_Move_Schema(many=True)
+
+workout_plan_schema = Workout_Plan_Schema()
+workout_plans_schema = Workout_Plan_Schema(many=True)
+
+
+class CoachesIndex(Resource):
+    def get(self):
+        coaches = Coach.query.all()
+        response = make_response(
+            coaches_schema.dump(coaches),
+            200
+        )
+        return response
+
+class CoachesByID(Resource):
+    def get(self, id):
+        coach = Coach.query.filter(Coach.id == id).first()
+        response = make_response(
+            coach_schema.dump(coach),
+            200
+        )
+        return response
+
+class ScheduledClassesIndex(Resource):
+    def get(self):
+        scheduledclasses = Schedule.query.all()
+        response = make_response(
+            schedules_schema.dump(scheduledclasses),
+            200
+        )
+        return response
+    
+class ScheduledClassesByID(Resource):
+    def get(self, id):
+        scheduledclass = Schedule.query.filter(Schedule.id == id).first()
+        response = make_response(
+            schedule_schema.dump(scheduledclass),
+            200
+        )
+        return response
+
+
+class WorkoutPlansIndex(Resource):
+    def get(self):
+        workout_plans = Workout_Plan.query.all()
+        response = make_response(
+            workout_plans_schema.dump(workout_plans),
+            200
+        )
+        return response
+
+class WorkoutPlansByID(Resource):
+    def get(self, id):
+        workout_plan = Workout_Plan.query.filter(Workout_Plan.id == id).first()
+        response = make_response(
+            workout_plan_schema.dump(workout_plan),
+            200
+        )
+        return response
+    
+class ExerciseMovesIndex(Resource):
+    def get(self):
+        exercise_moves = Exercise_Move.query.all()
+        response = make_response(
+            exercise_moves_schema.dump(exercise_moves),
+            200
+        )
+        return response
+
+class ExerciseMovesByID(Resource):
+    def get(self, id):
+        exercise_move = Exercise_Move.query.filter(Exercise_Move.id == id).first()
+        response = make_response(
+            exercise_move_schema.dump(exercise_move),
+            200
+        )
+        return response
+
+api.add_resource(CoachesIndex,"/coaches")
+api.add_resource(CoachesByID,"/coaches/<int:id>")
+
+api.add_resource(ScheduledClassesIndex, "/schedules")
+api.add_resource(ScheduledClassesByID, "/schedules/<int:id>")
+
+api.add_resource(WorkoutPlansIndex, "/workout_plans", endpoint="workout_plans")
+api.add_resource(WorkoutPlansByID, "/workout_plans/<int:id>")
+
+api.add_resource(ExerciseMovesIndex, "/exercise_moves")
+api.add_resource(ExerciseMovesByID, "/exercise_moves/<int:id>")
+
+
+
+"""
 views:
     - coaches + coaches/id
         - id, name, age, etc
@@ -59,112 +199,6 @@ detaield_workout_plans
 detailed_exercise_moves
     pluck / nest from base_workout_plans
 """
-
-
-
-
-# basic workout_plan
-"""
-    id
-    name
-    difficulty
-    description
-"""
-
-# basic for a lot of things
-
-# work_plan_full
-"""
-
-
-"""
-
-# schema for exercise moves
-"""
-    id
-    name
-    focus
-    description
-    video link
-    Nested(basic workout_plans)
-        name 
-"""
-
-
-
-
-class Coach_Schema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Coach
-        load_instance = True
-    # name = ma.auto_field()
-
-class Schedule_Schema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Schedule
-        load_instance = True
-        include_relationships = True
-    coach = fields.Pluck(Coach_Schema, "name")
-    coach_id = ma.auto_field()
-    # workout_plans = fields.Str()
-
-
-schedule_schema_many = Schedule_Schema(many = True)
-
-
-
-class Exercise_Move_Schema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Exercise_Move
-        load_instance = True
-
-class Workout_Plan_Schema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Workout_Plan
-        load_instance = True
-    exercise_moves = fields.List(fields.Nested(Exercise_Move_Schema))
-    schedules = fields.List(fields.Nested(Schedule_Schema))
-
-
-exercise_move_schema = Exercise_Move_Schema()
-exercise_move_schema_many = Exercise_Move_Schema(many=True)
-
-workout_plan_schema = Workout_Plan_Schema()
-workout_plan_schema_many = Workout_Plan_Schema(many=True)
-
-
-class ScheduleClasses(Resource):
-    def get(self):
-        scheduledclasses = Schedule.query.all()
-        response = make_response(
-            schedule_schema_many.dump(scheduledclasses),
-            200
-        )
-        return response
-
-api.add_resource(ScheduleClasses, "/schedules")
-
-class Workout_Plan_Index(Resource):
-    def get(self):
-        workout_plans = Workout_Plan.query.all()
-        response = make_response(
-            workout_plan_schema_many.dump(workout_plans),
-            200
-        )
-        return response
-
-api.add_resource(Workout_Plan_Index, "/workout_plans", endpoint="workout_plans")
-
-class Workout_Plan_Index_ID(Resource):
-    def get(self, id):
-        workout_plan = Workout_Plan.query.filter(Workout_Plan.id == id).first()
-        response = make_response(
-            workout_plan_schema.dump(workout_plan),
-            200
-        )
-        return response
-
-api.add_resource(Workout_Plan_Index_ID, "/workout_plans/<int:id>")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
