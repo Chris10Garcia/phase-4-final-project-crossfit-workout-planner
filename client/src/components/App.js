@@ -44,18 +44,46 @@ function ClassSchedule(){
 }
 
 function WorkoutPlan(){
+  const [plans, setPlans] = useState([])
+
+  useEffect(()=>{
+    fetch("/workout_plans")
+      .then( r => r.json())
+      .then( d => setPlans(d))
+  }, [])
+
+  console.log(plans)
   return (
     <h2>Here is the workout plan</h2>
   )
 }
 
 function ExerciseMove(){
+
+  const [moves, setMoves] = useState([])
+
+  useEffect(()=>{
+    fetch("/exercise_moves")
+      .then( r => r.json())
+      .then( d => setMoves(d))
+  }, [])
+
+  console.log(moves)
   return (
     <h2>Here is the exercise move info</h2>
   )
 }
 
 function Coach(){
+  const [coaches, setCoaches] = useState([])
+
+  useEffect(()=>{
+    fetch("/coaches")
+      .then( r => r.json())
+      .then( d => setCoaches(d))
+  }, [])
+
+  console.log(coaches)
   return (
     <h2>Here are the coaches</h2>
   )
