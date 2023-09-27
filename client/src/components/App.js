@@ -1,30 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route, NavLink } from "react-router-dom";
+import { 
+  Segment as SegmentUI, 
+  Header as HeaderUI,
+  Menu as MenuUI,
+} from 'semantic-ui-react'
 
 
 function Header(){
   return (
-    <div 
-      style={{
-        borderBottom: "2px solid black",
-        paddingBottom: "10px",
-        marginBottom: "12px",
-      }}
-    >
-      <h1>Welcome to Flatiron Crossfit</h1>
-      <NavLink exact to= "/">
-        Class Schedule
-      </NavLink>
-      <NavLink to ="/workout_plans">
-        Workout Plans
-      </NavLink>
-      <NavLink to = "/exercise_moves">
-        Exercise Moves
-      </NavLink>
-      <NavLink to ="/coaches">
-        Coaches
-      </NavLink>
-    </div>
+    <SegmentUI >
+      <HeaderUI>
+        <h1>Welcome to Flatiron Crossfit</h1>
+      </HeaderUI>
+      <MenuUI width = {5} size = "large" pointing color = "yellow" > 
+        <MenuUI.Item 
+          as = { NavLink }
+          exact to = "/"
+          name = "Class Schedule"
+        />
+        <MenuUI.Item 
+          as = { NavLink }
+          to ="/workout_plans"
+          name = "Workout Plans"
+        />
+        <MenuUI.Item 
+          as = { NavLink }
+          to = "/exercise_moves"
+          name = "Exercise Moves"
+        />
+        <MenuUI.Item 
+          as = { NavLink }
+          to ="/coaches"
+          name = "Coaches"
+        />                
+        {/* <MenuUI.Item 
+          as = { NavLink }
+          to ="/"
+          name = "Crossfit Builder"
+        />    */}
+
+      </MenuUI>
+    </ SegmentUI>
   )
 }
 
@@ -53,7 +70,7 @@ function ExerciseMove( { moves } ){
 
 function Coach( { coaches } ){
   console.log(coaches)
-  
+
   return (
     <h2>Here are the coaches</h2>
   )
@@ -90,12 +107,8 @@ function App() {
   }, [])
 
 
-
-  
-  
-
   return (
-  < >
+  <SegmentUI.Group>
     <Header />
     <Switch>
       <Route exact path = "/">
@@ -111,7 +124,7 @@ function App() {
         <Coach coaches = {coaches}/>
       </Route>
     </Switch>
-  </>
+  </ SegmentUI.Group>
   )
 
 }
