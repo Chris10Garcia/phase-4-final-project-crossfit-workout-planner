@@ -4,6 +4,9 @@ import {
   Segment as SegmentUI, 
   Header as HeaderUI,
   Menu as MenuUI,
+  Card as CardUI,
+  Feed as FeedUI,
+  Container as ContainerUI
 } from 'semantic-ui-react'
 
 
@@ -45,23 +48,57 @@ function Header(){
   )
 }
 
+function ClassScheduleDetails( { day, sch_classes }){
+  return(
+    <></>
+  )
+}
+
 function ClassSchedule( {sch_classes} ){
-  console.log(sch_classes)
+  const days = new Set()
+
+  sch_classes.forEach(element => {
+    days.add(element.day)
+  });
+
+  const classDetailsJSX = days.forEach( day => {
+    const classesFiltered = sch_classes.filter( sch_class => {
+      if (day === sch_class.day){
+        return true 
+      }
+      else {
+        return false
+      }
+      
+    })
+    console.log(classesFiltered)
+    return classesFiltered
+  }
+  )
+
 
   return (
-    <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
+    <SegmentUI>
+      <HeaderUI>
+        <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
+      </HeaderUI>
+      <CardUI>
+
+      </CardUI>
+    </SegmentUI>
   )
 }
 
 function WorkoutPlan( {plans} ){
-  console.log(plans)
+  // console.log(plans)
+
   return (
     <h2>Here is the workout plan</h2>
   )
 }
 
 function ExerciseMove( { moves } ){
-  console.log(moves)
+  // console.log(moves)
 
   return (
     <h2>Here is the exercise move info</h2>
@@ -69,7 +106,7 @@ function ExerciseMove( { moves } ){
 }
 
 function Coach( { coaches } ){
-  console.log(coaches)
+  // console.log(coaches)
 
   return (
     <h2>Here are the coaches</h2>
