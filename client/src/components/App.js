@@ -48,9 +48,32 @@ function Header(){
   )
 }
 
-function ClassScheduleDetails( { day, sch_classes }){
+function ClassScheduleDetails( { day, classesFiltered }){
+  
+
+  const feedClassesContentJSX = classesFiltered.map(class_details => {
+    return (
+      <FeedUI.Event>
+        <FeedUI.Content>
+          <FeedUI.User>{class_details.hour}</FeedUI.User>
+          <FeedUI.Summary> {class_details.coach.name} </FeedUI.Summary>
+          <FeedUI.Extra text> {class_details.workout_plan.name }</FeedUI.Extra>
+        </FeedUI.Content>
+      </FeedUI.Event>
+    )
+  })
+  console.log(day)
   return(
-    <></>
+    <>
+      <CardUI.Content>
+        <CardUI.Header>{ day }</CardUI.Header>
+      </CardUI.Content>
+      <CardUI.Content>
+        <FeedUI>
+          {feedClassesContentJSX}
+        </FeedUI>
+      </CardUI.Content>
+    </>
   )
 }
 
@@ -60,30 +83,24 @@ function ClassSchedule( {sch_classes} ){
   sch_classes.forEach(element => {
     days.add(element.day)
   });
-
-  const classDetailsJSX = days.forEach( day => {
-    const classesFiltered = sch_classes.filter( sch_class => {
-      if (day === sch_class.day){
-        return true 
-      }
-      else {
-        return false
-      }
-      
+  
+  const classDetailsJSX = [...days].map( day => {
+    const classesFiltered = sch_classes.filter( sch_classes => {
+      return day === sch_classes.day
     })
-    console.log(classesFiltered)
-    return classesFiltered
-  }
-  )
 
+    return(
+      <ClassScheduleDetails key = {day}  day = {day} classesFiltered = { classesFiltered }/>
+    )
+  })
 
   return (
     <SegmentUI>
       <HeaderUI>
         <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
       </HeaderUI>
-      <CardUI>
-
+      <CardUI fluid>
+        { classDetailsJSX }
       </CardUI>
     </SegmentUI>
   )
