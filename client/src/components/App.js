@@ -29,21 +29,38 @@ function Header(){
 }
 
 function ClassSchedule(){
-  const [classes, setClasses] = useState([])
 
-  useEffect(()=>{
-    fetch("/schedules")
-      .then( r => r.json())
-      .then( d => setClasses(d))
-  }, [])
-
-  console.log(classes)
   return (
     <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
   )
 }
 
 function WorkoutPlan(){
+
+  return (
+    <h2>Here is the workout plan</h2>
+  )
+}
+
+function ExerciseMove(){
+
+
+  return (
+    <h2>Here is the exercise move info</h2>
+  )
+}
+
+function Coach(){
+
+  return (
+    <h2>Here are the coaches</h2>
+  )
+}
+
+function App() {
+  const [coaches, setCoaches] = useState([])
+  const [moves, setMoves] = useState([])
+  const [classes, setClasses] = useState([])
   const [plans, setPlans] = useState([])
 
   useEffect(()=>{
@@ -52,30 +69,12 @@ function WorkoutPlan(){
       .then( d => setPlans(d))
   }, [])
 
-  console.log(plans)
-  return (
-    <h2>Here is the workout plan</h2>
-  )
-}
-
-function ExerciseMove(){
-
-  const [moves, setMoves] = useState([])
 
   useEffect(()=>{
-    fetch("/exercise_moves")
+    fetch("/schedules")
       .then( r => r.json())
-      .then( d => setMoves(d))
+      .then( d => setClasses(d))
   }, [])
-
-  console.log(moves)
-  return (
-    <h2>Here is the exercise move info</h2>
-  )
-}
-
-function Coach(){
-  const [coaches, setCoaches] = useState([])
 
   useEffect(()=>{
     fetch("/coaches")
@@ -83,13 +82,17 @@ function Coach(){
       .then( d => setCoaches(d))
   }, [])
 
-  console.log(coaches)
-  return (
-    <h2>Here are the coaches</h2>
-  )
-}
+  useEffect(()=>{
+    fetch("/exercise_moves")
+      .then( r => r.json())
+      .then( d => setMoves(d))
+  }, [])
 
-function App() {
+  console.log(coaches)
+  console.log(moves)
+  console.log(plans)
+  console.log(classes)
+  
   return (
   < >
     <Header />
