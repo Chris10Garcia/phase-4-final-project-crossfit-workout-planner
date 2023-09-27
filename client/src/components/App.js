@@ -1,52 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, NavLink } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { 
   Segment as SegmentUI, 
   Header as HeaderUI,
-  Menu as MenuUI,
   Card as CardUI,
   Feed as FeedUI,
   Container as ContainerUI
 } from 'semantic-ui-react'
+import Header from "./Header";
 
-
-function Header(){
-  return (
-    <SegmentUI >
-      <HeaderUI>
-        <h1>Welcome to Flatiron Crossfit</h1>
-      </HeaderUI>
-      <MenuUI width = {5} size = "large" pointing color = "yellow" > 
-        <MenuUI.Item 
-          as = { NavLink }
-          exact to = "/"
-          name = "Class Schedule"
-        />
-        <MenuUI.Item 
-          as = { NavLink }
-          to ="/workout_plans"
-          name = "Workout Plans"
-        />
-        <MenuUI.Item 
-          as = { NavLink }
-          to = "/exercise_moves"
-          name = "Exercise Moves"
-        />
-        <MenuUI.Item 
-          as = { NavLink }
-          to ="/coaches"
-          name = "Coaches"
-        />                
-        {/* <MenuUI.Item 
-          as = { NavLink }
-          to ="/"
-          name = "Crossfit Builder"
-        />    */}
-
-      </MenuUI>
-    </ SegmentUI>
-  )
-}
 
 function ClassScheduleDetails( { day, classesFiltered }){
   const feedClassesContentJSX = classesFiltered.map(class_details => {
