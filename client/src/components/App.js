@@ -28,30 +28,32 @@ function Header(){
   )
 }
 
-function ClassSchedule(){
+function ClassSchedule( {sch_classes} ){
+  console.log(sch_classes)
 
   return (
     <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
   )
 }
 
-function WorkoutPlan(){
-
+function WorkoutPlan( {plans} ){
+  console.log(plans)
   return (
     <h2>Here is the workout plan</h2>
   )
 }
 
-function ExerciseMove(){
-
+function ExerciseMove( { moves } ){
+  console.log(moves)
 
   return (
     <h2>Here is the exercise move info</h2>
   )
 }
 
-function Coach(){
-
+function Coach( { coaches } ){
+  console.log(coaches)
+  
   return (
     <h2>Here are the coaches</h2>
   )
@@ -60,7 +62,7 @@ function Coach(){
 function App() {
   const [coaches, setCoaches] = useState([])
   const [moves, setMoves] = useState([])
-  const [classes, setClasses] = useState([])
+  const [sch_classes, setSchClasses] = useState([])
   const [plans, setPlans] = useState([])
 
   useEffect(()=>{
@@ -69,11 +71,10 @@ function App() {
       .then( d => setPlans(d))
   }, [])
 
-
   useEffect(()=>{
     fetch("/schedules")
       .then( r => r.json())
-      .then( d => setClasses(d))
+      .then( d => setSchClasses(d))
   }, [])
 
   useEffect(()=>{
@@ -88,26 +89,26 @@ function App() {
       .then( d => setMoves(d))
   }, [])
 
-  console.log(coaches)
-  console.log(moves)
-  console.log(plans)
-  console.log(classes)
+
+
   
+  
+
   return (
   < >
     <Header />
     <Switch>
       <Route exact path = "/">
-        <ClassSchedule />
+        <ClassSchedule sch_classes = { sch_classes }/>
       </Route>
       <Route path = "/workout_plans" > 
-        <WorkoutPlan />
+        <WorkoutPlan plans = { plans } />
       </Route>
       <Route path = "/exercise_moves" >
-        <ExerciseMove />
+        <ExerciseMove moves = { moves } />
       </Route>
       <Route path = "/coaches" >
-        <Coach />
+        <Coach coaches = {coaches}/>
       </Route>
     </Switch>
   </>
