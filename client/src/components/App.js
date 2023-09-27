@@ -5,35 +5,45 @@ import {
   Header as HeaderUI,
   Card as CardUI,
   Feed as FeedUI,
+  Divider as DividerUI,
   Container as ContainerUI
 } from 'semantic-ui-react'
 import Header from "./Header";
 
 
-function ClassScheduleDetails( { day, classesFiltered }){
+function ClassScheduleDetails( { day, sch_classes }){
+  const classesFiltered = sch_classes.filter( sch_classes => {
+    return day === sch_classes.day
+  })
+
   const feedClassesContentJSX = classesFiltered.map(class_details => {
     return (
       <FeedUI.Event>
         <FeedUI.Content>
-          <FeedUI.User>{class_details.hour}</FeedUI.User>
-          <FeedUI.Summary> {class_details.coach.name} </FeedUI.Summary>
-          <FeedUI.Extra text> {class_details.workout_plan.name }</FeedUI.Extra>
+          <HeaderUI as="h4">Workout Plan: <a>{class_details.workout_plan.name } </a>
+            <FeedUI.Meta>Difficulty: {class_details.workout_plan.difficulty} </FeedUI.Meta>
+          </HeaderUI>
+          
+          <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
+          
+          Coach: <FeedUI.User href="/coaches" >{class_details.coach.name} </FeedUI.User>
+          <DividerUI />
         </FeedUI.Content>
       </FeedUI.Event>
     )
   })
 
   return(
-    <>
+    <CardUI>
       <CardUI.Content>
-        <CardUI.Header>{ day }</CardUI.Header>
+        <CardUI.Header as = "h1"> { day } </CardUI.Header>
       </CardUI.Content>
       <CardUI.Content>
         <FeedUI>
           {feedClassesContentJSX}
         </FeedUI>
       </CardUI.Content>
-    </>
+    </ CardUI>
   )
 }
 
@@ -45,12 +55,8 @@ function ClassSchedule( {sch_classes} ){
   });
   
   const classDetailsJSX = [...days].map( day => {
-    const classesFiltered = sch_classes.filter( sch_classes => {
-      return day === sch_classes.day
-    })
-
     return(
-      <ClassScheduleDetails key = {day}  day = {day} classesFiltered = { classesFiltered }/>
+      <ClassScheduleDetails key = {day}  day = {day} sch_classes = { sch_classes }/>
     )
   })
 
@@ -59,9 +65,9 @@ function ClassSchedule( {sch_classes} ){
       <HeaderUI>
         <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
       </HeaderUI>
-      <CardUI fluid>
+      <CardUI.Group>
         { classDetailsJSX }
-      </CardUI>
+      </CardUI.Group>
     </SegmentUI>
   )
 }
