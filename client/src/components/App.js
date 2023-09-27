@@ -49,8 +49,6 @@ function Header(){
 }
 
 function ClassScheduleDetails( { day, classesFiltered }){
-  
-
   const feedClassesContentJSX = classesFiltered.map(class_details => {
     return (
       <FeedUI.Event>
@@ -62,7 +60,7 @@ function ClassScheduleDetails( { day, classesFiltered }){
       </FeedUI.Event>
     )
   })
-  console.log(day)
+
   return(
     <>
       <CardUI.Content>
