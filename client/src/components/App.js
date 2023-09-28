@@ -90,7 +90,7 @@ function ListData ( {dataList} ){
       <MenuUI.Item 
         key = {data.id}
         name = {data.name}
-        as = {Link}
+        as = {NavLink}
         to = {`${match.url}/${data.id}`}
         color = {"red"}
       />
