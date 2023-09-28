@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, useRouteMatch, NavLink } from "react-router-dom";
+import { HashRouter, Switch, Route, useRouteMatch, NavLink, Link, useParams} from "react-router-dom";
 import { 
   Segment as SegmentUI, 
   Header as HeaderUI,
@@ -72,6 +72,7 @@ function ClassSchedule( {sch_classes} ){
 
 
 function ListData ( {dataList} ){
+  const match = useRouteMatch()
 
   if (dataList.length === 0) return (
     <React.Fragment>
@@ -83,14 +84,14 @@ function ListData ( {dataList} ){
       </PlaceholderUI>
     </React.Fragment>
   )
-
+  
   const dataListJSK = dataList.map ( data => {
     return(
       <MenuUI.Item 
         key = {data.id}
         name = {data.name}
-        as = {NavLink}
-        to = {"/"}
+        as = {Link}
+        to = {`${match.url}/${data.id}`}
         color = {"red"}
       />
     )
@@ -103,26 +104,35 @@ function ListData ( {dataList} ){
   )
 }
 
-function WorkoutPlan( {plans} ){
-  console.log(plans)
 
+
+function PageFrame({children, title, dataList }){
+  const match = useRouteMatch()
   return (
     <SegmentUI>
       <HeaderUI>
-        <h2>Here is the workout plan</h2>
+        <h2>{title} Page</h2>
       </HeaderUI>
       <GridUI celled columns="equal">
         <GridUI.Row>
           <GridUI.Column width = {3}>
             <HeaderUI>
-              <h3>List of Workout Plans</h3>
+              <h3>{title} List</h3>
             </HeaderUI>
-            <ListData dataList = {plans}/>
+            <ListData dataList = {dataList} />
           </GridUI.Column>
-          <GridUI.Column fluid>
-          <HeaderUI>
-              <h3>Workout Plan Selected</h3>
-            </HeaderUI>
+          <GridUI.Column>
+            
+            <Route exact path = {`${match.url}`}>
+              <HeaderUI>
+                      <h3>Select the {title} on the left</h3>
+              </HeaderUI>
+            </Route>
+
+            <Route path = {`${match.url}/:itemID`}>
+              { children }
+            </Route>
+
           </GridUI.Column>
         </GridUI.Row>
       </GridUI>
@@ -130,57 +140,79 @@ function WorkoutPlan( {plans} ){
   )  
 }
 
+function WorkoutPlanDetails({dataList}){
+  const params = useParams()
+
+  const data = dataList[params.itemID - 1]
+
+  if (!data) return <h2>page loading...</h2>
+
+  
+  return(
+    <React.Fragment>
+      <HeaderUI> Workout Plan Details for {data.name} </HeaderUI>
+      <ContainerUI>
+        
+      </ContainerUI>
+    </React.Fragment>
+  )
+}
+
+function WorkoutPlan( {plans} ){
+  // console.log(plans)
+  // const match = useRouteMatch()
+  // console.log(match)
+  return (
+    <PageFrame 
+        title = {"Workout Plan"}
+        dataList = {plans}
+        >
+      <WorkoutPlanDetails dataList={plans}/>
+    </PageFrame>
+  )
+}
+
 function ExerciseMove( { moves } ){
 
   return (
-    <SegmentUI>
-      <HeaderUI>
-        <h2>Here are the Exercise Moves</h2>
-      </HeaderUI>
-      <GridUI celled columns="equal">
-        <GridUI.Row>
-          <GridUI.Column width = {3}>
-            <HeaderUI>
-              <h3>List of Exercise Moves</h3>
-            </HeaderUI>
-            <ListData dataList = {moves}/>
-          </GridUI.Column>
-          <GridUI.Column fluid>
-          <HeaderUI>
-              <h3>Exercise Move Selected</h3>
-            </HeaderUI>
-          </GridUI.Column>
-        </GridUI.Row>
-      </GridUI>
-    </SegmentUI>
-  )  
+    <PageFrame 
+        title = {"Exercise Move"}
+        dataList = {moves}
+    />
+  )
 }
 
 function Coach( { coaches } ){
   // console.log(coaches)
 
   return (
-    <SegmentUI>
-      <HeaderUI>
-        <h2>Here are the Coaches</h2>
-      </HeaderUI>
-      <GridUI celled columns="equal">
-        <GridUI.Row>
-          <GridUI.Column width = {3}>
-            <HeaderUI>
-              <h3>List of Coaches</h3>
-            </HeaderUI>
-            <ListData dataList = {coaches}/>
-          </GridUI.Column>
-          <GridUI.Column fluid>
-          <HeaderUI>
-              <h3>Coach Selected</h3>
-            </HeaderUI>
-          </GridUI.Column>
-        </GridUI.Row>
-      </GridUI>
-    </SegmentUI>
-  )  
+    <PageFrame 
+        title = {"Coach"}
+        dataList = {coaches}
+    />
+  )
+  // return (
+  //   <SegmentUI>
+  //     <HeaderUI>
+  //       <h2>Here are the Coaches</h2>
+  //     </HeaderUI>
+  //     <GridUI celled columns="equal">
+  //       <GridUI.Row>
+  //         <GridUI.Column width = {3}>
+  //           <HeaderUI>
+  //             <h3>List of Coaches</h3>
+  //           </HeaderUI>
+  //           <ListData dataList = {coaches}/>
+  //         </GridUI.Column>
+  //         <GridUI.Column fluid>
+  //         <HeaderUI>
+  //             <h3>Coach Selected</h3>
+  //           </HeaderUI>
+  //         </GridUI.Column>
+  //       </GridUI.Row>
+  //     </GridUI>
+  //   </SegmentUI>
+  // )  
 }
 
 function App() {
