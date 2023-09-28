@@ -6,6 +6,9 @@ import {
   Container as ContainerUI,
   Grid as GridUI,
   Menu as MenuUI,
+  Card as CardUI,
+  Divider as DividerUI,
+  Feed as FeedUI,
   Placeholder as PlaceholderUI
 } from 'semantic-ui-react'
 
@@ -85,17 +88,34 @@ function PageFrame({children, title, dataList }){
 function WorkoutPlanDetails({dataList}){
   const params = useParams()
 
-  const data = dataList[params.itemID - 1]
+  const workoutPlan = dataList[params.itemID - 1]
 
-  if (!data) return <h2>page loading...</h2>
+  if (!workoutPlan) return <h2>page loading...</h2>
 
+  const { exercise_moves } = workoutPlan
   
+  console.log(exercise_moves)
+
+  const exerciseMovesJSK = exercise_moves.map(move => {
+    return(
+        <GridUI key = {move.id} celled>
+          <HeaderUI as= "h2">{move.name}</HeaderUI>
+            {move.focus}
+            {move.description}
+            <p>Video URL Link: <a href={move.video_link}>{move.video_link}</a></p>
+        </GridUI>
+    )
+  })
+
   return(
     <React.Fragment>
-      <HeaderUI> Workout Plan Details for {data.name} </HeaderUI>
-      <ContainerUI>
-        
-      </ContainerUI>
+      <HeaderUI> Workout Plan Details</HeaderUI>
+        <HeaderUI as="h1">{workoutPlan.name}</HeaderUI>
+        <p>Workout Plan ID: {workoutPlan.id}</p>
+        <p>Difficulty: {workoutPlan.difficulty}</p>
+        <p>Description: {workoutPlan.description}</p>
+        <HeaderUI as="h3">Exercise Moves Involved</HeaderUI>
+            {exerciseMovesJSK}
     </React.Fragment>
   )
 }
