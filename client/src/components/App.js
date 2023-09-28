@@ -1,121 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, useRouteMatch, NavLink, useParams} from "react-router-dom";
+import { Switch, Route, useParams} from "react-router-dom";
 import { 
   Segment as SegmentUI, 
   Header as HeaderUI,
   Container as ContainerUI,
   Grid as GridUI,
-  Menu as MenuUI,
   Card as CardUI,
   Divider as DividerUI,
-  Feed as FeedUI,
-  Placeholder as PlaceholderUI
-} from 'semantic-ui-react'
+  Feed as FeedUI} from 'semantic-ui-react'
 
 import Header from "./Header";
 import ClassSchedule from "./ClassSchedule";
+import PageFrame from "./PageFrame";
 
-
-function ListData ( {dataList} ){
-  const match = useRouteMatch()
-
-  if (dataList.length === 0) return (
-    <React.Fragment>
-      <HeaderUI as= "h3">Please wait while backend server starts up and pulls data </HeaderUI>
-      <PlaceholderUI fluid>
-        <PlaceholderUI.Paragraph>
-          <PlaceholderUI.Line /><PlaceholderUI.Line /><PlaceholderUI.Line /><PlaceholderUI.Line />
-        </PlaceholderUI.Paragraph>
-      </PlaceholderUI>
-    </React.Fragment>
-  )
-  
-  const dataListJSK = dataList.map ( data => {
-    return(
-      <MenuUI.Item 
-        key = {data.id}
-        name = {data.name}
-        as = {NavLink}
-        to = {`${match.url}/${data.id}`}
-        color = {"red"}
-      />
-    )
-  })
-
-  return (
-    <MenuUI size = "large" vertical fluid>
-      { dataListJSK }
-    </MenuUI>
-  )
-}
-
-
-
-function PageFrame({children, title, dataList }){
-  const match = useRouteMatch()
-  return (
-    <SegmentUI>
-      <HeaderUI>
-        <h2>{title} Page</h2>
-      </HeaderUI>
-      <GridUI celled columns="equal">
-        <GridUI.Row>
-          <GridUI.Column width = {3}>
-            <HeaderUI>
-              <h3>{title} List</h3>
-            </HeaderUI>
-            <ListData dataList = {dataList} />
-          </GridUI.Column>
-          <GridUI.Column>
-            
-            <Route exact path = {`${match.url}`}>
-              <HeaderUI>
-                      <h3>Select the {title} on the left</h3>
-              </HeaderUI>
-            </Route>
-
-            <Route path = {`${match.url}/:itemID`}>
-              { children }
-            </Route>
-
-          </GridUI.Column>
-        </GridUI.Row>
-      </GridUI>
-    </SegmentUI>
-  )  
-}
 
 function WorkoutPlanDetails({dataList}){
   const params = useParams()
-
   const workoutPlan = dataList[params.itemID - 1]
 
   if (!workoutPlan) return <h2>page loading...</h2>
 
   const { exercise_moves } = workoutPlan
-  
-  console.log(exercise_moves)
 
   const exerciseMovesJSK = exercise_moves.map(move => {
-    return(
-        <GridUI key = {move.id} celled>
-          <HeaderUI as= "h2">{move.name}</HeaderUI>
-            {move.focus}
-            {move.description}
-            <p>Video URL Link: <a href={move.video_link}>{move.video_link}</a></p>
-        </GridUI>
-    )
-  })
+      return(
+          <ContainerUI key = {move.id}>
+                <HeaderUI as= "h4">{move.name}</HeaderUI>
+                <p><b>Move focus:</b> {move.focus}</p>
+                <p><b>Description:</b>  {move.description}</p>
+                <p><b>Video URL Link:</b> <a href={move.video_link}>{move.video_link}</a></p>
+                <DividerUI></DividerUI>
+          </ContainerUI>
+      )
+    })
 
   return(
     <React.Fragment>
       <HeaderUI> Workout Plan Details</HeaderUI>
-        <HeaderUI as="h1">{workoutPlan.name}</HeaderUI>
-        <p>Workout Plan ID: {workoutPlan.id}</p>
-        <p>Difficulty: {workoutPlan.difficulty}</p>
-        <p>Description: {workoutPlan.description}</p>
-        <HeaderUI as="h3">Exercise Moves Involved</HeaderUI>
-            {exerciseMovesJSK}
+      <HeaderUI as="h2">{workoutPlan.name}</HeaderUI>
+      <p><b>Workout Plan ID:</b> {workoutPlan.id}</p>
+      <p><b>Difficulty:</b> {workoutPlan.difficulty}</p>
+      <p><b>Description:</b> {workoutPlan.description}</p>
+      <DividerUI />
+      <HeaderUI as="h3">Exercise Moves Involved </HeaderUI>
+          <SegmentUI padded>
+                {exerciseMovesJSK}
+          </SegmentUI>
     </React.Fragment>
   )
 }
@@ -125,7 +55,7 @@ function WorkoutPlan( {plans} ){
     <PageFrame 
         title = {"Workout Plan"}
         dataList = {plans}
-        >
+    >
       <WorkoutPlanDetails dataList={plans}/>
     </PageFrame>
   )

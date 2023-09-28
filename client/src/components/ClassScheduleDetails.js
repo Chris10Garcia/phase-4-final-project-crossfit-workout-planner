@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"
 import {
   Header as HeaderUI,
   Card as CardUI,
@@ -14,13 +15,15 @@ function ClassScheduleDetails({ day, sch_classes }) {
     return (
       <FeedUI.Event key={class_details.id}>
         <FeedUI.Content>
-          <HeaderUI as="h4">Workout Plan: <a>{class_details.workout_plan.name} </a>
-            <FeedUI.Meta>Difficulty: {class_details.workout_plan.difficulty} </FeedUI.Meta>
-          </HeaderUI>
 
+          <HeaderUI as="h4">Workout Plan: <Link to ={`/workout_plans/${class_details.workout_plan.id}`}>{class_details.workout_plan.name} </Link>
+              <FeedUI.Meta>Difficulty: {class_details.workout_plan.difficulty} </FeedUI.Meta>
+          </HeaderUI>
+          
           <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
 
-          Coach: <FeedUI.User href="/coaches">{class_details.coach.name} </FeedUI.User>
+          <p>Coach: <FeedUI.User href={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
+          
           <DividerUI />
         </FeedUI.Content>
       </FeedUI.Event>
