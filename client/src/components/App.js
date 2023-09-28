@@ -1,37 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useRouteMatch, NavLink } from "react-router-dom";
 import { 
   Segment as SegmentUI, 
   Header as HeaderUI,
   Card as CardUI,
   Feed as FeedUI,
   Divider as DividerUI,
-  Container as ContainerUI
+  Container as ContainerUI,
+  Grid as GridUI,
+  Menu as MenuUI,
+  Placeholder as PlaceholderUI
 } from 'semantic-ui-react'
 import Header from "./Header";
 
 
 function ClassScheduleDetails( { day, sch_classes }){
-  const classesFiltered = sch_classes.filter( sch_classes => {
-    return day === sch_classes.day
-  })
+
+  const classesFiltered = sch_classes.filter( sch_classes => day === sch_classes.day)
 
   const feedClassesContentJSX = classesFiltered.map(class_details => {
     return (
-      <FeedUI.Event>
-        <FeedUI.Content>
-          <HeaderUI as="h4">Workout Plan: <a>{class_details.workout_plan.name } </a>
-            <FeedUI.Meta>Difficulty: {class_details.workout_plan.difficulty} </FeedUI.Meta>
-          </HeaderUI>
-          
-          <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
-          
-          Coach: <FeedUI.User href="/coaches" >{class_details.coach.name} </FeedUI.User>
-          <DividerUI />
-        </FeedUI.Content>
-      </FeedUI.Event>
+            <FeedUI.Event key = {class_details.id}>
+              <FeedUI.Content>
+                <HeaderUI as="h4">Workout Plan: <a>{class_details.workout_plan.name } </a>
+                  <FeedUI.Meta>Difficulty: {class_details.workout_plan.difficulty} </FeedUI.Meta>
+                </HeaderUI>
+                
+                <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
+                
+                Coach: <FeedUI.User href="/coaches" >{class_details.coach.name} </FeedUI.User>
+                <DividerUI />
+              </FeedUI.Content>
+            </FeedUI.Event>
     )
   })
+
 
   return(
     <CardUI>
@@ -50,15 +53,9 @@ function ClassScheduleDetails( { day, sch_classes }){
 function ClassSchedule( {sch_classes} ){
   const days = new Set()
 
-  sch_classes.forEach(element => {
-    days.add(element.day)
-  });
+  sch_classes.forEach(element => days.add(element.day) );
   
-  const classDetailsJSX = [...days].map( day => {
-    return(
-      <ClassScheduleDetails key = {day}  day = {day} sch_classes = { sch_classes }/>
-    )
-  })
+  const classDetailsJSX = [...days].map( day => <ClassScheduleDetails key = {day}  day = {day} sch_classes = { sch_classes }/> )
 
   return (
     <SegmentUI>
@@ -72,28 +69,118 @@ function ClassSchedule( {sch_classes} ){
   )
 }
 
-function WorkoutPlan( {plans} ){
-  // console.log(plans)
+
+
+function ListData ( {dataList} ){
+
+  if (dataList.length === 0) return (
+    <React.Fragment>
+      <HeaderUI as= "h3">Please wait while backend server starts up and pulls data </HeaderUI>
+      <PlaceholderUI fluid>
+        <PlaceholderUI.Paragraph>
+          <PlaceholderUI.Line /><PlaceholderUI.Line /><PlaceholderUI.Line /><PlaceholderUI.Line />
+        </PlaceholderUI.Paragraph>
+      </PlaceholderUI>
+    </React.Fragment>
+  )
+
+  const dataListJSK = dataList.map ( data => {
+    return(
+      <MenuUI.Item 
+        key = {data.id}
+        name = {data.name}
+        as = {NavLink}
+        to = {"/"}
+        color = {"red"}
+      />
+    )
+  })
 
   return (
-    <h2>Here is the workout plan</h2>
+    <MenuUI size = "large" vertical fluid>
+      { dataListJSK }
+    </MenuUI>
   )
 }
 
-function ExerciseMove( { moves } ){
-  // console.log(moves)
+function WorkoutPlan( {plans} ){
+  console.log(plans)
 
   return (
-    <h2>Here is the exercise move info</h2>
-  )
+    <SegmentUI>
+      <HeaderUI>
+        <h2>Here is the workout plan</h2>
+      </HeaderUI>
+      <GridUI celled columns="equal">
+        <GridUI.Row>
+          <GridUI.Column width = {3}>
+            <HeaderUI>
+              <h3>List of Workout Plans</h3>
+            </HeaderUI>
+            <ListData dataList = {plans}/>
+          </GridUI.Column>
+          <GridUI.Column fluid>
+          <HeaderUI>
+              <h3>Workout Plan Selected</h3>
+            </HeaderUI>
+          </GridUI.Column>
+        </GridUI.Row>
+      </GridUI>
+    </SegmentUI>
+  )  
+}
+
+function ExerciseMove( { moves } ){
+
+  return (
+    <SegmentUI>
+      <HeaderUI>
+        <h2>Here are the Exercise Moves</h2>
+      </HeaderUI>
+      <GridUI celled columns="equal">
+        <GridUI.Row>
+          <GridUI.Column width = {3}>
+            <HeaderUI>
+              <h3>List of Exercise Moves</h3>
+            </HeaderUI>
+            <ListData dataList = {moves}/>
+          </GridUI.Column>
+          <GridUI.Column fluid>
+          <HeaderUI>
+              <h3>Exercise Move Selected</h3>
+            </HeaderUI>
+          </GridUI.Column>
+        </GridUI.Row>
+      </GridUI>
+    </SegmentUI>
+  )  
 }
 
 function Coach( { coaches } ){
   // console.log(coaches)
 
   return (
-    <h2>Here are the coaches</h2>
-  )
+    <SegmentUI>
+      <HeaderUI>
+        <h2>Here are the Coaches</h2>
+      </HeaderUI>
+      <GridUI celled columns="equal">
+        <GridUI.Row>
+          <GridUI.Column width = {3}>
+            <HeaderUI>
+              <h3>List of Coaches</h3>
+            </HeaderUI>
+            <ListData dataList = {coaches}/>
+          </GridUI.Column>
+          <GridUI.Column fluid>
+          <HeaderUI>
+              <h3>Coach Selected</h3>
+            </HeaderUI>
+          </GridUI.Column>
+        </GridUI.Row>
+      </GridUI>
+    </SegmentUI>
+  )  
 }
 
 function App() {
