@@ -1,74 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { HashRouter, Switch, Route, useRouteMatch, NavLink, Link, useParams} from "react-router-dom";
+import { Switch, Route, useRouteMatch, NavLink, useParams} from "react-router-dom";
 import { 
   Segment as SegmentUI, 
   Header as HeaderUI,
-  Card as CardUI,
-  Feed as FeedUI,
-  Divider as DividerUI,
   Container as ContainerUI,
   Grid as GridUI,
   Menu as MenuUI,
   Placeholder as PlaceholderUI
 } from 'semantic-ui-react'
+
 import Header from "./Header";
-
-
-function ClassScheduleDetails( { day, sch_classes }){
-
-  const classesFiltered = sch_classes.filter( sch_classes => day === sch_classes.day)
-
-  const feedClassesContentJSX = classesFiltered.map(class_details => {
-    return (
-            <FeedUI.Event key = {class_details.id}>
-              <FeedUI.Content>
-                <HeaderUI as="h4">Workout Plan: <a>{class_details.workout_plan.name } </a>
-                  <FeedUI.Meta>Difficulty: {class_details.workout_plan.difficulty} </FeedUI.Meta>
-                </HeaderUI>
-                
-                <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
-                
-                Coach: <FeedUI.User href="/coaches" >{class_details.coach.name} </FeedUI.User>
-                <DividerUI />
-              </FeedUI.Content>
-            </FeedUI.Event>
-    )
-  })
-
-
-  return(
-    <CardUI>
-      <CardUI.Content>
-        <CardUI.Header as = "h1"> { day } </CardUI.Header>
-      </CardUI.Content>
-      <CardUI.Content>
-        <FeedUI>
-          {feedClassesContentJSX}
-        </FeedUI>
-      </CardUI.Content>
-    </ CardUI>
-  )
-}
-
-function ClassSchedule( {sch_classes} ){
-  const days = new Set()
-
-  sch_classes.forEach(element => days.add(element.day) );
-  
-  const classDetailsJSX = [...days].map( day => <ClassScheduleDetails key = {day}  day = {day} sch_classes = { sch_classes }/> )
-
-  return (
-    <SegmentUI>
-      <HeaderUI>
-        <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
-      </HeaderUI>
-      <CardUI.Group>
-        { classDetailsJSX }
-      </CardUI.Group>
-    </SegmentUI>
-  )
-}
-
+import ClassSchedule from "./ClassSchedule";
 
 
 function ListData ( {dataList} ){
@@ -159,9 +101,6 @@ function WorkoutPlanDetails({dataList}){
 }
 
 function WorkoutPlan( {plans} ){
-  // console.log(plans)
-  // const match = useRouteMatch()
-  // console.log(match)
   return (
     <PageFrame 
         title = {"Workout Plan"}
@@ -183,36 +122,13 @@ function ExerciseMove( { moves } ){
 }
 
 function Coach( { coaches } ){
-  // console.log(coaches)
-
   return (
     <PageFrame 
         title = {"Coach"}
         dataList = {coaches}
     />
   )
-  // return (
-  //   <SegmentUI>
-  //     <HeaderUI>
-  //       <h2>Here are the Coaches</h2>
-  //     </HeaderUI>
-  //     <GridUI celled columns="equal">
-  //       <GridUI.Row>
-  //         <GridUI.Column width = {3}>
-  //           <HeaderUI>
-  //             <h3>List of Coaches</h3>
-  //           </HeaderUI>
-  //           <ListData dataList = {coaches}/>
-  //         </GridUI.Column>
-  //         <GridUI.Column fluid>
-  //         <HeaderUI>
-  //             <h3>Coach Selected</h3>
-  //           </HeaderUI>
-  //         </GridUI.Column>
-  //       </GridUI.Row>
-  //     </GridUI>
-  //   </SegmentUI>
-  // )  
+
 }
 
 function App() {
