@@ -3,11 +3,9 @@ import { useParams } from "react-router-dom";
 import {
   Segment as SegmentUI,
   Header as HeaderUI, 
-  Grid as GridUI, 
   Divider as DividerUI,
   Container as ContainerUI,
-  Image as ImageUI
-} from 'semantic-ui-react';
+  Image as ImageUI } from 'semantic-ui-react';
 
 function CoachDetails({ dataList }) {
   const params = useParams();
@@ -17,7 +15,7 @@ function CoachDetails({ dataList }) {
 
   return (
     <SegmentUI>
-        <HeaderUI> Exercise Move Details</HeaderUI>
+        <HeaderUI>Coach Details</HeaderUI>
         <ContainerUI>
             <HeaderUI as="h2">{coach.name}</HeaderUI>
             <ImageUI src = {coach.picture} size = "medium"/>

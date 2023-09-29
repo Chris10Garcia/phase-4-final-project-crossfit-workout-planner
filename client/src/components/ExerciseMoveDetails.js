@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Segment as SegmentUI,
   Header as HeaderUI, 
-  Grid as GridUI, 
   Divider as DividerUI,
   Container as ContainerUI
 } from 'semantic-ui-react';

@@ -22,7 +22,7 @@ function ClassScheduleDetails({ day, sch_classes }) {
           
           <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
 
-          <p>Coach: <FeedUI.User href={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
+          <p>Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
           
           <DividerUI />
         </FeedUI.Content>

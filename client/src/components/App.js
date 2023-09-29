@@ -1,29 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route} from "react-router-dom";
 import { 
-  Segment as SegmentUI, 
-  Container as ContainerUI,
-  Card as CardUI,
-  Feed as FeedUI} from 'semantic-ui-react'
+  Segment as SegmentUI, } from 'semantic-ui-react'
 
 import Header from "./Header";
 import ClassSchedule from "./ClassSchedule";
-import PageFrame from "./PageFrame";
 import WorkoutPlan from "./WorkoutPlan";
 import ExerciseMove from "./ExerciseMove";
-import CoachDetails from "./CoachDetails";
+import Coach from "./Coach";
 
-
-function Coach( { coaches } ){
-  return (
-    <PageFrame 
-        title = {"Coach"}
-        dataList = {coaches}>
-      <CoachDetails dataList={ coaches}/>
-    </PageFrame>
-  )
-
-}
 
 function App() {
   const [coaches, setCoaches] = useState([])
