@@ -10,26 +10,17 @@ import Header from "./Header";
 import ClassSchedule from "./ClassSchedule";
 import PageFrame from "./PageFrame";
 import WorkoutPlan from "./WorkoutPlan";
-import ExerciseMoveDetails from "./ExerciseMoveDetails";
+import ExerciseMove from "./ExerciseMove";
+import CoachDetails from "./CoachDetails";
 
-
-function ExerciseMove( { moves } ){
-
-  return (
-    <PageFrame 
-        title = {"Exercise Move"}
-        dataList = {moves}>
-      <ExerciseMoveDetails dataList={ moves }/>
-    </PageFrame>
-  )
-}
 
 function Coach( { coaches } ){
   return (
     <PageFrame 
         title = {"Coach"}
-        dataList = {coaches}
-    />
+        dataList = {coaches}>
+      <CoachDetails dataList={ coaches}/>
+    </PageFrame>
   )
 
 }
