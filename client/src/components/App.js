@@ -10,6 +10,34 @@ import ExerciseMove from "./ExerciseMove";
 import Coach from "./Coach";
 
 
+/*
+Adding forms Brainstorming
+
+ClassScheduling
+- add form there
+- If workout plan that you want doesn't exist, then go to WorkOutPlan page to create it
+- Have option to edit and delete as well
+- Deleting schedule doesn't delete the other records associated with it
+
+Workout Plan
+- add form there
+- If exercise move isn't there, go to ExerciseMove Page to create it there
+- Create only. Maybe deal with edit but not sure how to deal with other state variables
+
+Exercise Plan
+- add form there
+
+Coach
+- add form there 
+- OPTIONAL: 
+  - if i do authentication, have coach can edit their own profile
+  - move the adding coach form to sign up / log in page
+
+*/
+
+
+
+
 function App() {
   const [coaches, setCoaches] = useState([])
   const [moves, setMoves] = useState([])
