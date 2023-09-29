@@ -1,8 +1,10 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link} from "react-router-dom";
 import {
   Segment as SegmentUI,
-  Header as HeaderUI, Grid as GridUI, Divider as DividerUI
+  Header as HeaderUI, 
+  Grid as GridUI, 
+  Divider as DividerUI,
 } from 'semantic-ui-react';
 
 function WorkoutPlanDetails({ dataList }) {
@@ -17,11 +19,11 @@ function WorkoutPlanDetails({ dataList }) {
     return (
       <GridUI.Column>
         <SegmentUI key={move.id}>
-          <HeaderUI as="h4">{move.name}</HeaderUI>
-          <p><b>Move focus:</b> {move.focus}</p>
-          <p><b>Description:</b>  {move.description}</p>
-          <p><b>Video URL Link:</b> <a href={move.video_link}>{move.video_link}</a></p>
-          <DividerUI></DividerUI>
+          <HeaderUI as="h3"><Link to = {`/exercise_moves/${move.id}`}>{move.name}</Link></HeaderUI>
+          <p><b>Move focus: </b>{move.focus}</p>
+          <DividerUI/>
+          <p><b>Description: </b>{move.description}</p>
+          {/* <p><b>Video URL Link:</b> <a href={move.video_link}>{move.video_link}</a></p> */}
         </SegmentUI>
       </GridUI.Column>
 

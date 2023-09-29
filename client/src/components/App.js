@@ -10,6 +10,7 @@ import Header from "./Header";
 import ClassSchedule from "./ClassSchedule";
 import PageFrame from "./PageFrame";
 import WorkoutPlan from "./WorkoutPlan";
+import ExerciseMoveDetails from "./ExerciseMoveDetails";
 
 
 function ExerciseMove( { moves } ){
@@ -17,8 +18,9 @@ function ExerciseMove( { moves } ){
   return (
     <PageFrame 
         title = {"Exercise Move"}
-        dataList = {moves}
-    />
+        dataList = {moves}>
+      <ExerciseMoveDetails dataList={ moves }/>
+    </PageFrame>
   )
 }
 
