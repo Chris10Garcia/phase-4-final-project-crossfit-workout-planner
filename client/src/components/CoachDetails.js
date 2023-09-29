@@ -14,7 +14,7 @@ function CoachDetails({ dataList }) {
   if (!coach) return <h2>page loading...</h2>;
 
   return (
-    <SegmentUI>
+    <React.Fragment>
         <HeaderUI>Coach Details</HeaderUI>
         <ContainerUI>
             <HeaderUI as="h2">{coach.name}</HeaderUI>
@@ -23,7 +23,7 @@ function CoachDetails({ dataList }) {
             <p><b>Coach ID:</b> {coach.id}</p>
             <p><b>Age:</b> {coach.age}</p>
         </ContainerUI>
-    </SegmentUI>
+    </React.Fragment>
   );
 }
 

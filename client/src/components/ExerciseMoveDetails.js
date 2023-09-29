@@ -14,7 +14,7 @@ function ExerciseMoveDetails({ dataList }) {
   if (!exerciseMove) return <h2>page loading...</h2>;
 
   return (
-    <SegmentUI>
+    <React.Fragment>
         <HeaderUI> Exercise Move Details</HeaderUI>
         <ContainerUI>
             <HeaderUI as="h2">{exerciseMove.name}</HeaderUI>
@@ -24,7 +24,7 @@ function ExerciseMoveDetails({ dataList }) {
             <p><b>Description:</b> {exerciseMove.description}</p>
             <p><b>Youtube Video Link:</b> {exerciseMove.video_link}</p>
         </ContainerUI>
-    </SegmentUI>
+    </React.Fragment>
   );
 }
 
