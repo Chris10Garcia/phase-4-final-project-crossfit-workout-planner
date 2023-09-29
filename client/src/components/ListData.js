@@ -6,7 +6,7 @@ import {
   Placeholder as 
   PlaceholderUI } from 'semantic-ui-react';
 
-export function ListData({ dataList }) {
+function ListData({ dataList }) {
   const match = useRouteMatch();
 
   if (dataList.length === 0) return (

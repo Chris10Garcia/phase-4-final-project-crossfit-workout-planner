@@ -6,7 +6,7 @@ import {
   Menu as MenuUI
 } from 'semantic-ui-react';
 
-export function Header() {
+function Header() {
   return (
     <SegmentUI>
       <HeaderUI>

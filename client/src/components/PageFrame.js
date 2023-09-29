@@ -7,7 +7,7 @@ import {
 
 import ListData from "./ListData";
 
-export function PageFrame({ children, title, dataList }) {
+function PageFrame({ children, title, dataList }) {
   const match = useRouteMatch();
 
   return (
