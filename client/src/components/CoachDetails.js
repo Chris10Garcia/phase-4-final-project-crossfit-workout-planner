@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import {
-  Segment as SegmentUI,
   Header as HeaderUI, 
   Divider as DividerUI,
   Container as ContainerUI,

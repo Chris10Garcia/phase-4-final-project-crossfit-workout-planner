@@ -1,4 +1,6 @@
 import React from "react";
+import * as yup from "yup";
+import { useFormik } from "formik";
 import {
   Segment as SegmentUI,
   Header as HeaderUI,
@@ -7,7 +9,50 @@ import {
 
 import ClassScheduleDetails  from "./ClassScheduleDetails";
 
-export function ClassSchedule({ sch_classes }) {
+/*
+day, hour, coach_id / coach, workout_plan_id / workout_plan
+*/
+
+function FormClassSchedule(){
+  const formSchema = yup.object().shape({
+    day: yup.string().required(),
+    hour: yup.string(),
+    coach_id: yup.number().integer(),
+    workout_plan_id: yup.number().integer(),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      day: "",
+      hour: "",
+      coach_id: "",
+      workout_plan_id: "",
+    },
+    validationSchema: formSchema,
+    onSubmit: values =>{
+      console.log(values)
+    }
+  })
+
+  return(
+    <div>
+      <form onSubmit = {formik.handleSubmit}>
+        <label htmlFor="day">Day</label>
+        <br />
+        <input 
+          id = "day"
+          name = "day"
+          onChange = {formik.handleChange}
+          value = {formik.values.day}
+        />
+        <p style={{color: "red"}}>{formik.errors.hour}</p>
+      </form>
+    </div>
+  )
+}
+
+
+function ClassSchedule({ sch_classes }) {
   const days = new Set();
 
   sch_classes.forEach(element => days.add(element.day));
@@ -21,6 +66,7 @@ export function ClassSchedule({ sch_classes }) {
       </HeaderUI>
       <CardUI.Group>
         {classDetailsJSX}
+        <FormClassSchedule />
       </CardUI.Group>
     </SegmentUI>
   );

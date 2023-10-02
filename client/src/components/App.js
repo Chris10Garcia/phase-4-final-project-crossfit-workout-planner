@@ -11,6 +11,12 @@ import Coach from "./Coach";
 
 
 /*
+I can bring down state for each fetch. however, I will need one state for refreshing the page at the top level
+reason: If i add a new coach, i need the other APIs to fetch again, etc
+Actually nevermind. I need to keep it high. Certain pages require knowing what records are available in the other APIs
+*/
+
+/*
 Adding forms Brainstorming
 
 ClassScheduling
@@ -34,8 +40,6 @@ Coach
   - move the adding coach form to sign up / log in page
 
 */
-
-
 
 
 function App() {
