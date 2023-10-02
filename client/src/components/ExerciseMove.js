@@ -39,10 +39,13 @@ function ExerciseMove({ moves }) {
     video_link : yup.string()
   })
 
-  // const formik = useFormik(
-  //   initialValues : formData,
+  const formik = useFormik({
+    initialValues : formData,
+    onSubmit: values => {
+      console.log(values)
+    }
 
-  // )
+  })
 
   return (
     <PageFrame
