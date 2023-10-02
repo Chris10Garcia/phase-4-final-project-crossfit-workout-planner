@@ -4,7 +4,8 @@ import { useFormik } from "formik";
 import {
   Segment as SegmentUI,
   Header as HeaderUI,
-  Card as CardUI
+  Card as CardUI,
+  Form as FormUI,
 } from 'semantic-ui-react';
 
 import ClassScheduleDetails  from "./ClassScheduleDetails";
@@ -25,6 +26,7 @@ function FormClassSchedule(){
     initialValues: {
       day: "",
       hour: "",
+
       coach_id: "",
       workout_plan_id: "",
     },
@@ -35,8 +37,9 @@ function FormClassSchedule(){
   })
 
   return(
-    <div>
-      <form onSubmit = {formik.handleSubmit}>
+    <SegmentUI>
+    <FormUI onSubmit = {formik.handleSubmit}>
+      <FormUI.Field>
         <label htmlFor="day">Day</label>
         <br />
         <input 
@@ -46,8 +49,9 @@ function FormClassSchedule(){
           value = {formik.values.day}
         />
         <p style={{color: "red"}}>{formik.errors.hour}</p>
-      </form>
-    </div>
+      </FormUI.Field>
+    </FormUI>
+    </SegmentUI>
   )
 }
 
