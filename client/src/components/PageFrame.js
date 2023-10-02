@@ -9,14 +9,15 @@ import ListData from "./ListData";
 
 function PageFrame({ children, title, dataList }) {
   const match = useRouteMatch();
-
+  console.log(children)
   return (
     <SegmentUI>
       <HeaderUI>
         <h2>{title} Page</h2>
       </HeaderUI>
 
-      <GridUI celled columns="equal">
+
+      <GridUI celled columns="equal" stackable>
         <GridUI.Row>
           <GridUI.Column width={3}>
 
@@ -27,6 +28,9 @@ function PageFrame({ children, title, dataList }) {
             <ListData dataList={dataList} />
             
           </GridUI.Column>
+
+          {children[0]}
+
           <GridUI.Column>
 
             <Route exact path={`${match.url}`}>
@@ -36,10 +40,11 @@ function PageFrame({ children, title, dataList }) {
             </Route>
 
             <Route path={`${match.url}/:itemID`}>
-              {children}
+              {children[1]}
             </Route>
-
           </GridUI.Column>
+
+          
         </GridUI.Row>
       </GridUI>
     </SegmentUI>
