@@ -5,55 +5,112 @@ import * as yup from "yup";
 
 import {
   Grid as GridUI,
-  Header as HeaderUI
+  Header as HeaderUI,
+  Form as FormUI,
+  Button as ButtonUI,
+  TextArea as TextAreaUI
 } from "semantic-ui-react"
 import { useFormik } from "formik";
 
-function FormFrame(prop){
-  const {title} = prop
-
-  
 
 
-  return(
-    <GridUI.Column width = {5}>
-      <HeaderUI as = "h2">Form to add a new {title}</HeaderUI>
+function FormExerciseMove(prop){
+  const {title, formData, setFormData, resetFormData } = prop
 
-    </GridUI.Column>
-  )
-}
-
-function ExerciseMove({ moves }) {
-  const title = "Exercise Move"
-  const [formData, setFormData] = useState({
-      name: "",
-      focus: "",
-      description: "",
-      video_link: ""
-  })
 
   const formSchema = yup.object().shape({
+    id : yup.number().integer(),
     name : yup.string(),
     focus : yup.string(),
     description : yup.string(),
     video_link : yup.string()
   })
 
+
   const formik = useFormik({
     initialValues : formData,
     onSubmit: values => {
-      console.log(values)
-    }
-
+      setFormData({...values})
+    },
+    enableReinitialize: true
   })
+
+  function DisplayID(idValue){
+    if (idValue !== null){
+      return (
+      <FormUI.Field disabled>
+        <label>ID</label>
+        <FormUI.Input id = "id" name = "id" onChange={formik.handleChange} value = {formik.values.id}/>
+      </FormUI.Field>
+      )
+    } else {
+      return (<></>)
+    }
+  }
+
+
+  return(
+    <GridUI.Column width = {5}>
+      <HeaderUI as = "h2">Form to add a new {title}</HeaderUI>
+      <FormUI onSubmit = {formik.handleSubmit}>
+        <DisplayID idValue = {formik.values.id} />
+        <FormUI.Field>
+          <label>Name</label>
+          <FormUI.Input id = "name" name = "name" onChange={formik.handleChange} value = {formik.values.name} />
+        </FormUI.Field>
+        <FormUI.Field>
+          <label>Focus</label>
+          <FormUI.Input id = "focus" name = "focus" onChange={formik.handleChange} value = {formik.values.focus} />
+        </FormUI.Field>
+        <FormUI.Field>
+          <label>Description</label>
+          <FormUI.TextArea rows = {2} id = "description" name = "description" onChange={formik.handleChange} value = {formik.values.description}/>
+        </FormUI.Field>
+        <FormUI.Field >
+          <label>Video Link</label>
+          <FormUI.Input id = "video_link" name = "video_link" onChange={formik.handleChange} value = {formik.values.video_link}  />
+        </FormUI.Field>
+        <FormUI.Button type="submit">Submit</FormUI.Button>
+        <FormUI.Button  onClick={resetFormData} > Reset</FormUI.Button >
+      </FormUI>
+    </GridUI.Column>
+  )
+}
+
+
+
+
+
+
+function ExerciseMove({ moves }) {
+  const title = "Exercise Move"
+
+  const startingValues = {
+    id: null,
+    name: "",
+    focus: "",
+    description: "",
+    video_link: ""
+}
+  const [displayButton, setDisplayButton] = useState(true)
+  const [formData, setFormData] = useState(startingValues)
+
+  function resetFormData(){
+    setFormData({...startingValues})    
+  }
+
+  function editButton(id){
+    const move = moves.find( obj => obj.id === parseInt(id, 10))
+    setDisplayButton(!displayButton)
+    setFormData({...move})    
+  }
 
   return (
     <PageFrame
       title = {title}
       dataList={moves}>
-        {/* instead it should be here */}
-      <FormFrame title= {title} />
-      <ExerciseMoveDetails dataList={moves} />
+      {displayButton ? <FormExerciseMove title= {title} formData = {formData} setFormData={setFormData} /> : "" }
+      <ExerciseMoveDetails dataList={moves} editButton={editButton} resetFormData={resetFormData} setDisplayButton={setDisplayButton} displayButton={displayButton}/>
       
     </PageFrame>
   );

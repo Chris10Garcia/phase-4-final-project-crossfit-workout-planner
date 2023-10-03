@@ -9,7 +9,7 @@ import ListData from "./ListData";
 
 function PageFrame({ children, title, dataList }) {
   const match = useRouteMatch();
-  console.log(children)
+  // console.log(children)
   return (
     <SegmentUI>
       <HeaderUI>

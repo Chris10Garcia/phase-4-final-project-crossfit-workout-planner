@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Header as HeaderUI, 
   Divider as DividerUI,
-  Container as ContainerUI
+  Container as ContainerUI,
+  Button as ButtonUI
 } from 'semantic-ui-react';
 
-function ExerciseMoveDetails({ dataList }) {
+function ExerciseMoveDetails({ dataList, editButton, setDisplayButton, displayButton}) {
   const params = useParams();
   const exerciseMove = dataList[params.itemID - 1];
+  
 
   if (!exerciseMove) return <h2>page loading...</h2>;
+  // if (displayButton) {setDisplayButton(false)}
+  
 
+  // resetFormData()
   return (
     <React.Fragment>
-        <HeaderUI> Exercise Move Details</HeaderUI>
+        <HeaderUI> Exercise Move Details <ButtonUI id = {exerciseMove.id} onClick={e => editButton(e.target.id)}> Edit</ButtonUI> </HeaderUI> 
         <ContainerUI>
             <HeaderUI as="h2">{exerciseMove.name}</HeaderUI>
             <DividerUI />
