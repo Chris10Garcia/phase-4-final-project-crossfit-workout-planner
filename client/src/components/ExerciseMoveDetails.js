@@ -13,10 +13,7 @@ function ExerciseMoveDetails({ dataList, editButton, setDisplayButton, displayBu
   
 
   if (!exerciseMove) return <h2>page loading...</h2>;
-  // if (displayButton) {setDisplayButton(false)}
-  
 
-  // resetFormData()
   return (
     <React.Fragment>
         <HeaderUI> Exercise Move Details <ButtonUI id = {exerciseMove.id} onClick={e => editButton(e.target.id)}> Edit</ButtonUI> </HeaderUI> 

@@ -8,14 +8,14 @@ import {
   Header as HeaderUI,
   Form as FormUI,
   Button as ButtonUI,
-  TextArea as TextAreaUI
+  TextArea as TextAreaUI,
+  Divider
 } from "semantic-ui-react"
 import { useFormik } from "formik";
 
 
 
-function FormExerciseMove(prop){
-  const {title, formData, setFormData, resetFormData } = prop
+function FormExerciseMove({title, formData, setFormData, resetFormData }){
 
 
   const formSchema = yup.object().shape({
@@ -31,6 +31,7 @@ function FormExerciseMove(prop){
     initialValues : formData,
     onSubmit: values => {
       setFormData({...values})
+      console.log(values)
     },
     enableReinitialize: true
   })
@@ -71,8 +72,8 @@ function FormExerciseMove(prop){
           <FormUI.Input id = "video_link" name = "video_link" onChange={formik.handleChange} value = {formik.values.video_link}  />
         </FormUI.Field>
         <FormUI.Button type="submit">Submit</FormUI.Button>
-        <FormUI.Button  onClick={resetFormData} > Reset</FormUI.Button >
       </FormUI>
+
     </GridUI.Column>
   )
 }
@@ -92,7 +93,7 @@ function ExerciseMove({ moves }) {
     description: "",
     video_link: ""
 }
-  const [displayButton, setDisplayButton] = useState(true)
+  const [displayButton, setDisplayButton] = useState(false)
   const [formData, setFormData] = useState(startingValues)
 
   function resetFormData(){
@@ -101,7 +102,7 @@ function ExerciseMove({ moves }) {
 
   function editButton(id){
     const move = moves.find( obj => obj.id === parseInt(id, 10))
-    setDisplayButton(!displayButton)
+    setDisplayButton(true)
     setFormData({...move})    
   }
 
