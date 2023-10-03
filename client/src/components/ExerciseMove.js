@@ -36,7 +36,7 @@ function FormExerciseMove(prop){
   })
 
   function DisplayID(idValue){
-    if (idValue !== null){
+    if (idValue !== undefined){
       return (
       <FormUI.Field disabled>
         <label>ID</label>
@@ -86,7 +86,7 @@ function ExerciseMove({ moves }) {
   const title = "Exercise Move"
 
   const startingValues = {
-    id: null,
+    id: undefined,
     name: "",
     focus: "",
     description: "",
