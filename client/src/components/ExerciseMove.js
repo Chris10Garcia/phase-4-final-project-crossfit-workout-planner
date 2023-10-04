@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 
 
 
-function FormExerciseMove({title, formData, setFormData, resetFormData }){
+function FormExerciseMove({title, formData, setFormData }){
 
 
   const formSchema = yup.object().shape({
@@ -27,35 +27,45 @@ function FormExerciseMove({title, formData, setFormData, resetFormData }){
   })
 
 
+
+  // console.log(formData)
   const formik = useFormik({
+  //   initialValues : {
+  //     id: "",
+  //     name: "",
+  //     focus: "",
+  //     description: "",
+  //     video_link: ""
+  // },
     initialValues : formData,
     onSubmit: values => {
-      setFormData({...values})
-      console.log(values)
+      setFormData({...values})  
+      formik.setValues(values)
+      console.log(formik.values)
     },
-    setFieldValue : formData,
-    enableReinitialize: true
+    enableReinitialize: true,
+    // onReset: ()=> {
+    //   setFormData({
+    //     id: "",
+    //     name: "",
+    //     focus: "",
+    //     description: "",
+    //     video_link: ""
+    // })
+    //   console.log(formData)
+    // }
   })
 
-  function DisplayID(idValue){
-    if (idValue !== undefined){
-      return (
-      <FormUI.Field disabled>
-        <label>ID</label>
-        <FormUI.Input id = "id" name = "id" onChange={formik.handleChange} value = {formik.values.id}/>
-      </FormUI.Field>
-      )
-    } else {
-      return (<></>)
-    }
-  }
 
 
   return(
     <GridUI.Column width = {5}>
-      <HeaderUI as = "h2">Form to add a new {title}</HeaderUI>
+      <HeaderUI as = "h2">{formData.id !== "" ? `Form to Edit ${formData.name}`  : `Add a new ${title}`}</HeaderUI>
       <FormUI onSubmit = {formik.handleSubmit}>
-        <DisplayID idValue = {formik.values.id} />
+      <FormUI.Field disabled>
+        <label>ID</label>
+        <FormUI.Input id = "id" name = "id" onChange={formik.handleChange} value = {formik.values.id}/>
+      </FormUI.Field>
         <FormUI.Field>
           <label>Name</label>
           <FormUI.Input id = "name" name = "name" onChange={formik.handleChange} value = {formik.values.name} />
@@ -74,16 +84,9 @@ function FormExerciseMove({title, formData, setFormData, resetFormData }){
         </FormUI.Field>
         <FormUI.Button type="submit">Submit</FormUI.Button>
         <DividerUI />
-        <FormUI.Button type="reset" onClick={() => formik.resetForm({
-            values: {
-              id: undefined,
-              name: "",
-              focus: "",
-              description: "",
-              video_link: ""
-          }
-})}>Clear Form</FormUI.Button>
+        <FormUI.Button type="reset" onClick={() => formik.resetForm()}>Reset to Original</FormUI.Button>
       </FormUI>
+      
 
     </GridUI.Column>
   )
@@ -92,29 +95,23 @@ function FormExerciseMove({title, formData, setFormData, resetFormData }){
 
 
 
-
-
 function ExerciseMove({ moves }) {
   const title = "Exercise Move"
 
-  const startingValues = {
-    id: undefined,
+  const [displayButton, setDisplayButton] = useState(false)
+  const [formData, setFormData] = useState({
+    id: "",
     name: "",
     focus: "",
     description: "",
     video_link: ""
-}
-  const [displayButton, setDisplayButton] = useState(false)
-  const [formData, setFormData] = useState(startingValues)
+})
 
-  function resetFormData(){
-    setFormData({...startingValues})    
-  }
 
   function editButton(id){
     const move = moves.find( obj => obj.id === parseInt(id, 10))
     setDisplayButton(true)
-    setFormData({...move})    
+    setFormData({...move})  
   }
 
   return (
@@ -122,7 +119,7 @@ function ExerciseMove({ moves }) {
       title = {title}
       dataList={moves}>
       {displayButton ? <FormExerciseMove title= {title} formData = {formData} setFormData={setFormData} /> : "" }
-      <ExerciseMoveDetails dataList={moves} editButton={editButton} resetFormData={resetFormData} setDisplayButton={setDisplayButton} displayButton={displayButton}/>
+      <ExerciseMoveDetails dataList={moves} editButton={editButton} setDisplayButton={setDisplayButton} displayButton={displayButton}/>
       
     </PageFrame>
   );

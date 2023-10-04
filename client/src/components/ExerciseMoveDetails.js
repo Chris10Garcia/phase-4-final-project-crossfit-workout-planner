@@ -7,7 +7,7 @@ import {
   Button as ButtonUI
 } from 'semantic-ui-react';
 
-function ExerciseMoveDetails({ dataList, editButton, setDisplayButton, displayButton}) {
+function ExerciseMoveDetails({ dataList, editButton}) {
   const params = useParams();
   const exerciseMove = dataList[params.itemID - 1];
   

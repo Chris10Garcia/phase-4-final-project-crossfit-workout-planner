@@ -13,7 +13,7 @@ function PageFrame({ children, title, dataList }) {
   return (
     <SegmentUI>
       <HeaderUI>
-        <h2>{title} Page</h2>
+        <h2>{title} Page</h2> <button>test</button>
       </HeaderUI>
 
 
