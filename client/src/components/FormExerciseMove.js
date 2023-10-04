@@ -18,16 +18,6 @@ function FormExerciseMove({ title, formData, setFormData }) {
     video_link: yup.string()
   });
 
-  function clearForm(){
-    setFormData({
-          id: "",
-          name: "",
-          focus: "",
-          description: "",
-          video_link: ""
-      })
-  }
-
   const formik = useFormik({
     initialValues: formData,
     onSubmit: values => {
@@ -38,7 +28,15 @@ function FormExerciseMove({ title, formData, setFormData }) {
     enableReinitialize: true,
   });
 
-
+  function clearForm(){
+    setFormData({
+          id: "",
+          name: "",
+          focus: "",
+          description: "",
+          video_link: ""
+      })
+  }
 
   return (
     <GridUI.Column width={5}>
@@ -58,7 +56,7 @@ function FormExerciseMove({ title, formData, setFormData }) {
         </FormUI.Field>
         <FormUI.Field>
           <label>Description</label>
-          <FormUI.TextArea rows={2} id="description" name="description" onChange={formik.handleChange} value={formik.values.description} />
+          <FormUI.TextArea rows={4} id="description" name="description" onChange={formik.handleChange} value={formik.values.description} />
         </FormUI.Field>
         <FormUI.Field>
           <label>Video Link</label>

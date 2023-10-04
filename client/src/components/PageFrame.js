@@ -2,18 +2,20 @@ import React from "react";
 import { Route, useRouteMatch } from "react-router-dom";
 import {
   Segment as SegmentUI,
-  Header as HeaderUI, Grid as GridUI
+  Header as HeaderUI, 
+  Grid as GridUI,
+  Button as ButtonUI
 } from 'semantic-ui-react';
 
 import ListData from "./ListData";
 
-function PageFrame({ children, title, dataList }) {
+function PageFrame({ children, title, dataList, setDisplayButton, displayButton }) {
   const match = useRouteMatch();
-  // console.log(children)
+
   return (
     <SegmentUI>
       <HeaderUI>
-        <h2>{title} Page</h2> <button>test</button>
+        <h2>{title} Page</h2> <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Form to Add New / Edit ${title}`}</ButtonUI>
       </HeaderUI>
 
 

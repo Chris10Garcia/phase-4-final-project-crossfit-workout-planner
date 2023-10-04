@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Header as HeaderUI, 
@@ -7,16 +7,23 @@ import {
   Button as ButtonUI
 } from 'semantic-ui-react';
 
-function ExerciseMoveDetails({ dataList, editButton}) {
+function ExerciseMoveDetails({ dataList, setFormData, setDisplayButton}) {
   const params = useParams();
   const exerciseMove = dataList[params.itemID - 1];
   
+    
+  function editButton(){
+    setDisplayButton(true)  
+    setFormData({...exerciseMove})
+  }
 
   if (!exerciseMove) return <h2>page loading...</h2>;
 
   return (
     <React.Fragment>
-        <HeaderUI> Exercise Move Details <ButtonUI id = {exerciseMove.id} onClick={e => editButton(e.target.id)}> Edit</ButtonUI> </HeaderUI> 
+        <HeaderUI> Exercise Move Details </HeaderUI> 
+        <ButtonUI id = {exerciseMove.id} onClick={() => editButton()}> Edit</ButtonUI> 
+        <br /><br />
         <ContainerUI>
             <HeaderUI as="h2">{exerciseMove.name}</HeaderUI>
             <DividerUI />

@@ -8,11 +8,12 @@ import {
   Button as ButtonUI,
   TextArea as TextAreaUI} from "semantic-ui-react"
 
-  
+
 function ExerciseMove({ moves }) {
   const title = "Exercise Move"
 
   const [displayButton, setDisplayButton] = useState(false)
+
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -21,19 +22,11 @@ function ExerciseMove({ moves }) {
     video_link: ""
 })
 
-
-  function editButton(id){
-    const move = moves.find( obj => obj.id === parseInt(id, 10))
-    setDisplayButton(true)
-    setFormData({...move})  
-  }
-
   return (
-    <PageFrame
-      title = {title}
-      dataList={moves}>
+    <PageFrame title = {title} dataList={moves} displayButton = {displayButton} setDisplayButton={setDisplayButton}>
+
       {displayButton ? <FormExerciseMove title= {title} formData = {formData} setFormData={setFormData} /> : "" }
-      <ExerciseMoveDetails dataList={moves} editButton={editButton} setDisplayButton={setDisplayButton} displayButton={displayButton}/>
+      <ExerciseMoveDetails dataList={moves} setDisplayButton={setDisplayButton} displayButton={displayButton} setFormData={setFormData} formData = {formData}/>
       
     </PageFrame>
   );
