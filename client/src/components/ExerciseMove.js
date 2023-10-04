@@ -9,7 +9,7 @@ import {
   Form as FormUI,
   Button as ButtonUI,
   TextArea as TextAreaUI,
-  Divider
+  Divider as DividerUI
 } from "semantic-ui-react"
 import { useFormik } from "formik";
 
@@ -33,6 +33,7 @@ function FormExerciseMove({title, formData, setFormData, resetFormData }){
       setFormData({...values})
       console.log(values)
     },
+    setFieldValue : formData,
     enableReinitialize: true
   })
 
@@ -72,6 +73,16 @@ function FormExerciseMove({title, formData, setFormData, resetFormData }){
           <FormUI.Input id = "video_link" name = "video_link" onChange={formik.handleChange} value = {formik.values.video_link}  />
         </FormUI.Field>
         <FormUI.Button type="submit">Submit</FormUI.Button>
+        <DividerUI />
+        <FormUI.Button type="reset" onClick={() => formik.resetForm({
+            values: {
+              id: undefined,
+              name: "",
+              focus: "",
+              description: "",
+              video_link: ""
+          }
+})}>Clear Form</FormUI.Button>
       </FormUI>
 
     </GridUI.Column>
