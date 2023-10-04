@@ -8,7 +8,7 @@ function Coach({ coaches }) {
       title={"Coach"}
       dataList={coaches}>
         
-        {/*  */}
+      {""}
       <CoachDetails dataList={coaches} />
     </PageFrame>
   );

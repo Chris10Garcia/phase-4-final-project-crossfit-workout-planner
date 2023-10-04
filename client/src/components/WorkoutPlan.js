@@ -9,8 +9,8 @@ function WorkoutPlan({ plans }) {
     <PageFrame
       title={"Workout Plan"}
       dataList={plans}>
-      
-      {/*  */}
+        
+      {""}
       <WorkoutPlanDetails dataList={plans} />
     </PageFrame>
   );
