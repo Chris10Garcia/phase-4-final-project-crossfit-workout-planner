@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PageFrame from "./PageFrame";
 import CoachDetails from "./CoachDetails";
 
-function Coach({ coaches }) {
+function Coach({ coaches, refresh, setRefresh }) {
   const title = "Coach"
 
   const [displayButton, setDisplayButton] = useState(false)

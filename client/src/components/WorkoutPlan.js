@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PageFrame from "./PageFrame";
 import WorkoutPlanDetails from "./WorkoutPlanDetails";
 
-function WorkoutPlan({ plans }) {
+function WorkoutPlan({ plans, refresh, setRefresh }) {
 
   const [displayButton, setDisplayButton] = useState(false)
 

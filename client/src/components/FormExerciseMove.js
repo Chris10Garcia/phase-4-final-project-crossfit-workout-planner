@@ -1,4 +1,5 @@
 import React from "react";
+import {useHistory } from "react-router-dom"
 import * as yup from "yup";
 import {
   Grid as GridUI,
@@ -7,8 +8,8 @@ import {
 } from "semantic-ui-react";
 import { useFormik } from "formik";
 
-function FormExerciseMove({ title, formData, setFormData }) {
-
+function FormExerciseMove({ title, formData, setFormData, refresh, setRefresh }) {
+  const history = useHistory()
 
   const formSchema = yup.object().shape({
     id: yup.number().integer(),
@@ -21,6 +22,25 @@ function FormExerciseMove({ title, formData, setFormData }) {
   const formik = useFormik({
     initialValues: formData,
     onSubmit: values => {
+      if (values.id === ""){
+        console.log("fetch will POST")
+      } else {
+        fetch(`${values.id}`, {
+          method : "PATCH",
+          headers : { "Content-Type" : "application/json"},
+          body : JSON.stringify(values)
+        }).then( r => {
+          if (r.ok){
+            r.json().then(data => {
+              setRefresh(!refresh)
+              history.push(`${data.id}`)} )
+          } else {
+            r.json().then(err => console.log(err))
+          }
+        })
+        
+      }
+
       setFormData({ ...values });
       formik.setValues(values);
       console.log(formik.values);

@@ -80,6 +80,7 @@ class CoachesByID(Resource):
             200
         )
         return response
+    
 
 class ScheduledClassesIndex(Resource):
     def get(self):
@@ -135,6 +136,21 @@ class ExerciseMovesByID(Resource):
             200
         )
         return response
+    
+    
+    def patch(self, id):
+        ## this is prone to error if the record doesn't exist
+        exercise_move = Exercise_Move.query.filter(Exercise_Move.id == id).first()
+        [setattr(exercise_move, attr, request.json.get(attr)) for attr in request.json]
+        db.session.add(exercise_move)
+        db.session.commit()
+
+        response = make_response(
+            exercise_move_schema.dump(exercise_move),
+            200
+        )
+        return response
+
 
 api.add_resource(CoachesIndex,"/coaches")
 api.add_resource(CoachesByID,"/coaches/<int:id>")

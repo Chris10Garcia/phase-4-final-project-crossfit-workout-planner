@@ -47,6 +47,7 @@ function App() {
   const [moves, setMoves] = useState([])
   const [sch_classes, setSchClasses] = useState([])
   const [plans, setPlans] = useState([])
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(()=>{
     fetch("/workout_plans")
@@ -70,7 +71,7 @@ function App() {
     fetch("/exercise_moves")
       .then( r => r.json())
       .then( d => setMoves(d))
-  }, [])
+  }, [refresh])
 
 
   return (
@@ -78,16 +79,16 @@ function App() {
     <Header />
     <Switch>
       <Route exact path = "/">
-        <ClassSchedule sch_classes = { sch_classes }/>
+        <ClassSchedule sch_classes = { sch_classes } refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
       <Route path = "/workout_plans" > 
-        <WorkoutPlan plans = { plans } />
+        <WorkoutPlan plans = { plans } refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
       <Route path = "/exercise_moves" >
-        <ExerciseMove moves = { moves } />
+        <ExerciseMove moves = { moves } refresh={refresh} setRefresh ={setRefresh} />
       </Route>
       <Route path = "/coaches" >
-        <Coach coaches = {coaches}/>
+        <Coach coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
     </Switch>
   </ SegmentUI.Group>

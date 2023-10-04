@@ -4,12 +4,8 @@ import FormExerciseMove from "./FormExerciseMove";
 import PageFrame from "./PageFrame";
 import ExerciseMoveDetails from "./ExerciseMoveDetails";
 
-import {
-  Button as ButtonUI,
-  TextArea as TextAreaUI} from "semantic-ui-react"
 
-
-function ExerciseMove({ moves }) {
+function ExerciseMove({ moves, refresh, setRefresh}) {
   const title = "Exercise Move"
 
   const [displayButton, setDisplayButton] = useState(false)
@@ -22,11 +18,18 @@ function ExerciseMove({ moves }) {
     video_link: ""
 })
 
+
+
   return (
     <PageFrame title = {title} dataList={moves} displayButton = {displayButton} setDisplayButton={setDisplayButton}>
 
-      {displayButton ? <FormExerciseMove title= {title} formData = {formData} setFormData={setFormData} /> : "" }
-      <ExerciseMoveDetails dataList={moves} setDisplayButton={setDisplayButton} displayButton={displayButton} setFormData={setFormData} formData = {formData}/>
+      {displayButton ? <FormExerciseMove title= {title} formData = {formData} setFormData={setFormData} refresh={refresh} setRefresh ={setRefresh}/> : "" }
+      <ExerciseMoveDetails 
+            dataList={moves} 
+            setDisplayButton={setDisplayButton} 
+            displayButton={displayButton} 
+            setFormData={setFormData} formData = {formData}
+            />
       
     </PageFrame>
   );
