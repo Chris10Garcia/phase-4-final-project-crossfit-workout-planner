@@ -15,7 +15,7 @@ function PageFrame({ children, title, dataList, setDisplayButton, displayButton 
   return (
     <SegmentUI>
       <HeaderUI>
-        <h2>{title} Page</h2> <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Form to Add New / Edit ${title}`}</ButtonUI>
+        <h2>{title} Page</h2> <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI>
       </HeaderUI>
 
 

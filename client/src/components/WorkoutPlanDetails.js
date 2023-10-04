@@ -17,8 +17,8 @@ function WorkoutPlanDetails({ dataList }) {
 
   const exerciseMovesJSK = exercise_moves.map(move => {
     return (
-      <GridUI.Column>
-        <SegmentUI key={move.id}>
+      <GridUI.Column key={move.id}>
+        <SegmentUI >
           <HeaderUI as="h3"><Link to = {`/exercise_moves/${move.id}`}>{move.name}</Link></HeaderUI>
           <p><b>Move focus: </b>{move.focus}</p>
           <DividerUI/>

@@ -24,16 +24,21 @@ function FormExerciseMove({ title, formData, setFormData, refresh, setRefresh })
     onSubmit: values => {
       if (values.id === ""){
         console.log("fetch will POST")
+
+
       } else {
+
         fetch(`${values.id}`, {
           method : "PATCH",
           headers : { "Content-Type" : "application/json"},
           body : JSON.stringify(values)
-        }).then( r => {
+        })
+        .then( r => {
           if (r.ok){
             r.json().then(data => {
               setRefresh(!refresh)
-              history.push(`${data.id}`)} )
+              // history.push(`${data.id}`)
+            })
           } else {
             r.json().then(err => console.log(err))
           }

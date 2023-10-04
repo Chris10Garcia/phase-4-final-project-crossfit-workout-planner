@@ -53,19 +53,19 @@ function App() {
     fetch("/workout_plans")
       .then( r => r.json())
       .then( d => setPlans(d))
-  }, [])
+  }, [refresh])
 
   useEffect(()=>{
     fetch("/schedules")
       .then( r => r.json())
       .then( d => setSchClasses(d))
-  }, [])
+  }, [refresh])
 
   useEffect(()=>{
     fetch("/coaches")
       .then( r => r.json())
       .then( d => setCoaches(d))
-  }, [])
+  }, [refresh])
 
   useEffect(()=>{
     fetch("/exercise_moves")
