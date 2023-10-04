@@ -18,17 +18,17 @@ function FormExerciseMove({ title, formData, setFormData }) {
     video_link: yup.string()
   });
 
-  function clearForm(){
-    setFormData({
-          id: "",
-          name: "",
-          focus: "",
-          description: "",
-          video_link: ""
-      })
-  }
 
+
+  // console.log(formData)
   const formik = useFormik({
+    //   initialValues : {
+    //     id: "",
+    //     name: "",
+    //     focus: "",
+    //     description: "",
+    //     video_link: ""
+    // },
     initialValues: formData,
     onSubmit: values => {
       setFormData({ ...values });
@@ -36,6 +36,16 @@ function FormExerciseMove({ title, formData, setFormData }) {
       console.log(formik.values);
     },
     enableReinitialize: true,
+    // onReset: ()=> {
+    //   setFormData({
+    //     id: "",
+    //     name: "",
+    //     focus: "",
+    //     description: "",
+    //     video_link: ""
+    // })
+    //   console.log(formData)
+    // }
   });
 
 
@@ -65,9 +75,8 @@ function FormExerciseMove({ title, formData, setFormData }) {
           <FormUI.Input id="video_link" name="video_link" onChange={formik.handleChange} value={formik.values.video_link} />
         </FormUI.Field>
         <FormUI.Button type="submit">Submit</FormUI.Button>
-        {/* <FormUI.Button type="reset" onClick={() => formik.resetForm()}>Reset to Original</FormUI.Button> */}
         <DividerUI />
-        <FormUI.Button type="button" onClick={clearForm}>Clear Form</FormUI.Button>
+        <FormUI.Button type="reset" onClick={() => formik.resetForm()}>Reset to Original</FormUI.Button>
       </FormUI>
 
 
