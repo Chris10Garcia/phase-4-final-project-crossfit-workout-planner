@@ -23,11 +23,25 @@ function FormExerciseMove({ title, formData, setFormData, refresh, setRefresh })
     initialValues: formData,
     onSubmit: values => {
       if (values.id === ""){
-        console.log("fetch will POST")
+        fetch("/exercise_moves", {
+          method: "POST",
+          headers: {"Content-Type" : "application/json"},
+          body: JSON.stringify(values)
+        })
+        .then( r => {
+          if (r.ok){
+            r.json().then(data => {
+              setRefresh(!refresh)
+            })
+          } else {
+            r.json().then( err => {
+              console.log(err)
+            })
+          }
+        })
 
 
       } else {
-
         fetch(`${values.id}`, {
           method : "PATCH",
           headers : { "Content-Type" : "application/json"},
@@ -48,7 +62,6 @@ function FormExerciseMove({ title, formData, setFormData, refresh, setRefresh })
 
       setFormData({ ...values });
       formik.setValues(values);
-      console.log(formik.values);
     },
     enableReinitialize: true,
   });

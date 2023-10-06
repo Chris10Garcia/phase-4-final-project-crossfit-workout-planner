@@ -127,6 +127,23 @@ class ExerciseMovesIndex(Resource):
             200
         )
         return response
+    
+    def post(self):
+        em_data = request.get_json()
+        del em_data["id"]
+        
+        new_exercise_move = Exercise_Move(**em_data)
+        print(new_exercise_move)
+        db.session.add(new_exercise_move)
+        db.session.commit()
+
+        response = make_response(
+            exercise_move_schema.dump(new_exercise_move),
+            201
+        )
+
+        return response
+        return {"test": "test"}, 200
 
 class ExerciseMovesByID(Resource):
     def get(self, id):
@@ -150,6 +167,8 @@ class ExerciseMovesByID(Resource):
             200
         )
         return response
+    
+
 
 
 api.add_resource(CoachesIndex,"/coaches")
