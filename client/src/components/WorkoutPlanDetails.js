@@ -5,11 +5,17 @@ import {
   Header as HeaderUI, 
   Grid as GridUI, 
   Divider as DividerUI,
+  Button as ButtonUI
 } from 'semantic-ui-react';
 
-function WorkoutPlanDetails({ dataList }) {
+function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton }) {
   const params = useParams();
   const workoutPlan = dataList[params.itemID - 1];
+
+  function editButton(){
+    setDisplayButton(true)  
+    setFormData({...workoutPlan})
+  }
 
   if (!workoutPlan) return <h2>page loading...</h2>;
 
@@ -32,7 +38,10 @@ function WorkoutPlanDetails({ dataList }) {
 
   return (
     <React.Fragment>
+      
       <HeaderUI> Workout Plan Details</HeaderUI>
+      <ButtonUI id = {workoutPlan.id} > Edit</ButtonUI> {/* onClick={() => editButton()} */}
+      <br /><br />
       <HeaderUI as="h2">{workoutPlan.name}</HeaderUI>
       <p><b>Workout Plan ID:</b> {workoutPlan.id}</p>
       <p><b>Difficulty:</b> {workoutPlan.difficulty}</p>

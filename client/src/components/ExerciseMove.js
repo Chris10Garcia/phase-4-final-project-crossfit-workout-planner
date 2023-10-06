@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-import FormExerciseMove from "./FormExerciseMove";
+import ExerciseMoveForm from "./ExerciseMoveForm";
 import PageFrame from "./PageFrame";
 import ExerciseMoveDetails from "./ExerciseMoveDetails";
 
@@ -23,7 +23,7 @@ function ExerciseMove({ moves, refresh, setRefresh}) {
   return (
     <PageFrame title = {title} dataList={moves} displayButton = {displayButton} setDisplayButton={setDisplayButton}>
 
-      {displayButton ? <FormExerciseMove title= {title} formData = {formData} setFormData={setFormData} refresh={refresh} setRefresh ={setRefresh}/> : "" }
+      {displayButton ? <ExerciseMoveForm title= {title} formData = {formData} setFormData={setFormData} refresh={refresh} setRefresh ={setRefresh}/> : "" }
       <ExerciseMoveDetails 
             dataList={moves} 
             setDisplayButton={setDisplayButton} 

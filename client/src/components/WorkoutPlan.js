@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 import PageFrame from "./PageFrame";
 import WorkoutPlanDetails from "./WorkoutPlanDetails";
+import WorkoutPlanForm from "./WorkoutPlanForm";
 
 function WorkoutPlan({ plans, refresh, setRefresh }) {
-
+  const title = "Workout Plan"
   const [displayButton, setDisplayButton] = useState(false)
 
 
-  // REDO ATTRIBUTES
   const [formData, setFormData] = useState({
     id: "",
     name: "",
-    focus: "",
+    difficulty: "",
     description: "",
-    video_link: ""
+    exercise_moves: [{
+      id: "",
+      name: "",
+      focus: "",
+      description: "",
+      video_link: ""
+  }]
 })
   
   return (
     <PageFrame title={"Workout Plan"} dataList={plans} displayButton = {displayButton} setDisplayButton={setDisplayButton}>
 
-      {""}
+      {displayButton ? <WorkoutPlanForm title= {title} formData = {formData} setFormData={setFormData} refresh={refresh} setRefresh ={setRefresh}/> : "" } 
       <WorkoutPlanDetails dataList={plans} setDisplayButton={setDisplayButton} displayButton={displayButton} setFormData={setFormData} formData = {formData}/>
 
     </PageFrame>

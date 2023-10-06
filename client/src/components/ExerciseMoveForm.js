@@ -8,11 +8,10 @@ import {
 } from "semantic-ui-react";
 import { useFormik } from "formik";
 
-function FormExerciseMove({ title, formData, setFormData, refresh, setRefresh }) {
-  const history = useHistory()
+function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh }) {
 
   const formSchema = yup.object().shape({
-    id: yup.number().integer(),
+    // id: yup.number().integer(),
     name: yup.string(),
     focus: yup.string(),
     description: yup.string(),
@@ -80,6 +79,8 @@ function FormExerciseMove({ title, formData, setFormData, refresh, setRefresh })
     <GridUI.Column width={5}>
       <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit ${formData.name}` : `Add a new ${title}`}</HeaderUI>
       <FormUI onSubmit={formik.handleSubmit}>
+
+        {/* WHY DOES THIS NEED TO BE A FIELD? IT COULD BE JUST AN HTML ELEMENT DISPLAYING OR NOT THE ID */}
         <FormUI.Field disabled>
           <label>ID</label>
           <FormUI.Input id="id" name="id" onChange={formik.handleChange} value={formik.values.id} />
@@ -111,4 +112,4 @@ function FormExerciseMove({ title, formData, setFormData, refresh, setRefresh })
   );
 }
 
-export default FormExerciseMove
+export default ExerciseMoveForm
