@@ -111,53 +111,39 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
             <label>Name</label>
             <FormUI.Input id="name" name="name" onChange={formik.handleChange} value={formik.values.name} />
           </FormUI.Field>
+          <FormUI.Field>
+            <label>Difficulty</label>
+            <FormUI.Input id="difficulty" name="difficulty" onChange={formik.handleChange} value={formik.values.difficulty} />
+          </FormUI.Field>
+          <FormUI.Field>
+            <label>Description</label>
+            <FormUI.Input id="description" name="description" onChange={formik.handleChange} value={formik.values.description} />
+          </FormUI.Field>
 
           <DividerUI />
+          Select as many exercise moves to include within the workout plan
+          <br />
 
           <FieldArray name = "exercise_moves">
             { ({ insert, remove, push } ) => (
               <div>
                 { formik.values.exercise_moves.length > 0 && formik.values.exercise_moves.map ( (move, index) => (
                   <React.Fragment key = {index}> 
-                  {/*  onChange = { value => formik.setFieldValue("exercise_moves", value)}*/}
-
-                    {/* onChange={formik.handleChange}  */}
-                    <FormUI.Field as="select" >
+                    <FormUI.Field as="select" onChange={formik.handleChange} name = {`exercise_moves.${index}.id`} value = {formik.values.exercise_moves[index].id}>
                           <option value = "" label="Select Option"></option>
-                          <option value = {moves[0].id}>{moves[0].name}</option>
+                          {moves.map ( exerMove => <option key = {exerMove.name} value={exerMove.id} label = {exerMove.name} ></option>)}
                         </FormUI.Field>
-                    {/* <FormUI.Field as="select" onChange={formik.handleChange} >
-                      <option value = "" label="Select Option"></option>
-                      {moves.map( move => <option key = {move.name} value = {move.id} label={move.name} name={move.id} id={`exercise_moves.${move.id}`}/>)}
-                    </FormUI.Field> */}
-
-                    {/* <FormUI.Field>
-                      <label>Exercise Move ID</label>
-                      <FormUI.Input id={`exercise_moves.${index}.id`} name={`exercise_moves.${index}.id`} onChange={formik.handleChange} value={move.id} />
-                    </FormUI.Field >
-                      <FormUI.Field>
-                      <label>Exercise Move Name</label>
-                      <FormUI.Input id={`exercise_moves.${index}.name`} name={`exercise_moves.${index}.name`} onChange={formik.handleChange} value={move.name} />
-                    </FormUI.Field > */}
                     <ButtonUI type = "button" className = "secondary" onClick={()=>remove(index)}>Remove Field</ButtonUI>
+                    <br />
+                    <br />
                   </React.Fragment>
                     )
                 )}
-                <ButtonUI type = "button" className = "secondary" onClick={()=>push({ id: "", name: "",focus: "", description: "", video_link: ""})}>Add Field</ButtonUI>
+                <ButtonUI type = "button" onClick={()=>push({ id: ""})}>Add Field</ButtonUI>
               </div>
             )}
           </FieldArray>
 
-          
-
-
-        {/* THIS NEEDS TO BE A DROP DOWN OF THE EXSITING EXERCISE MOVES */}        
-
-        {/* <FormUI.Field>
-          <label>Video Link</label>
-          <FormUI.Input id="video_link" name="video_link" onChange={formik.handleChange} value={formik.values.video_link} />
-        </FormUI.Field> */}
-        <DividerUI />
         <DividerUI />
         <FormUI.Button type="submit">Submit</FormUI.Button>
       

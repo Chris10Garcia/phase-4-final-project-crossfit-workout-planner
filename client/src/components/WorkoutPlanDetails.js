@@ -14,6 +14,7 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton }) {
 
   function editButton(){
     setDisplayButton(true)  
+    console.log(workoutPlan)
     setFormData({...workoutPlan})
   }
 
@@ -40,7 +41,7 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton }) {
     <React.Fragment>
       
       <HeaderUI> Workout Plan Details</HeaderUI>
-      <ButtonUI id = {workoutPlan.id} > Edit</ButtonUI> {/* onClick={() => editButton()} */}
+      <ButtonUI id = {workoutPlan.id} onClick={() => editButton()}> Edit</ButtonUI> 
       <br /><br />
       <HeaderUI as="h2">{workoutPlan.name}</HeaderUI>
       <p><b>Workout Plan ID:</b> {workoutPlan.id}</p>
