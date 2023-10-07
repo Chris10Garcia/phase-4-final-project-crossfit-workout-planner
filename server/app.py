@@ -47,7 +47,7 @@ class Workout_Plan_Schema(ma.SQLAlchemyAutoSchema):
     exercise_moves = fields.List(fields.Nested(Exercise_Move_Schema))
 
     # maybe keep this. depends on what I want to do on the front end
-    schedules = fields.List(fields.Nested(Schedule_Schema(exclude=("workout_plan",))))
+    # schedules = fields.List(fields.Nested(Schedule_Schema(exclude=("workout_plan",))))
 
 
 coach_schema = Coach_Schema()
