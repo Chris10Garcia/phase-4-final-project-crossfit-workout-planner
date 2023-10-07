@@ -8,8 +8,9 @@ import {
 } from "semantic-ui-react";
 import { FieldArray, Formik, useFormik } from "formik";
 
-function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh }) {
+function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, moves }) {
 
+  
   // REDO THIS
   const formSchema = yup.object().shape({
     // id: yup.number().integer(),
@@ -18,7 +19,6 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh }) 
     description: yup.string(),
     video_link: yup.string()
   });
-
 
 
 
@@ -86,10 +86,6 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh }) 
           description: "",
           exercise_moves: [{
             id: "",
-            name: "",
-            focus: "",
-            description: "",
-            video_link: ""
         }]
       })  
   }
@@ -115,29 +111,34 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh }) 
             <label>Name</label>
             <FormUI.Input id="name" name="name" onChange={formik.handleChange} value={formik.values.name} />
           </FormUI.Field>
-          <FormUI.Field>
-            <label>Difficulty</label>
-            <FormUI.Input id="difficulty" name="difficulty" onChange={formik.handleChange} value={formik.values.difficulty} />
-          </FormUI.Field>
-          <FormUI.Field>
-            <label>Description</label>
-            <FormUI.TextArea rows={4} id="description" name="description" onChange={formik.handleChange} value={formik.values.description} />
-          </FormUI.Field>
+
           <DividerUI />
 
           <FieldArray name = "exercise_moves">
-            { ({ insert, remove, push }) => (
+            { ({ insert, remove, push } ) => (
               <div>
-                {formik.values.exercise_moves.length > 0 && formik.values.exercise_moves.map ( (move, index) => (
+                { formik.values.exercise_moves.length > 0 && formik.values.exercise_moves.map ( (move, index) => (
                   <React.Fragment key = {index}> 
-                    <FormUI.Field>
+                  {/*  onChange = { value => formik.setFieldValue("exercise_moves", value)}*/}
+
+                    {/* onChange={formik.handleChange}  */}
+                    <FormUI.Field as="select" >
+                          <option value = "" label="Select Option"></option>
+                          <option value = {moves[0].id}>{moves[0].name}</option>
+                        </FormUI.Field>
+                    {/* <FormUI.Field as="select" onChange={formik.handleChange} >
+                      <option value = "" label="Select Option"></option>
+                      {moves.map( move => <option key = {move.name} value = {move.id} label={move.name} name={move.id} id={`exercise_moves.${move.id}`}/>)}
+                    </FormUI.Field> */}
+
+                    {/* <FormUI.Field>
                       <label>Exercise Move ID</label>
                       <FormUI.Input id={`exercise_moves.${index}.id`} name={`exercise_moves.${index}.id`} onChange={formik.handleChange} value={move.id} />
                     </FormUI.Field >
                       <FormUI.Field>
                       <label>Exercise Move Name</label>
                       <FormUI.Input id={`exercise_moves.${index}.name`} name={`exercise_moves.${index}.name`} onChange={formik.handleChange} value={move.name} />
-                    </FormUI.Field >
+                    </FormUI.Field > */}
                     <ButtonUI type = "button" className = "secondary" onClick={()=>remove(index)}>Remove Field</ButtonUI>
                   </React.Fragment>
                     )

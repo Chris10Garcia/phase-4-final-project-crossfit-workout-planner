@@ -82,7 +82,7 @@ function App() {
         <ClassSchedule sch_classes = { sch_classes } refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
       <Route path = "/workout_plans" > 
-        <WorkoutPlan plans = { plans } refresh={refresh} setRefresh ={setRefresh}/>
+        <WorkoutPlan plans = { plans } moves={ moves } refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
       <Route path = "/exercise_moves" >
         <ExerciseMove moves = { moves } refresh={refresh} setRefresh ={setRefresh} />
