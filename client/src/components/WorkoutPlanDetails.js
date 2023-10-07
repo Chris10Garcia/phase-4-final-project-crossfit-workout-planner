@@ -8,13 +8,15 @@ import {
   Button as ButtonUI
 } from 'semantic-ui-react';
 
-function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton }) {
+function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton, displayButton }) {
   const params = useParams();
   const workoutPlan = dataList[params.itemID - 1];
 
   function editButton(){
+
     setDisplayButton(true)  
-    console.log(workoutPlan)
+    // console.log(workoutPlan)
+
     setFormData({...workoutPlan})
   }
 
@@ -33,7 +35,6 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton }) {
           {/* <p><b>Video URL Link:</b> <a href={move.video_link}>{move.video_link}</a></p> */}
         </SegmentUI>
       </GridUI.Column>
-
     );
   });
 

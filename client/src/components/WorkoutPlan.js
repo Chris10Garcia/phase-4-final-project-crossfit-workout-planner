@@ -6,8 +6,6 @@ import WorkoutPlanForm from "./WorkoutPlanForm";
 function WorkoutPlan({ plans, refresh, setRefresh, moves }) {
   const title = "Workout Plan"
   const [displayButton, setDisplayButton] = useState(false)
-
-
   const [formData, setFormData] = useState({
     id: "",
     name: "",

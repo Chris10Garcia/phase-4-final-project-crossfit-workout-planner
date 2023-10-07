@@ -89,17 +89,40 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
         }]
       })  
   }
+  function helperClearAttrs(data){
+    data.exercise_moves.forEach( move => {
+      delete move.description
+      delete move.name
+      delete move.video_link
+      delete move.focus
+    })
+    return data
 
+  }
+
+  // const formDataUpdated = formData.exercise_moves.map( move => {
+  //   delete move.description
+  //   delete move.name
+  //   delete move.video_link
+  //   delete move.focus
+  //   return move
+  // }) 
+
+  // console.log(formDataUpdated)
   return (
     <GridUI.Column width={5}>
       <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit ${formData.name}` : `Add a new ${title}`}</HeaderUI>
-      {/* */}
+      
       <Formik
-              onSubmit={(data)=>console.log(data)} 
+              onSubmit={(data)=>{
+                helperClearAttrs(data)
+                console.log(data)
+              }} 
               initialValues={formData} 
-              enableReinitalize = {true}
-      >
-      {formik => (
+              enableReinitialize = { true }
+              >
+      
+      { formik => (
         <FormUI onSubmit={formik.handleSubmit} >
 
           {/* WHY DOES THIS NEED TO BE A FIELD? IT COULD BE JUST AN HTML ELEMENT DISPLAYING OR NOT THE ID */}
@@ -123,6 +146,7 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
           <DividerUI />
           Select as many exercise moves to include within the workout plan
           <br />
+          {/* onChange={value => formik.setFieldValue(`exercise_moves[${index}].id`, value)} */}
 
           <FieldArray name = "exercise_moves">
             { ({ insert, remove, push } ) => (
