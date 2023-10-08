@@ -89,6 +89,9 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
         }]
       })  
   }
+
+  // Optional. Clearing the attrs because it clogs the console.log. what only matters is the ID that gets updated.
+  // maybe on a subsiquent update i'll remove this once everything works
   function helperClearAttrs(data){
     data.exercise_moves.forEach( move => {
       delete move.description
@@ -97,18 +100,9 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
       delete move.focus
     })
     return data
-
   }
 
-  // const formDataUpdated = formData.exercise_moves.map( move => {
-  //   delete move.description
-  //   delete move.name
-  //   delete move.video_link
-  //   delete move.focus
-  //   return move
-  // }) 
 
-  // console.log(formDataUpdated)
   return (
     <GridUI.Column width={5}>
       <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit ${formData.name}` : `Add a new ${title}`}</HeaderUI>
@@ -116,6 +110,15 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
       <Formik
               onSubmit={(data)=>{
                 helperClearAttrs(data)
+
+                // NEXT THING TO DO. SAME LOGIC AS EXERCISEMOVEFORM,
+                  // BLANK ID: NEW OBJECT... should be easy
+                  // EXISTING ID: THIS WILL BE INTERESTING
+                    // If an existing WP had a and c moves, but was changed to b and c
+                    // how would i handle this in the back end?
+                    // it might be easier to remove all of the moves
+                    // and then add them back per the list returned in the post sent data?
+                    // i think i might go with this route
                 console.log(data)
               }} 
               initialValues={formData} 
