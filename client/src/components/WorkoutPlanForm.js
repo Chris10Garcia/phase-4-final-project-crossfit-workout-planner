@@ -182,7 +182,7 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
                 { formik.values.exercise_moves.length > 0 && formik.values.exercise_moves.map ( (move, index) => (
                   <React.Fragment key = {index}> 
                     <FormUI.Field as="select" onChange={formik.handleChange} name = {`exercise_moves.${index}.id`} value = {formik.values.exercise_moves[index].id}>
-                          <option value = "" label="Select Option"></option>
+                          <option disabled value = "" label="Select Option"></option>
                           {moves.map ( exerMove => <option key = {exerMove.name} value={exerMove.id} label = {exerMove.name} ></option>)}
                         </FormUI.Field>
                     <ButtonUI type = "button" className = "secondary" onClick={()=>remove(index)}>Remove Field</ButtonUI>

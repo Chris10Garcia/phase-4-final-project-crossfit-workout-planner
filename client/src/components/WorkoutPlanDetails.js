@@ -25,8 +25,10 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton, displayBu
   const { exercise_moves } = workoutPlan;
   let counter = 0
 
+  // let exerciseMovesJSK = undefined
+  // if ( exercise_moves[0] !== null )
+
   const exerciseMovesJSK = exercise_moves.map(move => {
-    
     counter ++
     return (
       <GridUI.Column key={counter}>
