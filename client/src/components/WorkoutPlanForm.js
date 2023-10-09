@@ -7,10 +7,11 @@ import {
   Button as ButtonUI
 } from "semantic-ui-react";
 import { FieldArray, Formik, useFormik } from "formik";
+import { useHistory } from "react-router-dom";
 
 function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, moves }) {
 
-  
+  const history = useHistory()
   // REDO THIS
   const formSchema = yup.object().shape({
     // id: yup.number().integer(),
@@ -119,14 +120,17 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
                   })
                   .then ( r => {
                     if (r.ok){
-                      r.json().then(data => setRefresh(!refresh))
+                      r.json().then(data => {
+                        setRefresh(!refresh)
+                        history.push(`${data.id}`)
+                      })
                     } else {
                       r.json().then(err => console.log(err))
                     }
                   })
 
                 } else {
-                  
+
                   fetch(`${data.id}`, {
                     method: "PATCH",
                     headers: {"Content-Type" : "application/json"},

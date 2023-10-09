@@ -9,7 +9,7 @@ import {
 import { useFormik } from "formik";
 
 function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh }) {
-
+  const history = useHistory()
   const formSchema = yup.object().shape({
     // id: yup.number().integer(),
     name: yup.string(),
@@ -31,6 +31,7 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh })
           if (r.ok){
             r.json().then(data => {
               setRefresh(!refresh)
+              history.push(`${data.id}`)
             })
           } else {
             r.json().then( err => {
@@ -50,7 +51,7 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh })
           if (r.ok){
             r.json().then(data => {
               setRefresh(!refresh)
-              // history.push(`${data.id}`)
+              
             })
           } else {
             r.json().then(err => console.log(err))

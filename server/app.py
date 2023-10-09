@@ -109,6 +109,33 @@ class WorkoutPlansIndex(Resource):
             200
         )
         return response
+    
+    def post(self):
+        wp_data = request.get_json()
+        exercise_moves = wp_data["exercise_moves"]
+
+        del wp_data["id"]
+        del wp_data["exercise_moves"] # is this necessary?
+        
+        new_workout_plan = Workout_Plan(**wp_data)
+
+        db.session.add(new_workout_plan)
+        db.session.commit()
+
+        #
+        exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
+
+        [new_workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
+        db.session.add(new_workout_plan)
+        db.session.commit()
+
+        response = make_response(
+            workout_plan_schema.dump(new_workout_plan),
+            201
+        )
+
+        return response
+
 
 class WorkoutPlansByID(Resource):
     def get(self, id):
@@ -118,6 +145,9 @@ class WorkoutPlansByID(Resource):
             200
         )
         return response
+    
+    def patch(self, id):
+        pass
     
 class ExerciseMovesIndex(Resource):
     def get(self):
@@ -143,7 +173,6 @@ class ExerciseMovesIndex(Resource):
         )
 
         return response
-        return {"test": "test"}, 200
 
 class ExerciseMovesByID(Resource):
     def get(self, id):
