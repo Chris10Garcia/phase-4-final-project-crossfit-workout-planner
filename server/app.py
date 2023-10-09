@@ -115,14 +115,11 @@ class WorkoutPlansIndex(Resource):
         exercise_moves = wp_data["exercise_moves"]
 
         del wp_data["id"]
-        del wp_data["exercise_moves"] # is this necessary?
+        del wp_data["exercise_moves"]
         
         new_workout_plan = Workout_Plan(**wp_data)
 
-        db.session.add(new_workout_plan)
-        db.session.commit()
-
-        #
+        # Need to pull the object. Can't just use the ID number
         exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
 
         [new_workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
@@ -147,7 +144,30 @@ class WorkoutPlansByID(Resource):
         return response
     
     def patch(self, id):
-        pass
+        # get record from db + json data + children
+        workout_plan = Workout_Plan.query.filter(Workout_Plan.id == id).first()
+        wp_data = request.get_json()
+        exercise_moves = wp_data["exercise_moves"]
+        exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
+        
+        # delete data / attr that can cause issues
+        del wp_data["exercise_moves"]
+        [workout_plan.exercise_moves.pop() for moves in workout_plan.exercise_moves]
+
+        # update records + update children
+        [setattr(workout_plan, attr, wp_data[attr]) for attr in wp_data]
+        [workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
+
+        db.session.add(workout_plan)
+        db.session.commit()
+
+        response = make_response(
+            workout_plan_schema.dump(workout_plan),
+            200
+        )
+
+        return response
+
     
 class ExerciseMovesIndex(Resource):
     def get(self):
@@ -163,7 +183,7 @@ class ExerciseMovesIndex(Resource):
         del em_data["id"]
         
         new_exercise_move = Exercise_Move(**em_data)
-        print(new_exercise_move)
+
         db.session.add(new_exercise_move)
         db.session.commit()
 
