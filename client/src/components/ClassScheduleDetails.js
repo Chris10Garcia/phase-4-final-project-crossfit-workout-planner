@@ -4,20 +4,32 @@ import {
   Header as HeaderUI,
   Card as CardUI,
   Feed as FeedUI,
-  Divider as DividerUI
+  Divider as DividerUI,
+  Button as ButtonUI
 } from 'semantic-ui-react';
 
-function ClassScheduleDetails({ day, sch_classes }) {
+function ClassScheduleDetails({ day, sch_classes, setDisplayButton }) {
 
   const classesFiltered = sch_classes.filter(sch_classes => day === sch_classes.day);
+
+
+  function editButton(){
+    setDisplayButton(true)  
+    console.log("clicked")
+    // setFormData()
+  }
 
   const feedClassesContentJSX = classesFiltered.map(class_details => {
     return (
       <FeedUI.Event key={class_details.id}>
         <FeedUI.Content>
-
+          <ButtonUI onClick={editButton} size="mini">Edit</ButtonUI>
           <HeaderUI as="h4">Workout Plan: <Link to ={`/workout_plans/${class_details.workout_plan.id}`}>{class_details.workout_plan.name} </Link>
-              <FeedUI.Meta>Difficulty: {class_details.workout_plan.difficulty} </FeedUI.Meta>
+            <FeedUI.Meta>
+              Class ID: {class_details.id}
+              <br />
+              Difficulty: {class_details.workout_plan.difficulty} 
+            </FeedUI.Meta>
           </HeaderUI>
           
           <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>

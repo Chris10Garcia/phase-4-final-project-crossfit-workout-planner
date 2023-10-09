@@ -6,7 +6,7 @@ import {
   Form as FormUI, Divider as DividerUI,
   Button as ButtonUI
 } from "semantic-ui-react";
-import { FieldArray, Formik, useFormik } from "formik";
+import { FieldArray, Formik } from "formik";
 import { useHistory } from "react-router-dom";
 
 function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, moves }) {
@@ -20,63 +20,6 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
     description: yup.string(),
     video_link: yup.string()
   });
-
-
-
-  // REDO THIS
-  // const formik = useFormik({
-  //   initialValues: formData,
-
-  //   onSubmit: values => {
-  //     if (values.id === ""){
-
-  //       console.log("POST REQUEST")
-  //       console.log(values)
-  //     //   fetch("/exercise_moves", {
-  //     //     method: "POST",
-  //     //     headers: {"Content-Type" : "application/json"},
-  //     //     body: JSON.stringify(values)
-  //     //   })
-  //     //   .then( r => {
-  //     //     if (r.ok){
-  //     //       r.json().then(data => {
-  //     //         setRefresh(!refresh)
-  //     //       })
-  //     //     } else {
-  //     //       r.json().then( err => {
-  //     //         console.log(err)
-  //     //       })
-  //     //     }
-  //     //   })
-
-
-  //     } else {
-  //       console.log("PATCH REQUEST")
-  //       console.log(values)
-  //       // fetch(`${values.id}`, {
-  //       //   method : "PATCH",
-  //       //   headers : { "Content-Type" : "application/json"},
-  //       //   body : JSON.stringify(values)
-  //       // })
-  //       // .then( r => {
-  //       //   if (r.ok){
-  //       //     r.json().then(data => {
-  //       //       setRefresh(!refresh)
-  //       //       // history.push(`${data.id}`)
-  //       //     })
-  //       //   } else {
-  //       //     r.json().then(err => console.log(err))
-  //       //   }
-  //       // })
-        
-  //     }
-
-  //     setFormData({ ...values });
-  //     formik.setValues(values);
-  //   },
-
-  //   enableReinitialize: true,
-  // });
 
 
   function clearForm(){
@@ -200,17 +143,11 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
         <FormUI.Button type="submit">Submit</FormUI.Button>
       
         <DividerUI />
-        <FormUI.Button type="button" onClick={clearForm}>Clear Form</FormUI.Button>
-
+        {formData.id === "" ? "" : <FormUI.Button type="button" onClick={clearForm}>Click to Clear and Add New</FormUI.Button> }
 
       </FormUI>
       )}
-
-        
-
       </Formik>
-
-
     </GridUI.Column>
   );
 }

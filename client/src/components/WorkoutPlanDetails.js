@@ -26,7 +26,14 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton, displayBu
   let counter = 0
 
   // let exerciseMovesJSK = undefined
-  // if ( exercise_moves[0] !== null )
+  if ( exercise_moves[0] === null ) {
+    exercise_moves[0] = {
+      id: "",
+      name: "",
+      focus: "",
+      description: "",
+      video_link: ""
+  }}
 
   const exerciseMovesJSK = exercise_moves.map(move => {
     counter ++
