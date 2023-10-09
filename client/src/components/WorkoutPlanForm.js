@@ -110,17 +110,38 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
       <Formik
               onSubmit={(data)=>{
                 helperClearAttrs(data)
+                
+                if (data.id === ""){
+                  fetch("/workout_plans", {
+                    method: "POST",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(data)
+                  })
+                  .then ( r => {
+                    if (r.ok){
+                      r.json().then(data => setRefresh(!refresh))
+                    } else {
+                      r.json().then(err => console.log(err))
+                    }
+                  })
 
-                // NEXT THING TO DO. SAME LOGIC AS EXERCISEMOVEFORM,
-                  // BLANK ID: NEW OBJECT... should be easy
-                  // EXISTING ID: THIS WILL BE INTERESTING
-                    // If an existing WP had a and c moves, but was changed to b and c
-                    // how would i handle this in the back end?
-                    // it might be easier to remove all of the moves
-                    // and then add them back per the list returned in the post sent data?
-                    // i think i might go with this route
-                console.log(data)
-              }} 
+                } else {
+                  
+                  fetch(`${data.id}`, {
+                    method: "PATCH",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(data)
+                  })
+                  .then ( r => {
+                    if (r.ok){
+                      r.json().then(data => setRefresh(!refresh))
+                    } else {
+                      r.json().then(err => console.log(err))
+                    }
+                  })                  
+
+                }
+              }}
               initialValues={formData} 
               enableReinitialize = { true }
               >
