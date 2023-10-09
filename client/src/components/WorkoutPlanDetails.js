@@ -23,10 +23,13 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton, displayBu
   if (!workoutPlan) return <h2>page loading...</h2>;
 
   const { exercise_moves } = workoutPlan;
+  let counter = 0
 
   const exerciseMovesJSK = exercise_moves.map(move => {
+    
+    counter ++
     return (
-      <GridUI.Column key={move.id}>
+      <GridUI.Column key={counter}>
         <SegmentUI >
           <HeaderUI as="h3"><Link to = {`/exercise_moves/${move.id}`}>{move.name}</Link></HeaderUI>
           <p><b>Move focus: </b>{move.focus}</p>

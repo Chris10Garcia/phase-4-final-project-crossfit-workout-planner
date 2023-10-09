@@ -152,10 +152,18 @@ class WorkoutPlansByID(Resource):
         
         # delete data / attr that can cause issues
         del wp_data["exercise_moves"]
-        [workout_plan.exercise_moves.pop() for moves in workout_plan.exercise_moves]
+        print(workout_plan.exercise_moves)
+        # [workout_plan.exercise_moves.pop() for moves in workout_plan.exercise_moves]
+        workout_plan.exercise_moves.clear()
 
+        print(workout_plan.exercise_moves)
         # update records + update children
         [setattr(workout_plan, attr, wp_data[attr]) for attr in wp_data]
+
+        # db.session.add(workout_plan)
+        # db.session.commit()
+
+
         [workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
 
         db.session.add(workout_plan)
