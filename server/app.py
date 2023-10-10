@@ -47,7 +47,6 @@ class Workout_Plan_Schema(ma.SQLAlchemyAutoSchema):
     exercise_moves = fields.List(fields.Nested(Exercise_Move_Schema))
 
 
-
 coach_schema = Coach_Schema()
 coaches_schema = Coach_Schema(many=True)
 
@@ -69,6 +68,24 @@ class CoachesIndex(Resource):
             200
         )
         return response
+    
+    def post(self):
+        ch_data = request.get_json()
+
+        del ch_data["id"]
+
+        new_coach = Coach(**ch_data)
+
+        db.session.add(new_coach)
+        db.session.commit()
+
+        response = make_response(
+            coach_schema.dump(new_coach),
+            201
+        )
+
+        return response
+
 
 class CoachesByID(Resource):
     def get(self, id):
@@ -79,6 +96,23 @@ class CoachesByID(Resource):
         )
         return response
     
+    def patch(self, id):
+        coach = Coach.query.filter(Coach.id == id).first()
+        # del coach["created_at"]
+        [setattr(coach, attr, request.json.get(attr)) for attr in request.json]
+
+        # print(coach)
+        # return {"message": "testing"}
+
+        db.session.add(coach)
+        db.session.commit()
+
+        response = make_response(
+            coach_schema.dump(coach),
+            200
+        )
+        
+        return response
 
 class ScheduledClassesIndex(Resource):
     def get(self):
