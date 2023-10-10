@@ -99,6 +99,12 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
               enableReinitialize = { true }
               >
       
+      {/* id : "",
+      day: "",
+      hour: "",
+      coach: {id: "", name: ""},
+      workout_plan: {id: "", name : "", difficulty : ""} */}
+
       { formik => (
         <FormUI onSubmit={formik.handleSubmit} >
 
@@ -108,8 +114,12 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
             <FormUI.Input id="id" name="id" onChange={formik.handleChange} value={formik.values.id} />
           </FormUI.Field>
           <FormUI.Field>
-            <label>Name</label>
-            <FormUI.Input id="name" name="name" onChange={formik.handleChange} value={formik.values.name} />
+            <label>Day: Should be a drop down</label>
+            <FormUI.Input id="day" name="day" onChange={formik.handleChange} value={formik.values.day} />
+          </FormUI.Field>
+          <FormUI.Field>
+            <label>Time: Should be a drop down</label>
+            <FormUI.Input id="hour" name="hour" onChange={formik.handleChange} value={formik.values.hour} />
           </FormUI.Field>
 
           {/* <FormUI.Field as="select" onChange={formik.handleChange} name = {`exercise_moves.${index}.id`} value = {formik.values.exercise_moves[index].id}>
