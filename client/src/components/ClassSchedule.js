@@ -25,9 +25,7 @@ function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
   }
   )
   
-  const days = new Set();
-
-  sch_classes.forEach(element => days.add(element.day));
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 
   return (
@@ -40,7 +38,7 @@ function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
       
       <CardUI.Group stackable doubling>
         {displayButton ? <ClassScheduleForm title= {title} formData = {formData} setFormData={setFormData} coaches = {coaches} plans = {plans} refresh={refresh} setRefresh ={setRefresh}/> : "" }
-       { [...days].map(day => <ClassScheduleDetails key={day} day={day} sch_classes={sch_classes}  refresh={refresh} displayButton = {displayButton} setDisplayButton = {setDisplayButton} setFormData = {setFormData}/>) }
+       { days.map(day => <ClassScheduleDetails key={day} day={day} sch_classes={sch_classes}  refresh={refresh} displayButton = {displayButton} setDisplayButton = {setDisplayButton} setFormData = {setFormData}/>) }
       </CardUI.Group>
     </SegmentUI>
   );

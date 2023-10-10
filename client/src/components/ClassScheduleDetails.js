@@ -12,10 +12,12 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData 
 
   const classesFiltered = sch_classes.filter(sch_classes => day === sch_classes.day);
 
+  classesFiltered.sort ( (a,b) => {
+    return a.hour - b.hour
+  })
 
   function editButton(class_detail){
     setDisplayButton(true)  
-    console.log(class_detail)
     setFormData(class_detail)
   }
 

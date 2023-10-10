@@ -43,30 +43,14 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     )  
   }
 
-  // REDO THIS
-  // Optional. Clearing the attrs because it clogs the console.log. what only matters is the ID that gets updated.
-  // maybe on a subsiquent update i'll remove this once everything works
-  function helperClearAttrs(data){
-    data.exercise_moves.forEach( move => {
-      delete move.description
-      delete move.name
-      delete move.video_link
-      delete move.focus
-    })
-    return data
-  }
 
 
   return (
     <Card> 
     <Card.Content>
       <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit Class Schedule ID: ${formData.id}` : `Add a new ${title}`}</HeaderUI>
-      
       <Formik 
               onSubmit={(data)=>{
-                console.log(data)
-                // helperClearAttrs(data)
-                
                 if (data.id === ""){
                   fetch("/schedules", {
                     method: "POST",
@@ -112,15 +96,15 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
             <FormUI.Input id="id" name="id" onChange={formik.handleChange} value={formik.values.id} />
           </FormUI.Field>
 
-          <FormUI.Field label = "Select Time" control="select" onChange={formik.handleChange} name="hour" value={formik.values.hour} >
-            <option value="" label ="Select Option"></option>
-            { hours.map ( hour => <option key = {hour} value = {hour} label = {hour }></option>)}
-          </FormUI.Field>          
-
           <FormUI.Field label = "Select Day" control="select" onChange={formik.handleChange} name="day" value={formik.values.day} >
             <option value="" label ="Select Option"></option>
             { days.map( day => <option key = {day} value={day} label = {day} ></option>)}
           </FormUI.Field>
+
+          <FormUI.Field label = "Select Time" control="select" onChange={formik.handleChange} name="hour" value={formik.values.hour} >
+            <option value="" label ="Select Option"></option>
+            { hours.map ( hour => <option key = {hour} value = {hour} label = {hour }></option>)}
+          </FormUI.Field>          
 
           <FormUI.Field label = "Select Workout Plan To Schedule" control="select" onChange={formik.handleChange} name="workout_plan.id" value={formik.values.workout_plan.id}>
             <option value="" label ="Select Option"></option>
