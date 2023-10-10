@@ -38,7 +38,7 @@ function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
       
       <CardUI.Group stackable doubling>
         {displayButton ? <ClassScheduleForm title= {title} formData = {formData} setFormData={setFormData} coaches = {coaches} plans = {plans} refresh={refresh} setRefresh ={setRefresh}/> : "" }
-       { days.map(day => <ClassScheduleDetails key={day} day={day} sch_classes={sch_classes} refresh={refresh} setRefresh ={setRefresh} displayButton = {displayButton} setDisplayButton = {setDisplayButton} setFormData = {setFormData}/>) }
+       { days.map(day => <ClassScheduleDetails key={day} day={day} sch_classes={sch_classes} refresh={refresh} setRefresh ={setRefresh} displayButton = {displayButton} setDisplayButton = {setDisplayButton} setFormData = {setFormData} formData={formData}/>) }
       </CardUI.Group>
     </SegmentUI>
   );

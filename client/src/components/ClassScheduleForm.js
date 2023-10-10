@@ -22,16 +22,6 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     hours.push(i)
   }
 
-  // REDO THIS
-  // const formSchema = yup.object().shape({
-  //   // id: yup.number().integer(),
-  //   name: yup.string(),
-  //   focus: yup.string(),
-  //   description: yup.string(),
-  //   video_link: yup.string()
-  // });
-
-
   function clearForm(){
     setFormData({
       id : "",
@@ -43,7 +33,14 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     )  
   }
 
-
+  // REDO THIS
+  // const formSchema = yup.object().shape({
+  //   // id: yup.number().integer(),
+  //   name: yup.string(),
+  //   focus: yup.string(),
+  //   description: yup.string(),
+  //   video_link: yup.string()
+  // });
 
   return (
     <Card> 
@@ -124,7 +121,7 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
         <DividerUI />
         { formData.id === "" ? "" : <FormUI.Button type="button" onClick={clearForm}>Click to Clear and Add New</FormUI.Button> }
 
-      </FormUI>
+        </FormUI>
       )}
       </Formik>
       </Card.Content>
