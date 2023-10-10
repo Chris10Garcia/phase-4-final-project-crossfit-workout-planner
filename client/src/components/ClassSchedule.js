@@ -24,7 +24,7 @@ day, hour, coach_id / coach, workout_plan_id / workout_plan
 
 */
 
-function ClassSchedule({ sch_classes, refresh, setRefresh }) {
+function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
   const [displayButton, setDisplayButton] = useState(false)
   const title = "Class Schedule"
   const [formData, setFormData] = useState( {
@@ -48,8 +48,8 @@ function ClassSchedule({ sch_classes, refresh, setRefresh }) {
       </HeaderUI>
       
       <CardUI.Group>
-        {displayButton ? <ClassScheduleForm title= {title} formData = {formData} setFormData={setFormData} refresh={refresh} setRefresh ={setRefresh}/> : "" }
-       { [...days].map(day => <ClassScheduleDetails key={day} day={day} sch_classes={sch_classes} displayButton = {displayButton} setDisplayButton = {setDisplayButton} setFormData = {setFormData}/>) }
+        {displayButton ? <ClassScheduleForm title= {title} formData = {formData} setFormData={setFormData} coaches = {coaches} plans = {plans} refresh={refresh} setRefresh ={setRefresh}/> : "" }
+       { [...days].map(day => <ClassScheduleDetails key={day} day={day} sch_classes={sch_classes}  refresh={refresh} displayButton = {displayButton} setDisplayButton = {setDisplayButton} setFormData = {setFormData}/>) }
       </CardUI.Group>
     </SegmentUI>
   );

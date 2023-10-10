@@ -10,7 +10,7 @@ import {
 import { Formik } from "formik";
 import { useHistory } from "react-router-dom";
 
-function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, moves }) {
+function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, plans, coaches }) {
 
   const history = useHistory()
 
@@ -121,6 +121,14 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
             <label>Time: Should be a drop down</label>
             <FormUI.Input id="hour" name="hour" onChange={formik.handleChange} value={formik.values.hour} />
           </FormUI.Field>
+          <b>Select Workout Plan To Schedule</b>
+          <br />
+          <FormUI.Field as="select" onChange={formik.handleChange} name="workout_plan.id" value={formik.values.workout_plan.id}>
+            <option value="" label ="Selection Option"></option>
+            { plans.map( plan => <option key = {plan.id} value={plan.id} label = {plan.name } ></option>)}
+          </FormUI.Field>
+          <label>Select Coach to Schedule</label>
+          <br />
 
           {/* <FormUI.Field as="select" onChange={formik.handleChange} name = {`exercise_moves.${index}.id`} value = {formik.values.exercise_moves[index].id}>
                           <option disabled value = "" label="Select Option"></option>
@@ -134,7 +142,6 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
 
           <DividerUI />
           <br />
-          {/* onChange={value => formik.setFieldValue(`exercise_moves[${index}].id`, value)} */}
 
         <FormUI.Button type="submit">Submit</FormUI.Button>
       

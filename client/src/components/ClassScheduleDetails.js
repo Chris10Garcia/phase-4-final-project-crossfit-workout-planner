@@ -15,7 +15,6 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData 
 
   function editButton(class_detail){
     setDisplayButton(true)  
-    console.log(class_detail)
     setFormData(class_detail)
   }
 

@@ -79,7 +79,7 @@ function App() {
     <Header />
     <Switch>
       <Route exact path = "/">
-        <ClassSchedule sch_classes = { sch_classes } refresh={refresh} setRefresh ={setRefresh}/>
+        <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
       <Route path = "/workout_plans" > 
         <WorkoutPlan plans = { plans } moves={ moves } refresh={refresh} setRefresh ={setRefresh}/>
