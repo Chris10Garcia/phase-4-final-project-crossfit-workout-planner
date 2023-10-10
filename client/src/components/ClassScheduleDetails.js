@@ -12,13 +12,22 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData 
 
   const classesFiltered = sch_classes.filter(sch_classes => day === sch_classes.day);
 
-  classesFiltered.sort ( (a,b) => {
-    return a.hour - b.hour
-  })
+  classesFiltered.sort (( a,b ) => a.hour - b.hour)
 
   function editButton(class_detail){
     setDisplayButton(true)  
     setFormData(class_detail)
+  }
+
+  function deleteButton(class_detail){
+    console.log(class_detail.id)
+    fetch(`/schedules/${class_detail.id}`, {
+      method: "DELETE",
+      headers: {"Content-Type" : "application/json"},
+    })
+    .then(r => r.json())
+    .then(d => console.log(d))
+    .catch(err => console.log(err))
   }
 
   const feedClassesContentJSX = classesFiltered.map(class_details => {
@@ -37,7 +46,10 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData 
           <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
 
           <p>Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
-            <FeedUI.Extra><ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI></FeedUI.Extra>
+          <FeedUI.Extra>
+            <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI>
+            <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI>
+          </FeedUI.Extra>
           <DividerUI />
         </FeedUI.Content>
       </FeedUI.Event>
@@ -46,7 +58,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData 
 
 
   return (
-    <CardUI style={{"vertical-align" : "top", "display": "inline-block"}}>
+    <CardUI style={{"verticalAlign" : "top", "display": "inline-block"}}>
       <CardUI.Content>
         <CardUI.Header as="h1"> {day} </CardUI.Header>
       </CardUI.Content>
