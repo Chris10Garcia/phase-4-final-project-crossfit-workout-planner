@@ -77,7 +77,6 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
                     if (r.ok){
                       r.json().then(data => {
                         setRefresh(!refresh)
-                        history.push(`${data.id}`)
                       })
                     } else {
                       r.json().then(err => console.log(err))
@@ -86,7 +85,7 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
 
                 } else {
 
-                  fetch(`${data.id}`, {
+                  fetch(`/schedules/${data.id}`, {
                     method: "PATCH",
                     headers: {"Content-Type" : "application/json"},
                     body: JSON.stringify(data)

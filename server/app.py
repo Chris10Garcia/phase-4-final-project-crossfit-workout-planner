@@ -100,8 +100,8 @@ class ScheduledClassesIndex(Resource):
 
         new_schedule = Schedule(**sch_data)
 
-        new_schedule.coach = Coach.query.filter(Coach.id == coach_data.id).first()
-        new_schedule.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data.id).first()
+        new_schedule.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
+        new_schedule.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
 
         db.session.add(new_schedule)
         db.session.commit()

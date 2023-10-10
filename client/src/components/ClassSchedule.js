@@ -6,6 +6,7 @@ import {
   Header as HeaderUI,
   Card as CardUI,
   Form as FormUI,
+  Button as ButtonUI
 } from 'semantic-ui-react';
 
 import ClassScheduleDetails  from "./ClassScheduleDetails";
@@ -33,7 +34,9 @@ function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
     <SegmentUI>
       <HeaderUI>
         <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
+        <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI>
       </HeaderUI>
+      
       
       <CardUI.Group stackable doubling>
         {displayButton ? <ClassScheduleForm title= {title} formData = {formData} setFormData={setFormData} coaches = {coaches} plans = {plans} refresh={refresh} setRefresh ={setRefresh}/> : "" }
