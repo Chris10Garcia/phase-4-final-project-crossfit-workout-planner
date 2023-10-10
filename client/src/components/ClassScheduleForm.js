@@ -5,7 +5,7 @@ import {
   Header as HeaderUI,
   Form as FormUI, Divider as DividerUI,
   Button as ButtonUI,
-  Segment
+  Card, Feed
 } from "semantic-ui-react";
 import { Formik } from "formik";
 import { useHistory } from "react-router-dom";
@@ -14,6 +14,13 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
 
   const history = useHistory()
 
+
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+  const hours = []
+  for (let i = 900; i < 1800; i = i + 100){
+    hours.push(i)
+  }
 
   // REDO THIS
   // const formSchema = yup.object().shape({
@@ -51,11 +58,11 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
 
 
   return (
-    <Segment>
-    <GridUI.Column width={5}>
-      <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit ${formData.name}` : `Add a new ${title}`}</HeaderUI>
+    <Card> 
+    <Card.Content>
+      <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit Class Schedule ID: ${formData.id}` : `Add a new ${title}`}</HeaderUI>
       
-      <Formik
+      <Formik 
               onSubmit={(data)=>{
                 console.log(data)
                 // helperClearAttrs(data)
@@ -96,14 +103,7 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
               }
             }
               initialValues={formData} 
-              enableReinitialize = { true }
-              >
-      
-      {/* id : "",
-      day: "",
-      hour: "",
-      coach: {id: "", name: ""},
-      workout_plan: {id: "", name : "", difficulty : ""} */}
+              enableReinitialize = { true } >
 
       { formik => (
         <FormUI onSubmit={formik.handleSubmit} >
@@ -113,32 +113,26 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
             <label>ID</label>
             <FormUI.Input id="id" name="id" onChange={formik.handleChange} value={formik.values.id} />
           </FormUI.Field>
-          <FormUI.Field>
-            <label>Day: Should be a drop down</label>
-            <FormUI.Input id="day" name="day" onChange={formik.handleChange} value={formik.values.day} />
+
+          <FormUI.Field label = "Select Time" control="select" onChange={formik.handleChange} name="hour" value={formik.values.hour} >
+            <option value="" label ="Select Option"></option>
+            { hours.map ( hour => <option key = {hour} value = {hour} label = {hour }></option>)}
+          </FormUI.Field>          
+
+          <FormUI.Field label = "Select Day" control="select" onChange={formik.handleChange} name="day" value={formik.values.day} >
+            <option value="" label ="Select Option"></option>
+            { days.map( day => <option key = {day} value={day} label = {day} ></option>)}
           </FormUI.Field>
-          <FormUI.Field>
-            <label>Time: Should be a drop down</label>
-            <FormUI.Input id="hour" name="hour" onChange={formik.handleChange} value={formik.values.hour} />
-          </FormUI.Field>
-          <b>Select Workout Plan To Schedule</b>
-          <br />
-          <FormUI.Field as="select" onChange={formik.handleChange} name="workout_plan.id" value={formik.values.workout_plan.id}>
-            <option value="" label ="Selection Option"></option>
+
+          <FormUI.Field label = "Select Workout Plan To Schedule" control="select" onChange={formik.handleChange} name="workout_plan.id" value={formik.values.workout_plan.id}>
+            <option value="" label ="Select Option"></option>
             { plans.map( plan => <option key = {plan.id} value={plan.id} label = {plan.name } ></option>)}
           </FormUI.Field>
-          <label>Select Coach to Schedule</label>
-          <br />
 
-          {/* <FormUI.Field as="select" onChange={formik.handleChange} name = {`exercise_moves.${index}.id`} value = {formik.values.exercise_moves[index].id}>
-                          <option disabled value = "" label="Select Option"></option>
-                          {moves.map ( exerMove => <option key = {exerMove.name} value={exerMove.id} label = {exerMove.name} ></option>)}
-          </FormUI.Field> */}
-
-          {/* <FormUI.Field as="select" onChange={formik.handleChange} name = {`exercise_moves.${index}.id`} value = {formik.values.exercise_moves[index].id}>
-                          <option disabled value = "" label="Select Option"></option>
-                          {moves.map ( exerMove => <option key = {exerMove.name} value={exerMove.id} label = {exerMove.name} ></option>)}
-          </FormUI.Field> */}          
+          <FormUI.Field label="Select Coach to Schedule" control="select" onChange={formik.handleChange} name="coach.id" value={formik.values.coach.id}>
+            <option value="" label ="Select Option"></option>
+            { coaches.map( coach => <option key = {coach.id} value={coach.id} label = {coach.name } ></option>)}
+          </FormUI.Field>      
 
           <DividerUI />
           <br />
@@ -151,8 +145,8 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
       </FormUI>
       )}
       </Formik>
-    </GridUI.Column>
-    </Segment>
+      </Card.Content>
+    </Card>
   );
 }
 

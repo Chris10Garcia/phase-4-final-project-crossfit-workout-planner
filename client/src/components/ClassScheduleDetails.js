@@ -22,7 +22,6 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData 
     return (
       <FeedUI.Event key={class_details.id}>
         <FeedUI.Content>
-          <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI>
           <HeaderUI as="h4">Workout Plan: <Link to ={`/workout_plans/${class_details.workout_plan.id}`}>{class_details.workout_plan.name} </Link>
             <FeedUI.Meta>
               Class ID: {class_details.id}
@@ -34,7 +33,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData 
           <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
 
           <p>Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
-          
+          <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI>
           <DividerUI />
         </FeedUI.Content>
       </FeedUI.Event>

@@ -35,7 +35,7 @@ function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
     workout_plan: {id: "", name : "", difficulty : ""}
   }
   )
-
+  
   const days = new Set();
 
   sch_classes.forEach(element => days.add(element.day));
@@ -47,7 +47,7 @@ function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
         <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
       </HeaderUI>
       
-      <CardUI.Group>
+      <CardUI.Group stackable doubling>
         {displayButton ? <ClassScheduleForm title= {title} formData = {formData} setFormData={setFormData} coaches = {coaches} plans = {plans} refresh={refresh} setRefresh ={setRefresh}/> : "" }
        { [...days].map(day => <ClassScheduleDetails key={day} day={day} sch_classes={sch_classes}  refresh={refresh} displayButton = {displayButton} setDisplayButton = {setDisplayButton} setFormData = {setFormData}/>) }
       </CardUI.Group>
