@@ -65,9 +65,11 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
     );
   });
 
-
+  console.log(feedClassesContentJSX.length)
   return (
-    <CardUI style={{"verticalAlign" : "top", "display": "inline-block"}} >
+    
+    // <CardUI style={{"verticalAlign" : "top", "display": "inline-block"}} >
+    <CardUI style={ feedClassesContentJSX.length > 0 ? {"verticalAlign" : "top", "display": "inline-block"} : {"display":"none"}} >
       <CardUI.Content>
         <CardUI.Header as="h1"> {day} </CardUI.Header>
       </CardUI.Content>
