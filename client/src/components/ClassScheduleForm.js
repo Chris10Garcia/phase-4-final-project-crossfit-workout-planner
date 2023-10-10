@@ -1,19 +1,14 @@
 import React from "react";
 import * as yup from "yup";
 import {
-  Grid as GridUI,
   Header as HeaderUI,
   Form as FormUI, Divider as DividerUI,
   Button as ButtonUI,
-  Card, Feed
+  Card
 } from "semantic-ui-react";
 import { Formik } from "formik";
-import { useHistory } from "react-router-dom";
 
 function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, plans, coaches }) {
-
-  const history = useHistory()
-
 
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
@@ -47,6 +42,7 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     <Card.Content>
       <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit Class Schedule ID: ${formData.id}` : `Add a new ${title}`}</HeaderUI>
       <Formik 
+      // THIS SHOULD BE A FUNCTION CALL. VERY CONVELUTED
               onSubmit={(data)=>{
                 if (data.id === ""){
                   fetch("/schedules", {

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import * as yup from "yup";
-import { useFormik } from "formik";
 import {
   Segment as SegmentUI,
   Header as HeaderUI,
   Card as CardUI,
-  Form as FormUI,
   Button as ButtonUI
 } from 'semantic-ui-react';
 

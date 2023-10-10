@@ -32,26 +32,13 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
       })  
   }
 
-  // Optional. Clearing the attrs because it clogs the console.log. what only matters is the ID that gets updated.
-  // maybe on a subsiquent update i'll remove this once everything works
-  function helperClearAttrs(data){
-    data.exercise_moves.forEach( move => {
-      delete move.description
-      delete move.name
-      delete move.video_link
-      delete move.focus
-    })
-    return data
-  }
-
-
   return (
     <GridUI.Column width={5}>
       <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit ${formData.name}` : `Add a new ${title}`}</HeaderUI>
       
       <Formik
               onSubmit={(data)=>{
-                helperClearAttrs(data)
+                // helperClearAttrs(data)
                 
                 if (data.id === ""){
                   fetch("/workout_plans", {
@@ -115,7 +102,6 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
           <DividerUI />
           Select as many exercise moves to include within the workout plan
           <br />
-          {/* onChange={value => formik.setFieldValue(`exercise_moves[${index}].id`, value)} */}
 
           <FieldArray name = "exercise_moves">
             { ({ insert, remove, push } ) => (
