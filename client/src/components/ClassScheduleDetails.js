@@ -38,7 +38,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
 
   const feedClassesContentJSX = classesFiltered.map(class_details => {
     return (
-      <div key={class_details.id} style={ formData.id === class_details.id ? {backgroundColor: "LightGray"} : {}}>
+      <div key={class_details.id} style={ formData.id === class_details.id ? {backgroundColor: "LightGray"} : {}} >
         <FeedUI.Event >
           <FeedUI.Content >
             
@@ -48,12 +48,12 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
               Class ID: {class_details.id}
               <br />
               Difficulty: {class_details.workout_plan.difficulty} 
-            </FeedUI.Meta>
+            </FeedUI.Meta>   
             
             <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
             <p>Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
             
-            <FeedUI.Extra>
+            <FeedUI.Extra>  
               <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI>
               <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI>
             </FeedUI.Extra>
