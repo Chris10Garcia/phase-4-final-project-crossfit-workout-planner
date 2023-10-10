@@ -13,9 +13,9 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton }) {
   const classesFiltered = sch_classes.filter(sch_classes => day === sch_classes.day);
 
 
-  function editButton(){
+  function editButton(class_detail){
     setDisplayButton(true)  
-    console.log("clicked")
+    console.log(class_detail)
     // setFormData()
   }
 
@@ -23,7 +23,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton }) {
     return (
       <FeedUI.Event key={class_details.id}>
         <FeedUI.Content>
-          <ButtonUI onClick={editButton} size="mini">Edit</ButtonUI>
+          <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI>
           <HeaderUI as="h4">Workout Plan: <Link to ={`/workout_plans/${class_details.workout_plan.id}`}>{class_details.workout_plan.name} </Link>
             <FeedUI.Meta>
               Class ID: {class_details.id}

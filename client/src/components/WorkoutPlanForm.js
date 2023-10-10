@@ -28,9 +28,7 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
           name: "",
           difficulty: "",
           description: "",
-          exercise_moves: [{
-            id: "",
-        }]
+          exercise_moves: [ {id: ""} ]
       })  
   }
 
