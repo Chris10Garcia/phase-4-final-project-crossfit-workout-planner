@@ -67,39 +67,38 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
                 console.log(data)
                 // helperClearAttrs(data)
                 
-                // // REDO THIS
-                // if (data.id === ""){
-                //   fetch("/workout_plans", {
-                //     method: "POST",
-                //     headers: {"Content-Type" : "application/json"},
-                //     body: JSON.stringify(data)
-                //   })
-                //   .then ( r => {
-                //     if (r.ok){
-                //       r.json().then(data => {
-                //         setRefresh(!refresh)
-                //         history.push(`${data.id}`)
-                //       })
-                //     } else {
-                //       r.json().then(err => console.log(err))
-                //     }
-                //   })
+                if (data.id === ""){
+                  fetch("/schedules", {
+                    method: "POST",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(data)
+                  })
+                  .then ( r => {
+                    if (r.ok){
+                      r.json().then(data => {
+                        setRefresh(!refresh)
+                        history.push(`${data.id}`)
+                      })
+                    } else {
+                      r.json().then(err => console.log(err))
+                    }
+                  })
 
-                // } else {
+                } else {
 
-                //   fetch(`${data.id}`, {
-                //     method: "PATCH",
-                //     headers: {"Content-Type" : "application/json"},
-                //     body: JSON.stringify(data)
-                //   })
-                //   .then ( r => {
-                //     if (r.ok){
-                //       r.json().then(data => setRefresh(!refresh))
-                //     } else {
-                //       r.json().then(err => console.log(err))
-                //     }
-                //   })                  
-                // }
+                  fetch(`${data.id}`, {
+                    method: "PATCH",
+                    headers: {"Content-Type" : "application/json"},
+                    body: JSON.stringify(data)
+                  })
+                  .then ( r => {
+                    if (r.ok){
+                      r.json().then(data => setRefresh(!refresh))
+                    } else {
+                      r.json().then(err => console.log(err))
+                    }
+                  })                  
+                }
               }
             }
               initialValues={formData} 

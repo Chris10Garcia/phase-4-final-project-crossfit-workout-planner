@@ -11,18 +11,6 @@ import {
 import ClassScheduleDetails  from "./ClassScheduleDetails";
 import ClassScheduleForm from "./ClassScheduleForm";
 
-/*
-day, hour, coach_id / coach, workout_plan_id / workout_plan
-*/
-
-
-/* 
-  Copy WorkoutPlanForm
-  Edit the attrs and varriables
-  It will need a single selection of a coach
-  it will need a single selection of a workout plan
-
-*/
 
 function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
   const [displayButton, setDisplayButton] = useState(false)

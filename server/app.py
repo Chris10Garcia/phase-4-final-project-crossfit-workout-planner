@@ -46,8 +46,6 @@ class Workout_Plan_Schema(ma.SQLAlchemyAutoSchema):
         load_instance = True
     exercise_moves = fields.List(fields.Nested(Exercise_Move_Schema))
 
-    # maybe keep this. depends on what I want to do on the front end
-    # schedules = fields.List(fields.Nested(Schedule_Schema(exclude=("workout_plan",))))
 
 
 coach_schema = Coach_Schema()
@@ -91,6 +89,30 @@ class ScheduledClassesIndex(Resource):
         )
         return response
     
+    def post(self):
+        sch_data = request.get_json()
+        coach_data = sch_data["coach"]
+        workout_plan_data = sch_data["workout_plan"]
+
+        del sch_data["id"]
+        del sch_data["coach"]
+        del sch_data["workout_plan"]
+
+        new_schedule = Schedule(**sch_data)
+
+        new_schedule.coach = Coach.query.filter(Coach.id == coach_data.id).first()
+        new_schedule.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data.id).first()
+
+        db.session.add(new_schedule)
+        db.session.commit()
+
+        response = make_response(
+            schedule_schema.dump(new_schedule),
+            201
+        )
+
+        return response
+    
 class ScheduledClassesByID(Resource):
     def get(self, id):
         scheduledclass = Schedule.query.filter(Schedule.id == id).first()
@@ -100,6 +122,30 @@ class ScheduledClassesByID(Resource):
         )
         return response
 
+    def patch(self, id):
+
+        scheduledclass = Schedule.query.filter(Schedule.id == id).first()
+        sch_data = request.get_json()
+        coach_data = sch_data["coach"]
+        workout_plan_data = sch_data["workout_plan"]
+
+        del sch_data["coach"]
+        del sch_data["workout_plan"]  
+
+        [setattr(scheduledclass, attr, sch_data[attr]) for attr in sch_data]
+
+        scheduledclass.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
+        scheduledclass.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
+
+        db.session.add(scheduledclass)
+        db.session.commit()
+
+        response = make_response(
+            schedule_schema.dump(scheduledclass),
+            200
+        )
+
+        return response
 
 class WorkoutPlansIndex(Resource):
     def get(self):
@@ -121,8 +167,8 @@ class WorkoutPlansIndex(Resource):
 
         # Need to pull the object. Can't just use the ID number
         exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
-
         [new_workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
+
         db.session.add(new_workout_plan)
         db.session.commit()
 
