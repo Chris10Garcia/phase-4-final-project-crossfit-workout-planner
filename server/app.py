@@ -146,6 +146,20 @@ class ScheduledClassesByID(Resource):
         )
 
         return response
+    
+    def delete(self, id):
+
+        scheduledclass = Schedule.query.filter(Schedule.id == id).first()
+        
+        db.session.delete(scheduledclass)
+        db.session.commit()
+
+        response = make_response(
+            {"message": "Sucessful deletion of record"},
+            202
+        )
+
+        return response
 
 class WorkoutPlansIndex(Resource):
     def get(self):

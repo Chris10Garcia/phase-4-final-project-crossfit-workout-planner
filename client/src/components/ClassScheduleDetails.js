@@ -8,7 +8,7 @@ import {
   Button as ButtonUI
 } from 'semantic-ui-react';
 
-function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData }) {
+function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData, refresh, setRefresh }) {
 
   const classesFiltered = sch_classes.filter(sch_classes => day === sch_classes.day);
 
@@ -26,7 +26,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData 
       headers: {"Content-Type" : "application/json"},
     })
     .then(r => r.json())
-    .then(d => console.log(d))
+    .then(d => setRefresh(!refresh))
     .catch(err => console.log(err))
   }
 
