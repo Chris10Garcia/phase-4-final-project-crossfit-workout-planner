@@ -16,15 +16,29 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     hours.push(i)
   }
 
+  // {
+  //   id : "",
+  //   day: "",
+  //   hour: "",
+  //   coach: {id: "", name: ""},
+  //   workout_plan: {id: "", name : "", difficulty : ""}
+  // }
+
+  const formSchema = yup.object().shape({
+    day : yup.string()
+      .required("Must select a day")
+    ,
+    hour : yup.string()
+      .required("Must select an hour")
+    ,
+    coach : yup.object()
+      .shape({id: yup.number().required("Must make a Coach selection")})
+    ,
+    workout_plan : yup.object()
+      .shape({id: yup.number().required("Must make a workout plan selection")})
+
+  })
   
-  // REDO THIS
-  // const formSchema = yup.object().shape({
-  //   // id: yup.number().integer(),
-  //   name: yup.string(),
-  //   focus: yup.string(),
-  //   description: yup.string(),
-  //   video_link: yup.string()
-  // });
 
   function clearForm(){
     setFormData(clearFormValues)  
@@ -71,7 +85,7 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     <CardUI> 
       <CardUI.Content>
         <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit Class Schedule ID: ${formData.id}` : `Add a new ${title}`}</HeaderUI>
-        <Formik onSubmit= {submitData} initialValues={formData} enableReinitialize = {true} >
+        <Formik onSubmit= {submitData} initialValues={formData} enableReinitialize = {true} validationSchema={formSchema}>
           { formik => ( 
             <FormUI onSubmit={formik.handleSubmit} >
 
@@ -81,21 +95,25 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
                 <option value= "" label = "Select Option" />
                 { days.map( day => <option value={day} label = {day} key = {day} /> )}
               </FormUI.Field>
+              <b><p style={{color: "red"}}>{formik.errors.day}</p></b>
 
               <FormUI.Field label = "Select Time" control="select" onChange={formik.handleChange} name="hour" value={formik.values.hour} >
                 <option value="" label ="Select Option"></option>
                 { hours.map ( hour => <option value = {hour} label = {hour } key = {hour} /> )}
               </FormUI.Field>          
+              <b><p style={{color: "red"}}>{formik.errors.hour}</p></b>
 
               <FormUI.Field label = "Select Workout Plan To Schedule" control="select" onChange={formik.handleChange} name="workout_plan.id" value={formik.values.workout_plan.id}>
                 <option value="" label ="Select Option"></option>
                 { plans.map( plan => <option value={plan.id} label = {plan.name } key = {plan.id} /> )}
               </FormUI.Field>
+              { "workout_plan" in formik.errors ? <b><p style={{color: "red"}}>{formik.errors.workout_plan.id}</p></b> : ""}
 
               <FormUI.Field label="Select Coach to Schedule" control="select" onChange={formik.handleChange} name="coach.id" value={formik.values.coach.id}>
                 <option value="" label ="Select Option"></option>
                 { coaches.map( coach => <option value={coach.id} label = {coach.name } key = {coach.id} /> )}
-              </FormUI.Field>      
+              </FormUI.Field>    
+              { "coach" in formik.errors ? <b><p style={{color: "red"}}>{formik.errors.coach.id}</p></b> : ""}
 
               <DividerUI />
               <br />
