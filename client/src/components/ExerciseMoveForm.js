@@ -14,11 +14,24 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
   const history = useHistory()
 
   const formSchema = yup.object().shape({
-    // id: yup.number().integer(),
-    name: yup.string(),
-    focus: yup.string(),
-    description: yup.string(),
+    name: yup.string()
+      .min(2, "Name is too short")
+      .max(20, "Name is too long")
+      .required("Name is require")
+    ,
+    focus: yup.string()
+      .min(2, "Focus type is too short")
+      .max(20, "Focus type is too long")
+      .required("Focus type is require")
+    ,
+    description: yup.string()      
+      .min(10, "Description is too short")
+      .max(500, "Description is too long")
+      .required("A description is require")
+    ,
     video_link: yup.string()
+      .url("Please provide a proper url for the video (https://www.website.com)")
+    ,
   });
 
 
@@ -41,7 +54,6 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
           })
         }
       })
-
 
     } else {
       fetch(`${values.id}`, {
@@ -70,6 +82,7 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
     initialValues: formData,
     onSubmit: values => submitData(values),
     enableReinitialize: true,
+    validationSchema: formSchema
   });
 
   function clearForm(){
@@ -84,12 +97,16 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
         <FormUI.Field disabled label = "ID" control="input" name="id" onChange={formik.handleChange} value={formik.values.id} />
 
         <FormUI.Field label="Name" control="input" name="name" onChange={formik.handleChange} value={formik.values.name}/>
+        <b><p style={{color: "red"}}>{formik.errors.name}</p></b>
 
         <FormUI.Field label="Focus" control="input" name="focus" onChange={formik.handleChange} value={formik.values.focus}/>
+        <b><p style={{color: "red"}}>{formik.errors.focus}</p></b>
 
         <FormUI.Field label="Description" control="textarea" name="description" rows={4} onChange={formik.handleChange} value={formik.values.description}/>
+        <b><p style={{color: "red"}}>{formik.errors.description}</p></b>
 
         <FormUI.Field label="Video Link" control="input" name="video_link" onChange={formik.handleChange} value={formik.values.video_link}/>
+        <b><p style={{color: "red"}}>{formik.errors.video_link}</p></b>
 
         <FormUI.Button type="submit">Submit</FormUI.Button>
         <DividerUI />

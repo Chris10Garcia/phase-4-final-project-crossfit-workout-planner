@@ -91,13 +91,13 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
         <FormUI.Field disabled label = "ID" control="input" name="id" onChange={formik.handleChange} value={formik.values.id} />
 
         <FormUI.Field label="Name" control="input" type="text" name="name" onChange={formik.handleChange} value={formik.values.name}/>
-        <p style={{color: "red"}}>{formik.errors.name}</p>
+        <b><p style={{color: "red"}}>{formik.errors.name}</p></b>
  
         <FormUI.Field label="Age" control="input" name="age" onChange={formik.handleChange} value={formik.values.age}/>
-        <p style={{color: "red"}}>{formik.errors.age}</p>
+        <b><p style={{color: "red"}}>{formik.errors.age}</p></b>
 
         <FormUI.Field label="Picture" control="input" type="url" name="picture" onChange={formik.handleChange} value={formik.values.picture}/>
-        <p style={{color: "red"}}>{formik.errors.picture}</p>
+        <b><p style={{color: "red"}}>{formik.errors.picture}</p></b>
 
         <FormUI.Button type="submit">Submit</FormUI.Button>
         <DividerUI />
