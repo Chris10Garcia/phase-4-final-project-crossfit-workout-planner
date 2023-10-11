@@ -12,12 +12,21 @@ import {
 
 function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFormValues }) {
   const history = useHistory()
+
   const formSchema = yup.object().shape({
-    // id: yup.number().integer(),
-    name: yup.string(),
-    focus: yup.string(),
-    description: yup.string(),
-    video_link: yup.string()
+    name: yup.string()
+      .min(2, "Name is too short")
+      .max(40, "Name is too long")
+      .required("Name is require")
+      ,
+    age: yup.number()
+      .integer("Age must be an integer number")
+      .min(18, "You must be at least 18 years old")
+      ,
+    picture: yup.string()
+      .url("Please provide a proper url for the picture")
+      ,
+    
   });
 
   function submitData(values){
@@ -67,6 +76,7 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
     initialValues: formData,
     onSubmit: values => submitData(values),
     enableReinitialize: true,
+    validationSchema: formSchema
   });
 
   function clearForm(){
@@ -80,11 +90,14 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
 
         <FormUI.Field disabled label = "ID" control="input" name="id" onChange={formik.handleChange} value={formik.values.id} />
 
-        <FormUI.Field label="Name" control="input" name="name" onChange={formik.handleChange} value={formik.values.name}/>
+        <FormUI.Field label="Name" control="input" type="text" name="name" onChange={formik.handleChange} value={formik.values.name}/>
+        <p style={{color: "red"}}>{formik.errors.name}</p>
  
         <FormUI.Field label="Age" control="input" name="age" onChange={formik.handleChange} value={formik.values.age}/>
+        <p style={{color: "red"}}>{formik.errors.age}</p>
 
-        <FormUI.Field label="Picture" control="input" name="picture" onChange={formik.handleChange} value={formik.values.picture}/>
+        <FormUI.Field label="Picture" control="input" type="url" name="picture" onChange={formik.handleChange} value={formik.values.picture}/>
+        <p style={{color: "red"}}>{formik.errors.picture}</p>
 
         <FormUI.Button type="submit">Submit</FormUI.Button>
         <DividerUI />
