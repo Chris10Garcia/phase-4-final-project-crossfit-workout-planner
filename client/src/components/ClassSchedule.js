@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import * as yup from "yup";
 
 import ClassScheduleDetails  from "./ClassScheduleDetails";
 import ClassScheduleForm from "./ClassScheduleForm";
