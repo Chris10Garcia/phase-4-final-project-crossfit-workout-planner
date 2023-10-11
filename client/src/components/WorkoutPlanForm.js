@@ -13,14 +13,42 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
 
   const history = useHistory()
 
+
+  // {
+  //   name: "",
+  //   difficulty: "",
+  //   description: "",
+  //   exercise_moves: [{ id: "" }]
+  // }
+
   // REDO THIS
+
+
   const formSchema = yup.object().shape({
-    // id: yup.number().integer(),
-    name: yup.string(),
-    focus: yup.string(),
-    description: yup.string(),
-    video_link: yup.string()
+    name: yup.string()
+      .min(2, "Name is too short")
+      .max(40, "Name is too long")
+      .required("Name is require")
+    ,
+    description: yup.string()      
+      .min(10, "Description is too short")
+      .max(300, "Description is too long")
+      .required("A description is require")
+    ,
+    difficulty: yup.string()
+      .min(2, "Difficulty type is too short")
+      .max(20, "Difficulty type is too long")
+      .required("A difficulty is require")
+    ,
+    exercise_moves : yup.array()
+      .of( yup.object().shape( {id: yup.string().required("This is working!!!")} ) )
+      .min(1, "Must add a workout move to the plan")
+
   });
+
+  // .of(
+  //   yup.object().shape({id: yup.number().required("Must make a plan selection")})
+  // )
 
   function clearForm(){
     setFormData(clearFormValues)  
@@ -61,27 +89,54 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
     }
   }
 
+  function FormatExerciseMoveErrors(exercise_moves){
+
+    // eslint-disable-next-line default-case
+
+  }
+
   return (
     <GridUI.Column width={5}>
       <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit ${formData.name}` : `Add a new ${title}`}</HeaderUI>
       
-      <Formik onSubmit={(data)=> submitData(data)} initialValues={formData} enableReinitialize = { true } >
+      <Formik onSubmit={(data)=> submitData(data)} initialValues={formData} enableReinitialize = { true } validationSchema={formSchema} >
       
         { formik => (
           <FormUI onSubmit={formik.handleSubmit} >
+            {}
 
             <FormUI.Field disabled label = "ID" control="input" name="id" onChange={formik.handleChange} value={formik.values.id} />
 
             <FormUI.Field label="Name" control="input" name="name" onChange={formik.handleChange} value={formik.values.name}/>
-            
-            <FormUI.Field label="Difficulty" control="input" name="difficulty" onChange={formik.handleChange} value={formik.values.difficulty}/>
+            <b><p style={{color: "red"}}>{formik.errors.name}</p></b>
 
+            <FormUI.Field label="Difficulty" control="input" name="difficulty" onChange={formik.handleChange} value={formik.values.difficulty}/>
+            <b><p style={{color: "red"}}>{formik.errors.difficulty}</p></b>
+            
             <FormUI.Field label="Description" control="textarea" name="description" rows={4} onChange={formik.handleChange} value={formik.values.description}/>
-       
+            <b><p style={{color: "red"}}>{formik.errors.description}</p></b>
+
             <DividerUI />
             <b>Select as many exercise moves to include within the workout plan</b>
             <br />
-
+            { typeof formik.errors.exercise_moves === "string" ? <b><p style={{color: "red"}}>{formik.errors.exercise_moves}</p></b> : ""}
+            {/* <b><p style={{color: "red"}}>{formik.errors.exercise_moves}</p></b> */}
+            {/* { () => {
+                  // eslint-disable-next-line default-case
+                  switch (typeof formik.errors.exercise_moves){
+                    case "undefined":
+                      console.log("undefined")
+                      break
+                      return <b><p style={{color: "red"}}>""</p></b>
+                    case "string":
+                      return <b><p style={{color: "red"}}>{formik.errors.exercise_moves}</p></b>
+                    case "object":
+                      console.log(formik.errors.exercise_moves)
+                      break
+                      return formik.errors.exercise_moves.map( move => <b><p style={{color: "red"}}>{move}</p></b>)
+                  }
+            } } */}
+   
             <FieldArray name = "exercise_moves" >
               { ( { remove, push } ) => (
 
@@ -90,16 +145,31 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
                       <React.Fragment key = {index} > 
 
                         <FormUI.Field as="select" onChange={formik.handleChange} name = {`exercise_moves.${index}.id`} value = {formik.values.exercise_moves[index].id}>
-                            <option disabled value = "" label="Select Option" />
+                            <option value = "" label="Select Option" />
                             {moves.map ( exerMove => <option value={exerMove.id} label = {exerMove.name} key = {exerMove.name} /> )}
                         </FormUI.Field>
-
+                        {/* { typeof formik.errors.exercise_moves === "object" && 
+                                         "exercise_moves" in formik.errors ? <b><p style={{color: "red"}}>{formik.errors.exercise_moves.map(move => move.id)}</p></b> 
+                                                                           : ""} */}
+      
+      
+                        { typeof formik.errors.exercise_moves === "object" && formik.errors.exercise_moves.length > 0 
+                                          ? <b><p style={{color: "red"}}>{ formik.errors.exercise_moves[index] === undefined ?
+                                                                          "" : formik.errors.exercise_moves[index].id
+                                                                          }
+                                            </p></b> 
+                                          : ""}
                         <ButtonUI type = "button" className = "secondary" onClick={()=>remove(index)}>Remove Field</ButtonUI>
                         <br />
                         <br />
+                        <br />
+                        {/* {console.log(formik.errors.exercise_moves)} */}
+                        
                       </React.Fragment>
+                      
                       )
                     )}
+
                   <ButtonUI type = "button" onClick={()=>push({ id: ""})}>Add Field</ButtonUI>
                 </div>
 

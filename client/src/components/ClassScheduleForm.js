@@ -16,13 +16,6 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     hours.push(i)
   }
 
-  // {
-  //   id : "",
-  //   day: "",
-  //   hour: "",
-  //   coach: {id: "", name: ""},
-  //   workout_plan: {id: "", name : "", difficulty : ""}
-  // }
 
   const formSchema = yup.object().shape({
     day : yup.string()

@@ -22,7 +22,7 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
     focus: yup.string()
       .min(2, "Focus type is too short")
       .max(20, "Focus type is too long")
-      .required("Focus type is require")
+      .required("A focus type is require")
     ,
     description: yup.string()      
       .min(10, "Description is too short")
