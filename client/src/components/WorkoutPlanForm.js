@@ -13,17 +13,6 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
 
   const history = useHistory()
 
-
-  // {
-  //   name: "",
-  //   difficulty: "",
-  //   description: "",
-  //   exercise_moves: [{ id: "" }]
-  // }
-
-  // REDO THIS
-
-
   const formSchema = yup.object().shape({
     name: yup.string()
       .min(2, "Name is too short")
@@ -41,14 +30,11 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
       .required("A difficulty is require")
     ,
     exercise_moves : yup.array()
-      .of( yup.object().shape( {id: yup.string().required("This is working!!!")} ) )
+      .of( yup.object().shape( {id: yup.string().required("Must select an exercise move or press 'remove field'")} ) )
       .min(1, "Must add a workout move to the plan")
 
   });
 
-  // .of(
-  //   yup.object().shape({id: yup.number().required("Must make a plan selection")})
-  // )
 
   function clearForm(){
     setFormData(clearFormValues)  
@@ -89,11 +75,6 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
     }
   }
 
-  function FormatExerciseMoveErrors(exercise_moves){
-
-    // eslint-disable-next-line default-case
-
-  }
 
   return (
     <GridUI.Column width={5}>
@@ -120,22 +101,6 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
             <b>Select as many exercise moves to include within the workout plan</b>
             <br />
             { typeof formik.errors.exercise_moves === "string" ? <b><p style={{color: "red"}}>{formik.errors.exercise_moves}</p></b> : ""}
-            {/* <b><p style={{color: "red"}}>{formik.errors.exercise_moves}</p></b> */}
-            {/* { () => {
-                  // eslint-disable-next-line default-case
-                  switch (typeof formik.errors.exercise_moves){
-                    case "undefined":
-                      console.log("undefined")
-                      break
-                      return <b><p style={{color: "red"}}>""</p></b>
-                    case "string":
-                      return <b><p style={{color: "red"}}>{formik.errors.exercise_moves}</p></b>
-                    case "object":
-                      console.log(formik.errors.exercise_moves)
-                      break
-                      return formik.errors.exercise_moves.map( move => <b><p style={{color: "red"}}>{move}</p></b>)
-                  }
-            } } */}
    
             <FieldArray name = "exercise_moves" >
               { ( { remove, push } ) => (
@@ -148,22 +113,15 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
                             <option value = "" label="Select Option" />
                             {moves.map ( exerMove => <option value={exerMove.id} label = {exerMove.name} key = {exerMove.name} /> )}
                         </FormUI.Field>
-                        {/* { typeof formik.errors.exercise_moves === "object" && 
-                                         "exercise_moves" in formik.errors ? <b><p style={{color: "red"}}>{formik.errors.exercise_moves.map(move => move.id)}</p></b> 
-                                                                           : ""} */}
-      
       
                         { typeof formik.errors.exercise_moves === "object" && formik.errors.exercise_moves.length > 0 
-                                          ? <b><p style={{color: "red"}}>{ formik.errors.exercise_moves[index] === undefined ?
-                                                                          "" : formik.errors.exercise_moves[index].id
-                                                                          }
-                                            </p></b> 
+                                          ? <b><p style={{color: "red"}}>{ formik.errors.exercise_moves[index] === undefined ? "" : formik.errors.exercise_moves[index].id }</p></b> 
                                           : ""}
+                                          
                         <ButtonUI type = "button" className = "secondary" onClick={()=>remove(index)}>Remove Field</ButtonUI>
                         <br />
                         <br />
                         <br />
-                        {/* {console.log(formik.errors.exercise_moves)} */}
                         
                       </React.Fragment>
                       
