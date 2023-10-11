@@ -1,5 +1,8 @@
 import React from "react";
 import { Route, useRouteMatch } from "react-router-dom";
+
+import ListData from "./ListData";
+
 import {
   Segment as SegmentUI,
   Header as HeaderUI, 
@@ -7,7 +10,7 @@ import {
   Button as ButtonUI
 } from 'semantic-ui-react';
 
-import ListData from "./ListData";
+
 
 function PageFrame({ children, title, dataList, setDisplayButton, displayButton }) {
   const match = useRouteMatch();
@@ -15,9 +18,11 @@ function PageFrame({ children, title, dataList, setDisplayButton, displayButton 
   return (
     <SegmentUI>
       <HeaderUI>
-        <h2>{title} Page</h2> <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI>
+        <h2>{title} Page</h2> 
+        <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >
+            { displayButton ? "Hide Form" : `Show Add New / Edit Form`}
+        </ButtonUI>
       </HeaderUI>
-
 
       <GridUI celled columns="equal" stackable>
         <GridUI.Row>
@@ -31,7 +36,7 @@ function PageFrame({ children, title, dataList, setDisplayButton, displayButton 
             
           </GridUI.Column>
 
-          {children[0]}
+          { children[0] }
 
           <GridUI.Column>
 
@@ -42,11 +47,11 @@ function PageFrame({ children, title, dataList, setDisplayButton, displayButton 
             </Route>
 
             <Route path={`${match.url}/:itemID`}>
-              {children[1]}
+              { children[1] }
             </Route>
+
           </GridUI.Column>
 
-          
         </GridUI.Row>
       </GridUI>
     </SegmentUI>

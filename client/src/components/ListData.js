@@ -3,8 +3,8 @@ import { useRouteMatch, NavLink } from "react-router-dom";
 import { 
   Header as HeaderUI, 
   Menu as MenuUI, 
-  Placeholder as 
-  PlaceholderUI } from 'semantic-ui-react';
+  Placeholder as PlaceholderUI 
+} from 'semantic-ui-react';
 
 function ListData({ dataList }) {
   const match = useRouteMatch();
@@ -20,20 +20,15 @@ function ListData({ dataList }) {
     </React.Fragment>
   );
 
-  const dataListJSK = dataList.map(data => {
-    return (
-      <MenuUI.Item
-        key={data.id}
-        name={data.name}
-        as={NavLink}
-        to={`${match.url}/${data.id}`}
-        color={"red"} />
-    );
-  });
-
   return (
     <MenuUI size="large" vertical fluid>
-      {dataListJSK}
+      { dataList.map( data => < MenuUI.Item 
+                                          key={data.id}
+                                          name={data.name}
+                                          as={NavLink}
+                                          to={`${match.url}/${data.id}`}
+                                          color={"red"} /> )
+      }
     </MenuUI>
   );
 }

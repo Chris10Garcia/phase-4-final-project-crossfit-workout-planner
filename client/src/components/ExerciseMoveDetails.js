@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+
 import {
   Header as HeaderUI, 
   Divider as DividerUI,
@@ -11,13 +12,13 @@ function ExerciseMoveDetails({ dataList, setFormData, setDisplayButton}) {
   const params = useParams();
   const exerciseMove = dataList[params.itemID - 1];
   
+  if (!exerciseMove) return <h2>page loading...</h2>;
     
   function editButton(){
     setDisplayButton(true)  
     setFormData({...exerciseMove})
   }
-
-  if (!exerciseMove) return <h2>page loading...</h2>;
+  
 
   return (
     <React.Fragment>

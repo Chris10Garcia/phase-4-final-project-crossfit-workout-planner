@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route} from "react-router-dom";
-import { 
-  Segment as SegmentUI, } from 'semantic-ui-react'
+import { Switch, Route } from "react-router-dom";
 
 import Header from "./Header";
 import ClassSchedule from "./ClassSchedule";
@@ -9,32 +7,16 @@ import WorkoutPlan from "./WorkoutPlan";
 import ExerciseMove from "./ExerciseMove";
 import Coach from "./Coach";
 
+import { 
+  Segment as SegmentUI, 
+  } from 'semantic-ui-react'
+
+
+
 
 /*
-I can bring down state for each fetch. however, I will need one state for refreshing the page at the top level
-reason: If i add a new coach, i need the other APIs to fetch again, etc
-Actually nevermind. I need to keep it high. Certain pages require knowing what records are available in the other APIs
-*/
-
-/*
-Adding forms Brainstorming
-
-ClassScheduling
-- add form there
-- If workout plan that you want doesn't exist, then go to WorkOutPlan page to create it
-- Have option to edit and delete as well
-- Deleting schedule doesn't delete the other records associated with it
-
-Workout Plan
-- add form there
-- If exercise move isn't there, go to ExerciseMove Page to create it there
-- Create only. Maybe deal with edit but not sure how to deal with other state variables
-
-Exercise Plan
-- add form there
 
 Coach
-- add form there 
 - OPTIONAL: 
   - if i do authentication, have coach can edit their own profile
   - move the adding coach form to sign up / log in page
@@ -49,6 +31,7 @@ function App() {
   const [plans, setPlans] = useState([])
   const [refresh, setRefresh] = useState(false)
 
+  // I should just one useEffect and call all 4 fetches within
   useEffect(()=>{
     fetch("/workout_plans")
       .then( r => r.json())

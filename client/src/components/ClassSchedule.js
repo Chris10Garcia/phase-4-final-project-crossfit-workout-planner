@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import * as yup from "yup";
+
+import ClassScheduleDetails  from "./ClassScheduleDetails";
+import ClassScheduleForm from "./ClassScheduleForm";
+
 import {
   Segment as SegmentUI,
   Header as HeaderUI,
@@ -7,22 +11,23 @@ import {
   Button as ButtonUI
 } from 'semantic-ui-react';
 
-import ClassScheduleDetails  from "./ClassScheduleDetails";
-import ClassScheduleForm from "./ClassScheduleForm";
 
 
-function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
+
+function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
   const [displayButton, setDisplayButton] = useState(false)
-  const title = "Class Schedule"
-  const [formData, setFormData] = useState( {
-    id : "",
-    day: "",
-    hour: "",
-    coach: {id: "", name: ""},
-    workout_plan: {id: "", name : "", difficulty : ""}
-  }
-  )
+
+  const clearFormValues = {
+      id : "",
+      day: "",
+      hour: "",
+      coach: {id: "", name: ""},
+      workout_plan: {id: "", name : "", difficulty : ""}
+    }
+
+  const [formData, setFormData] = useState( clearFormValues )
   
+  const title = "Class Schedule"
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 
@@ -33,10 +38,18 @@ function ClassSchedule({ sch_classes, refresh, setRefresh, plans, coaches }) {
         <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI>
       </HeaderUI>
       
-      
       <CardUI.Group stackable doubling>
-        {displayButton ? <ClassScheduleForm title= {title} formData = {formData} setFormData={setFormData} coaches = {coaches} plans = {plans} refresh={refresh} setRefresh ={setRefresh}/> : "" }
-       { days.map(day => <ClassScheduleDetails key={day} day={day} sch_classes={sch_classes} refresh={refresh} setRefresh ={setRefresh} displayButton = {displayButton} setDisplayButton = {setDisplayButton} setFormData = {setFormData} formData={formData}/>) }
+        { displayButton ? <ClassScheduleForm 
+                              title= {title} coaches = {coaches} plans = {plans} 
+                              formData = {formData} setFormData={setFormData} 
+                              refresh={refresh} setRefresh ={setRefresh} days={days} 
+                              clearFormValues={clearFormValues} /> 
+                        : "" }
+        { days.map(day => <ClassScheduleDetails 
+                              key={day} day={day} sch_classes={sch_classes} 
+                              refresh={refresh} setRefresh ={setRefresh} 
+                              displayButton = {displayButton} setDisplayButton = {setDisplayButton} 
+                              setFormData = {setFormData} formData={formData}/> )}
       </CardUI.Group>
     </SegmentUI>
   );

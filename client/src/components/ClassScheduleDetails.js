@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom"
+
 import {
   Header as HeaderUI,
   Card as CardUI,
@@ -57,6 +58,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
               <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI>
               <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI>
             </FeedUI.Extra>
+
           </FeedUI.Content>
 
         </FeedUI.Event>
@@ -65,18 +67,16 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
     );
   });
 
-  console.log(feedClassesContentJSX.length)
   return (
     
-    // <CardUI style={{"verticalAlign" : "top", "display": "inline-block"}} >
     <CardUI style={ feedClassesContentJSX.length > 0 ? {"verticalAlign" : "top", "display": "inline-block"} : {"display":"none"}} >
       <CardUI.Content>
-        <CardUI.Header as="h1"> {day} </CardUI.Header>
+        <CardUI.Header as="h1">{day} </CardUI.Header>
       </CardUI.Content>
+      
       <CardUI.Content >
         <FeedUI > 
           {feedClassesContentJSX}
-
         </FeedUI>
       </CardUI.Content>
     </CardUI>

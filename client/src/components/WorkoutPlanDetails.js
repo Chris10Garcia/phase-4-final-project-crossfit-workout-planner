@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams, Link} from "react-router-dom";
+
 import {
   Segment as SegmentUI,
   Header as HeaderUI, 
@@ -13,9 +14,8 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton, displayBu
   const workoutPlan = dataList[params.itemID - 1];
 
   function editButton(){
-
     setDisplayButton(true)  
-    setFormData({...workoutPlan})
+    setFormData(workoutPlan)
   }
 
   if (!workoutPlan) return <h2>page loading...</h2>;
@@ -62,7 +62,7 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton, displayBu
       <HeaderUI as="h3">Exercise Moves Involved </HeaderUI>
       <SegmentUI padded>
         <GridUI stackable columns={3}>
-          {exerciseMovesJSK}
+          { exerciseMovesJSK }
         </GridUI>
       </SegmentUI>
       

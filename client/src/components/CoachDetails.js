@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+
 import {
   Header as HeaderUI, 
   Divider as DividerUI,
@@ -14,16 +15,15 @@ function CoachDetails({ dataList, setDisplayButton, setFormData }) {
 
   if (!coach) return <h2>page loading...</h2>;
 
-
   function editButton(){
     setDisplayButton(true)  
-    setFormData({...coach})
+    setFormData(coach)
   }
 
   return (
     <React.Fragment>
         <HeaderUI>Coach Details</HeaderUI>
-        <ButtonUI id = {coach.id} onClick={() => editButton()}> Edit</ButtonUI> 
+        <ButtonUI id = {coach.id} onClick={() => editButton()}>Edit</ButtonUI> 
         <br /><br />
         <ContainerUI>
             <HeaderUI as="h2">{coach.name}</HeaderUI>

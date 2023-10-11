@@ -10,20 +10,24 @@ function ExerciseMove({ moves, refresh, setRefresh}) {
 
   const [displayButton, setDisplayButton] = useState(false)
 
-  const [formData, setFormData] = useState({
+  const clearFormValues = {
     id: "",
     name: "",
     focus: "",
     description: "",
     video_link: ""
-})
+}
 
+  const [formData, setFormData] = useState(clearFormValues)
 
 
   return (
     <PageFrame title = {title} dataList={moves} displayButton = {displayButton} setDisplayButton={setDisplayButton}>
-
-      {displayButton ? <ExerciseMoveForm title= {title} formData = {formData} setFormData={setFormData} refresh={refresh} setRefresh ={setRefresh}/> : "" }
+      {displayButton  ? <ExerciseMoveForm 
+                                  title= {title} formData = {formData} 
+                                  setFormData={setFormData} refresh={refresh} 
+                                  setRefresh ={setRefresh} clearFormValues={clearFormValues} /> 
+                      : "" }
       <ExerciseMoveDetails 
             dataList={moves} 
             setDisplayButton={setDisplayButton} 
