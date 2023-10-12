@@ -58,10 +58,12 @@ function BlogApp(){
       <h1>Blog Code</h1>
       
       <Formik 
-              initialValues={initialValues}  
-              onSubmit={ values => console.log(values)} >
+              initialValues= {initialValues}  
+              onSubmit={ values => console.log(values)} 
+              
+              >
 
-        {formik => ( 
+        { formik => ( 
           <Form>
             <Field name = "name" placeholder="Jane Doe" label="Student Name" /> <br /> <br />
 
