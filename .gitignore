@@ -57,4 +57,5 @@ __pycache__
 /server/instance/app.db
 
 */*.db
-instance
+server/instance
+
