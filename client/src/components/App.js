@@ -7,12 +7,11 @@ import WorkoutPlan from "./WorkoutPlan";
 import ExerciseMove from "./ExerciseMove";
 import Coach from "./Coach";
 
+import {Formik, Form, Field, FieldArray } from "formik"
+
 import { 
   Segment as SegmentUI, 
   } from 'semantic-ui-react'
-
-
-
 
 /*
 
@@ -23,6 +22,90 @@ Coach
 
 */
 
+
+function BlogApp(){
+  /* 
+  NOT TO BE GRADED. PURPOSE OF THIS COMPONENT IS TO ENSURE CODE WORKS FOR MY BLOG ENTRY
+
+  Blog Form should cover 
+  - a field
+  - drop down
+  - an array
+    - drop down
+    - field
+  
+  form values to control
+  - Single fields
+    - student name = text field
+    - favorite color = drop down
+  - Array
+    - subject taking = drop down
+    - grade = field
+  */
+
+
+  const initialValues = {
+    name : "",
+    color : "",
+    records : [ {subject :"", grade : "" }]
+  }
+
+  const colors = ["Red", "Green", "Blue", "White", "Black", "Yellow", "Orange"]
+  const subjects = ["Calculus", "English Lit", "History", "Social Studies", "Physics"]
+
+  return(
+    <div>
+      <h1>Blog Code</h1>
+      
+      <Formik 
+              initialValues={initialValues}  
+              onSubmit={ values => console.log(values)} >
+
+        {formik => ( 
+          <Form>
+            <Field name = "name" placeholder="Jane Doe" label="Student Name" /> <br /> <br />
+
+            <Field name= "color" as = "select" >
+              <option label="Make a section" value=""/>
+              { colors.map( color => <option key={ color } label={ color } value={ color } /> )}
+            </Field> <br /><br /> <br />
+
+            <FieldArray name= "records"  >
+
+                { ( {push, remove}) => ( 
+                  <div>
+                    <div>
+                      { formik.values.records.length > 0 && formik.values.records.map ( (record, index ) => ( 
+                            <div key={index} style={{border:"3px solid black"}}>
+                                
+                                <label>Grade Value</label>
+                                <Field name = {`records.${index}.grade`} /> <br /><br />
+                                
+                                <label>Subject</label>
+                                <Field name= {`records.${index}.subject`} as = "select" >
+                                  <option label="Make a section" value=""/>
+                                  { subjects.map( subject => <option key={ subject } label={ subject } value={ subject } /> )}
+                                </Field> <br /><br />
+
+                                <button type="button" onClick={() => remove(index)}>Remove</button><br /><br /><br />
+
+                              </div> 
+                        ))}
+                        
+                    </div>
+                    <button type="button" onClick={() => push({grade: "", subject: ""}) }>Add More</button><br /><br />
+                  </div>
+                )}
+              
+            </FieldArray>
+            <button type="submit">Submit</button>
+          </Form>
+        )}
+      </Formik>
+
+    </div>
+  )
+}
 
 function App() {
   const [coaches, setCoaches] = useState([])
@@ -72,6 +155,11 @@ function App() {
       </Route>
       <Route path = "/coaches" >
         <Coach coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
+      </Route>
+      <Route path = "/blog" >
+        <SegmentUI>
+          <BlogApp  />
+        </SegmentUI>
       </Route>
     </Switch>
   </ SegmentUI.Group>
