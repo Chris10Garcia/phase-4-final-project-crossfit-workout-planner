@@ -2,11 +2,8 @@
 
 # Standard library imports
 from random import randint, choice as rc
-
-# Remote library imports
 from faker import Faker
 
-# Local imports
 from app import app
 from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan, Schedule
 
@@ -17,11 +14,6 @@ def delete_all_records():
     Exercise_Move.query.delete()
     Workout_Plan.query.delete()
     Schedule.query.delete()
-    # db.session.query(schedule_workout_plan).delete()
-    # db.session.commit() #is this necessary?
-
-
-# basic for now, maybe later on create records that are more accurate to fitness and crossfit?
 
 
 

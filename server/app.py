@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
 
-# Standard library imports
 
-# Remote library imports
 from flask import request, make_response
 from flask_restful import Resource
-# from marshmallow_sqlalchemy import fields
 from marshmallow import fields
-# Local imports
+
 from config import app, db, api, ma
-from models import Coach, Crossfit_Class, Workout_Plan, Exercise_Move, Schedule
-# Add your model imports
+from models import Coach, Workout_Plan, Exercise_Move, Schedule
 
 
-# Views go here!
 
+# This is not needed, should remove
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
 
-
-# Schema plans
+########################################################################
+# SCHEMA PLANS
+########################################################################
 
 class Coach_Schema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -60,6 +57,14 @@ workout_plan_schema = Workout_Plan_Schema()
 workout_plans_schema = Workout_Plan_Schema(many=True)
 
 
+########################################################################
+# RESTful API VIEW ROUTES
+########################################################################
+
+ 
+#######################
+# /coaches 
+
 class CoachesIndex(Resource):
     def get(self):
         coaches = Coach.query.all()
@@ -87,6 +92,9 @@ class CoachesIndex(Resource):
         return response
 
 
+#######################
+# /coaches/id
+
 class CoachesByID(Resource):
     def get(self, id):
         coach = Coach.query.filter(Coach.id == id).first()
@@ -98,11 +106,8 @@ class CoachesByID(Resource):
     
     def patch(self, id):
         coach = Coach.query.filter(Coach.id == id).first()
-        # del coach["created_at"]
+        
         [setattr(coach, attr, request.json.get(attr)) for attr in request.json]
-
-        # print(coach)
-        # return {"message": "testing"}
 
         db.session.add(coach)
         db.session.commit()
@@ -113,6 +118,10 @@ class CoachesByID(Resource):
         )
         
         return response
+
+
+#######################
+# /schedules
 
 class ScheduledClassesIndex(Resource):
     def get(self):
@@ -146,7 +155,11 @@ class ScheduledClassesIndex(Resource):
         )
 
         return response
-    
+
+
+#######################
+# /schedules/id
+
 class ScheduledClassesByID(Resource):
     def get(self, id):
         scheduledclass = Schedule.query.filter(Schedule.id == id).first()
@@ -195,6 +208,10 @@ class ScheduledClassesByID(Resource):
 
         return response
 
+
+#######################
+# /workout_plans
+
 class WorkoutPlansIndex(Resource):
     def get(self):
         workout_plans = Workout_Plan.query.all()
@@ -228,6 +245,9 @@ class WorkoutPlansIndex(Resource):
         return response
 
 
+#######################
+# /workout_plans/id
+
 class WorkoutPlansByID(Resource):
     def get(self, id):
         workout_plan = Workout_Plan.query.filter(Workout_Plan.id == id).first()
@@ -238,13 +258,13 @@ class WorkoutPlansByID(Resource):
         return response
     
     def patch(self, id):
-        # get record from db + json data + children
+        # get record from db + json data + childrens
         workout_plan = Workout_Plan.query.filter(Workout_Plan.id == id).first()
         wp_data = request.get_json()
         exercise_moves = wp_data["exercise_moves"]
         exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
         
-        # delete data and attr that can cause issues
+        # delete data and attr that can cause issues when creating new record
         del wp_data["exercise_moves"]
         workout_plan.exercise_moves.clear()
 
@@ -263,7 +283,10 @@ class WorkoutPlansByID(Resource):
 
         return response
 
-    
+
+#######################
+# /exercise_moves
+
 class ExerciseMovesIndex(Resource):
     def get(self):
         exercise_moves = Exercise_Move.query.all()
@@ -289,6 +312,10 @@ class ExerciseMovesIndex(Resource):
 
         return response
 
+
+#######################
+# /exercise_moves/id
+
 class ExerciseMovesByID(Resource):
     def get(self, id):
         exercise_move = Exercise_Move.query.filter(Exercise_Move.id == id).first()
@@ -300,9 +327,11 @@ class ExerciseMovesByID(Resource):
     
     
     def patch(self, id):
+
         ## this is prone to error if the record doesn't exist
         exercise_move = Exercise_Move.query.filter(Exercise_Move.id == id).first()
         [setattr(exercise_move, attr, request.json.get(attr)) for attr in request.json]
+
         db.session.add(exercise_move)
         db.session.commit()
 
@@ -313,7 +342,8 @@ class ExerciseMovesByID(Resource):
         return response
     
 
-
+#######################
+# resources
 
 api.add_resource(CoachesIndex,"/coaches")
 api.add_resource(CoachesByID,"/coaches/<int:id>")
@@ -326,6 +356,7 @@ api.add_resource(WorkoutPlansByID, "/workout_plans/<int:id>")
 
 api.add_resource(ExerciseMovesIndex, "/exercise_moves")
 api.add_resource(ExerciseMovesByID, "/exercise_moves/<int:id>")
+
 
 
 if __name__ == '__main__':

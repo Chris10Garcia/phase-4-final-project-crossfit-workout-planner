@@ -54,6 +54,7 @@ jspm_packages
 __pycache__
 
 *.db
+/server/instance/app.db
 
 */*.db
 instance
