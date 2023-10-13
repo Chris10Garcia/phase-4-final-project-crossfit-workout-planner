@@ -51,7 +51,7 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
         if (r.ok){
           r.json().then(data => {
               setRefresh(!refresh)
-              history.push(`${data.id}`)
+              history.push(`/workout_plans/${data.id}`)
           })
         } else {
           r.json().then(err => console.log(err))
