@@ -9,21 +9,25 @@ from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan, Sched
 
 fake = Faker()
 
+
 def delete_all_records():
+    "DELETE ALL RECORDS WITHIN DB"
 
     print("Deleting all records...")
 
-    Coach.query.delete()
+    Schedule.query.delete()
     Crossfit_Class.query.delete()
+    Coach.query.delete()
     Exercise_Move.query.delete()
     Workout_Plan.query.delete()
-    Schedule.query.delete()
 
-    print("Action Complete")
 
 
 def create_coaches():
+    "CREATE ALL COACH RECORDS WITHIN DB"
+
     print("Creating new Coach records...")
+
     coach_dan = Coach(
             name = "Dan Baily",
             age = 30,
@@ -50,9 +54,14 @@ def create_coaches():
     
     coaches = [coach_chris, coach_brent, coach_dan, coach_rose, ]
 
+    add_records(coaches)
+
     return coaches
 
+
+
 def create_exercise_moves():
+    "CREATE ALL EXERCISE MOVE RECORDS WITHIN DB"
 
     print("Creating new Exercise Move records...")
 
@@ -100,9 +109,14 @@ def create_exercise_moves():
 
     moves = [bench_press, dead_lift, burpee, clean, snatch, running ]
 
+    add_records(moves)
+
     return moves
 
+
+
 def create_workout_plans():
+    "CREATE ALL WORKOUT PLAN RECORDS WITHIN DB"
 
     print("Creating new Workout Plan records...")
 
@@ -120,13 +134,54 @@ def create_workout_plans():
 
     plans = [leg_burner, beginner]
 
+    add_records(plans)
+
     return plans
 
-def add_records(arry_of_reccords):
-    db.session.add_all(arry_of_reccords)
+
+def create_schedule():
+    "CREATE ALL SCHEDULE RECORDS WITHIN DB"
+
+    print("Creating new Schedule records...")
+
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+    schedules = [ [ Schedule( day = day, hour = i * 100 ) for i in range(9,15) ] for day in days]    
+    
+    [ add_records(days) for days in schedules ]
+    
+    return schedules
+
+def relate_workout_plans_and_moves(workout_plan, moves):
+    "RELATE EXERCISE MOVES WITH A WORKOUT PLAN"
+
+    workout_plan.exercise_moves.extend(moves)
+    add_record(workout_plan)
+
+
+def relate_schedule_with_coaches_and_plans(days, coaches, plans):
+    "RELATE COACH AND WORKOUT PLAN WITH A SCHEDULE"
+    
+    for day in days:
+        day.coach = rc(coaches)
+        day.workout_plan = rc(plans)
+    
+    add_records(days)
+    
+
+def add_records(arry_of_records):
+    "ADD AN ARRAY OF RECORDS INTO DB"
+
+    db.session.add_all(arry_of_records)
     db.session.commit()
 
-    return arry_of_reccords
+def add_record(record):
+    "ADD A SINGLE RECORD INTO DB"
+
+    db.session.add(record)
+    db.session.commit()
+
+
 
 if __name__ == '__main__':
     with app.app_context():
@@ -138,15 +193,61 @@ if __name__ == '__main__':
         moves = create_exercise_moves()
         plans = create_workout_plans()
 
+        print("Coach, workout plan, and exercise move records added to db")
+
         [ coach_chris, coach_brent, coach_dan, coach_rose ] = coaches
         [ bench_press, dead_lift, burpee, clean, snatch, running ] = moves
         [ leg_burner, beginner ] = plans
-        
-        add_records(coaches)
-        add_records(moves)
-        add_records(plans)
 
-        print("Coach, workout plan, and exercise move records added to db")
+        print("Relating Exercise Move records with a Workout Plan records...")
+
+        relate_workout_plans_and_moves(leg_burner, [dead_lift, clean, snatch] )
+        relate_workout_plans_and_moves(beginner, [clean, running, burpee])
+
+        print("Relationship complete")
+
+        schedules = create_schedule()
+
+        print("Relating a Coach and Workout Plan record with a Schedule record...")
+
+        [relate_schedule_with_coaches_and_plans(days, coaches, plans) for days in schedules]
+
+        print("DB record creation and relationships complete")
+
+
+
+
+
+
+""" 
+    THE BELOW COMMENTED OUT CODE WAS CODE USED TO BRAINSTORM AND UNDERSTAND HOW DBS WORK
+    KEEPING THIS AS A MEMORY IN TERMS OF HOW I TROUBLESHOOTED THINGS, MENTAL THOUGHT
+    PROCESS, ETC. THE BELOW IS NOT TO BE UNCOMMENTED OUT AS IT MIGHT NOT FUNCTION 
+    ANY LONGER.
+"""
+
+        # [add_records(days) for days in schedules]
+
+        # days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+        # schedules = [ 
+        #     [Schedule( day = day, hour = i * 100, coach=rc(coaches), workout_plan = rc(plans) ) for i in range(9,15)] for day in days
+        #         ]    
+
+        # # [mondays, tuesdays, wednesdays, thursdays, fridays, saturdays] = schedules
+
+        # mondays = [Schedule(day = "Monday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans) ) for i in range(9,15)]
+        # tuesdays = [Schedule(day = "Tuesday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans)  ) for i in range(9,14)]
+        # wednesdays = [Schedule(day = "Wednesday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans)  ) for i in range(9,14)]
+
+        # db.session.add_all(mondays + tuesdays + wednesdays)
+
+        # db.session.commit()
+        # days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+        # schedules = [ 
+        #     [Schedule( day = day, hour = i * 100, coach=rc(coaches), workout_plan = rc(plans) ) for i in range(9,15)] for day in days
+        #             ]
 
 
         # leg_burner.exercise_moves.append(dead_lift)
@@ -162,15 +263,9 @@ if __name__ == '__main__':
         # tuesdays = [Schedule(day = "Tuesday", coach=rc(coaches)) for i in range(0,6)]
         # wednesday = [Schedule(day = "Wednesday", coach=rc(coaches)) for i in range(0,7)]
 
-        mondays = [Schedule(day = "Monday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans) ) for i in range(9,14)]
-        tuesdays = [Schedule(day = "Tuesday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans)  ) for i in range(9,14)]
-        wednesday = [Schedule(day = "Wednesday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans)  ) for i in range(9,14)]
-        mondays + tuesdays + wednesday
-
-        db.session.add_all(mondays + tuesdays + wednesday)
-        db.session.commit()
-
-
+        # mondays = [Schedule(day = "Monday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans) ) for i in range(9,15)]
+        # tuesdays = [Schedule(day = "Tuesday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans)  ) for i in range(9,14)]
+        # wednesday = [Schedule(day = "Wednesday", hour = i * 100, coach=rc(coaches), workout_plan = rc(plans)  ) for i in range(9,14)]
 
         # beginner.exercise_moves.append((burpee,))
         # beginner.exercise_moves.append((dead_lift,))   
@@ -190,18 +285,11 @@ if __name__ == '__main__':
         # db.session.commit()
 
         # mondays[1].workout_plans.append(beginner)
-        leg_burner.exercise_moves.extend([dead_lift, clean, snatch])
-        beginner.exercise_moves.append(clean)
-        beginner.exercise_moves.append(running)
-        beginner.exercise_moves.append(burpee)
+
         # for test in beginner.crossfit_classes:
         #     test.schedule = monday
         # beginner.schedules.append(monday)
 
-
-
-        db.session.add_all([beginner, leg_burner])
-        db.session.commit()
 
         # print(beginner.exercise_moves)
 
@@ -218,8 +306,6 @@ if __name__ == '__main__':
         # print()
 
         
-
-
         # test_1 = Crossfit_Class(
         #     schedule = monday,
         #     workout_plan = beginner,
