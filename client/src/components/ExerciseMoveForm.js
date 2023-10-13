@@ -16,12 +16,12 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
   const formSchema = yup.object().shape({
     name: yup.string()
       .min(2, "Name is too short")
-      .max(20, "Name is too long")
+      .max(30, "Name is too long")
       .required("Name is require")
     ,
     focus: yup.string()
       .min(2, "Focus type is too short")
-      .max(20, "Focus type is too long")
+      .max(30, "Focus type is too long")
       .required("A focus type is require")
     ,
     description: yup.string()      
