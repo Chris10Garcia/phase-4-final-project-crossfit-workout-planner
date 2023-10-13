@@ -7,96 +7,144 @@ from faker import Faker
 from app import app
 from models import db, Coach, Crossfit_Class, Exercise_Move, Workout_Plan, Schedule
 
+fake = Faker()
+
 def delete_all_records():
+
     print("Deleting all records...")
+
     Coach.query.delete()
     Crossfit_Class.query.delete()
     Exercise_Move.query.delete()
     Workout_Plan.query.delete()
     Schedule.query.delete()
 
+    print("Action Complete")
 
 
-if __name__ == '__main__':
-    fake = Faker()
-    with app.app_context():
-        print("Starting seed script...")
-        delete_all_records()
-
-        coach_dan = Coach(
+def create_coaches():
+    print("Creating new Coach records...")
+    coach_dan = Coach(
             name = "Dan Baily",
             age = 30,
             picture = "https://www.themodestman.com/wp-content/uploads/2020/03/Dan-Bailey-CrossFit.jpg",
         )
 
-        coach_rose = Coach(
+    coach_rose = Coach(
             name = "Rose Smith",
             age = 25,
             picture = "https://misfitathletics.com/wp-content/uploads/2021/03/20200801-TED03193.cjpg_-819x1024.jpg"
         )
 
-        bench_press = Exercise_Move(
+    coach_brent = Coach(
+            name = "Brent Fikowski",
+            age = 40,
+            picture = "https://upload.wikimedia.org/wikipedia/commons/5/5d/Brent_Fikowski_at_the_Asia_CrossFit_Championship.jpg"
+    )
+
+    coach_chris = Coach(
+            name = "Chris Garcia",
+            age = 33,
+            picture = "https://avatars.githubusercontent.com/u/10578405?v=4"
+        )
+    
+    coaches = [coach_chris, coach_brent, coach_dan, coach_rose, ]
+
+    return coaches
+
+def create_exercise_moves():
+
+    print("Creating new Exercise Move records...")
+
+    bench_press = Exercise_Move(
             name = "Bench Press",
             focus = "Strength",
             description = "It involves lying on a bench and pressing weight upward using either a barbell or a pair of dumbbells. During a bench press, you lower the weight down to chest level and then press upwards while extending your arms. This movement is considered one repetition, or rep.",
             video_link = "https://www.youtube.com/watch?v=SCVCLChPQFY"
         )
 
-        dead_lift = Exercise_Move(
-            name = "Dead Lift",
-            focus = "Strength",
-            description = "The deadlift exercise is a relatively simple exercise to perform, a weight is lifted from a resting position on the floor to an upright position. The deadlift exercise utilizes multiple muscle groups to perform but has been used to strength the hips, thighs, and back musculature.",
-            video_link = "youtube.com/watch?v=op9kVnSso6Q"
-        )
+    dead_lift = Exercise_Move(
+        name = "Dead Lift",
+        focus = "Strength",
+        description = "The deadlift exercise is a relatively simple exercise to perform, a weight is lifted from a resting position on the floor to an upright position. The deadlift exercise utilizes multiple muscle groups to perform but has been used to strength the hips, thighs, and back musculature.",
+        video_link = "youtube.com/watch?v=op9kVnSso6Q"
+    )
 
-        burpee = Exercise_Move(
-            name = "Burpee",
-            focus = "Cardio",
-            description = "a conditioning exercise in which a person squats, places the palms of the hands on the floor in front of the feet, jumps back into a push-up position, in some cases completes one push-up, returns to the squat position, and then jumps up into the air while extending the arms overhead.",
-            video_link = "https://www.youtube.com/watch?v=auBLPXO8Fww"
-        )
+    burpee = Exercise_Move(
+        name = "Burpee",
+        focus = "Cardio",
+        description = "a conditioning exercise in which a person squats, places the palms of the hands on the floor in front of the feet, jumps back into a push-up position, in some cases completes one push-up, returns to the squat position, and then jumps up into the air while extending the arms overhead.",
+        video_link = "https://www.youtube.com/watch?v=auBLPXO8Fww"
+    )
 
-        clean = Exercise_Move(
-            name = "Clean",
-            focus = "Olympic Weight Lifting",
-            description = "when a barbell is “pulled in a single movement from the platform to the shoulders, while either splitting or bending the legs.” Simply put, a clean is a lift that moves a barbell from the floor to a front rack position at the shoulders.",
-            video_link = "https://www.youtube.com/watch?v=EKRiW9Yt3Ps"
-        )
+    clean = Exercise_Move(
+        name = "Clean",
+        focus = "Olympic Weight Lifting",
+        description = "when a barbell is “pulled in a single movement from the platform to the shoulders, while either splitting or bending the legs.” Simply put, a clean is a lift that moves a barbell from the floor to a front rack position at the shoulders.",
+        video_link = "https://www.youtube.com/watch?v=EKRiW9Yt3Ps"
+    )
 
-        snatch = Exercise_Move(
-            name = "Snatch",
-            focus = "Olympic Weight Lifting",
-            description = "In the snatch, the lifter lifts the bar as high as possible and pulls themselves under it in a squat position, receiving the bar overhead with the arms straight, decreasing the necessary height of the bar, therefore increasing the amount of weight that the lifter may successfully lift. The lifter finally straightens to a fully upright position with the bar above their head and arms fully extended.",
-            video_link = "https://www.youtube.com/watch?v=9xQp2sldyts"
-        )
+    snatch = Exercise_Move(
+        name = "Snatch",
+        focus = "Olympic Weight Lifting",
+        description = "In the snatch, the lifter lifts the bar as high as possible and pulls themselves under it in a squat position, receiving the bar overhead with the arms straight, decreasing the necessary height of the bar, therefore increasing the amount of weight that the lifter may successfully lift. The lifter finally straightens to a fully upright position with the bar above their head and arms fully extended.",
+        video_link = "https://www.youtube.com/watch?v=9xQp2sldyts"
+    )
 
-        running = Exercise_Move(
-            name = "Run",
-            focus = "Cardio",
-            description = "Running is the action of rapidly propelling yourself forward on foot. When running, there is a moment when both feet are off the ground (as opposed to walking, when one foot is always on the ground), making it a high-impact exercise",
-            video_link = "https://www.youtube.com/watch?v=_kGESn8ArrU"
-        )
+    running = Exercise_Move(
+        name = "Run",
+        focus = "Cardio",
+        description = "Running is the action of rapidly propelling yourself forward on foot. When running, there is a moment when both feet are off the ground (as opposed to walking, when one foot is always on the ground), making it a high-impact exercise",
+        video_link = "https://www.youtube.com/watch?v=_kGESn8ArrU"
+    )
 
+    moves = [bench_press, dead_lift, burpee, clean, snatch, running ]
 
-        leg_burner = Workout_Plan(
-            name = "Leg Burner",
-            difficulty = "medium",
-            description = "Leg focused workout that will help you increase size and strength"
-        )
+    return moves
 
-        beginner = Workout_Plan(
-            name = "Beginner Routine",
-            difficulty = "Beginner",
-            description = "An entry level class to teach you the basics"
-        )
+def create_workout_plans():
 
-        coaches = [coach_rose, coach_dan]
-        moves = [bench_press, dead_lift, burpee, clean, snatch, running]
-        plans = [leg_burner, beginner]
+    print("Creating new Workout Plan records...")
+
+    leg_burner = Workout_Plan(
+        name = "Leg Burner",
+        difficulty = "medium",
+        description = "Leg focused workout that will help you increase size and strength"
+    )
+
+    beginner = Workout_Plan(
+        name = "Beginner Routine",
+        difficulty = "Beginner",
+        description = "An entry level class to teach you the basics"
+    )
+
+    plans = [leg_burner, beginner]
+
+    return plans
+
+def add_records(arry_of_reccords):
+    db.session.add_all(arry_of_reccords)
+    db.session.commit()
+
+    return arry_of_reccords
+
+if __name__ == '__main__':
+    with app.app_context():
+        print("Starting seed script...")
+
+        delete_all_records()
         
+        coaches = create_coaches()
+        moves = create_exercise_moves()
+        plans = create_workout_plans()
 
-        db.session.add_all(coaches + moves + plans)
-        db.session.commit()
+        [ coach_chris, coach_brent, coach_dan, coach_rose ] = coaches
+        [ bench_press, dead_lift, burpee, clean, snatch, running ] = moves
+        [ leg_burner, beginner ] = plans
+        
+        add_records(coaches)
+        add_records(moves)
+        add_records(plans)
 
         print("Coach, workout plan, and exercise move records added to db")
 
@@ -122,8 +170,7 @@ if __name__ == '__main__':
         db.session.add_all(mondays + tuesdays + wednesday)
         db.session.commit()
 
-        monday = mondays[0]
-        tuesday = tuesdays[2]
+
 
         # beginner.exercise_moves.append((burpee,))
         # beginner.exercise_moves.append((dead_lift,))   
