@@ -41,7 +41,8 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
         if (r.ok){
           r.json().then(data => {
             setRefresh(!refresh)
-            history.push(`${data.id}`)
+            history.push(`/coaches/${data.id}`)
+            setFormData(data)
           })
         } else {
           r.json().then( err => {

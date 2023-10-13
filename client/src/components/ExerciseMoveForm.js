@@ -46,7 +46,8 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
         if (r.ok){
           r.json().then(data => {
             setRefresh(!refresh)
-            history.push(`${data.id}`)
+            history.push(`/exercise_moves"/${data.id}` )
+            setFormData(data)
           })
         } else {
           r.json().then( err => {
