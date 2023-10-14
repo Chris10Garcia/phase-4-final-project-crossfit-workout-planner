@@ -1,4 +1,26 @@
-# Phase 4 
+# Phase 4 Project: Flatiron Crossfit
+
+
+## Table of Content
+
+1. [Overview](#overview)
+2. [Get Started]
+3. [Detailed Project Info]
+4. [Backend Details]
+.. 1. [Config]
+.. 2. [Models]
+.. 3. [Seed]
+.. 4. [App]
+5. [Frontend Details]
+.. 1. [Hierachy Structure]
+.. 2. [App and Header]
+.. 3. [PageFrame and ListData Components]
+.. 3. [Coach Components]
+.. 4. [Exercise Move Components]
+.. 5. [Workout Plan Components]
+.. 6. [Class Schedule Components]
+6. [Sources and Credit]
+
 
 
 

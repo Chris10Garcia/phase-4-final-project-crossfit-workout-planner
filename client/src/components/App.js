@@ -62,6 +62,7 @@ function App() {
       <Route path = "/coaches" >
         <Coach coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
+      {/* NOT TO BE GRADED. PURPOSE OF THIS IS TO ENSURE CODE FOR BLOG WORKS */}
       <Route path = "/blog" >
         <SegmentUI>
           <BlogApp  />
