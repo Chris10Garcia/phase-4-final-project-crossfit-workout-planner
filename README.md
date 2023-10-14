@@ -42,7 +42,7 @@ Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/ins
 - Run `npm install -prefix client`
 - Run `npm start -prefix client`
 
-Your browser should open to http://localhost:3000/ and my fullstack app will run successfully. Play around with it and thank you for visiting!
+Your browser should open to http://localhost:3000/ and my fullstack app will run successfully. Explore arond, provide feedback if you like, and thank you for visiting!
 
 
 ## Detailed Project Info
@@ -51,9 +51,11 @@ My project is broken into two major parts:
 - the backend which covers the DB tables, the relationships between them, and the various API's and RESTful views.
 - the frontend which covers all of the various React compoments that visually make my application.
 
+Below covers the details of each and the various importmant files and functions that make it work.
 
 ## Backend Details
 
+- talk about using SQLAlchemy, flask, marshmallow, the file structure, APIs, etc
 
 ### config.py
 
