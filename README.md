@@ -4,8 +4,8 @@
 ## Table of Content
 
 1. [Overview](#overview)
-2. [Get Started]
-3. [Detailed Project Info]
+2. [Get Started](#get-started)
+3. [Detailed Project Info](#detailed-project-info)
 4. [Backend Details]
 .. 1. [Config]
 .. 2. [Models]
@@ -22,22 +22,80 @@
 6. [Sources and Credit]
 
 
+## Overview
 
 
-### What Goes into a README?
 
-This README should serve as a template for your own- go through the important
-files in your project and describe what they do. Each file that you edit (you
-can ignore your migration files) should get at least a paragraph. Each function
-should get a small blurb.
+## Get Started
 
-You should descibe your application first, and with a good level of detail. The
-rest should be ordered by importance to the user. (Probably routes next, then
-models.)
+Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/installation/) for installing pipenv. Lastly, my project uses python_version = "3.8.13".
 
-Screenshots and links to resources that you used throughout are also useful to
-users and collaborators, but a little more syntactically complicated. Only add
-these in if you're feeling comfortable with Markdown.
+- Clone this repo
+- `cd` into the folder
+- Run `pipenv install`
+- Run `pipenv shell`
+- `cd` into the `server` folder
+- Run `flask db upgrade`
+- Run `python seed.py`
+- Run `python app.y`
+- Open another terminal (ensure you're within the parent folder of the repo)
+- Run `npm install -prefix client`
+- Run `npm start -prefix client`
+
+Your browser should open to http://localhost:3000/ and my fullstack app will run successfully. Play around with it and thank you for visiting!
+
+
+## Detailed Project Info
+
+My project is broken into two major parts: 
+- the backend which covers the DB tables, the relationships between them, and the various API's and RESTful views.
+- the frontend which covers all of the various React compoments that visually make my application.
+
+
+## Backend Details
+
+
+### config.py
+
+
+### models.py
+
+
+### seed.py
+
+
+### app.py
+
+
+
+## Frontend Details
+
+
+### Hierarchy Structure
+
+
+### App and Header Components
+
+
+### PageFrame and ListData Components
+
+
+### Coach Components
+
+
+### Exercise Move Components
+
+
+### Workout Plan Components
+
+
+### Class Schedule Components
+
+
+## Sources and Credit
+
+
+
 
 ## Resources
 
