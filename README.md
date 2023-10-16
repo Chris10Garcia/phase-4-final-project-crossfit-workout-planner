@@ -53,20 +53,62 @@ My project is broken into two major parts:
 
 Below covers the details of each and the various importmant files and functions that make it work.
 
+
 ## Backend Details
 
-- talk about using SQLAlchemy, flask, marshmallow, the file structure, APIs, etc
+My project uses python as the backend language, Flask as the web framework, sqlite as the database, SQLAlchemy as the ORM, and marshmallow for object serializaiton. 
 
 ### config.py
 
+This file contains all of the library imports and instantiations of various apps and settings. The following is performed:
+- Creates the flask instance, links the database, and configures various settings
+- Defines the metadata and creates a Flask SQLAlchemy extension
+- Creates a flask migrate object to manage database schema migrations
+- Initialize the flask app to use the database
+- Instanizate REST API, marshamallow serialzier, and CORS
+
+### app.py
+
+This is my flask application. There are 4 views it provides; `Coach`, `Workout_Plan`, `Exercise_Move`, `Schedule`. It is broken down into 2 main substructures to handle this:
+1. The API schema plans:
+    - Each of the schemas inhertits from the `flask_marshmallow` libray. To automate and make life easier, I use utilize Flask's auto generating class to automatically generate the API for each of the columns of the tables. 
+    - For the Schedule and Workout_Plan schema, I use the `fields` function from the `marshmallow` (and not from `flask_marshmallow`) library to load in the many to many relationship records. Additionally, only specific columns are loaded to prevent a circular recursion issue.
+    - For each of the schemas, the application create 2 object versions to handle a singular or a list of records to serialize
+
+2. RESTFUL API Routes:
+    - Each of the views have 2 versions: the base `/route` path and the `/route/id` path.
+    - This application follows the project requirements: All tables / views have CREATE, READ actions plus EDIT as well
+    - This application follows the project requirements: The `Schedule` table / view also has DELETE actions
+    - This application follows RESTful conventions:
+        - Base `/route` paths handle GET actions for all records and POST actions for creating single records
+        - `/route/id` paths handle GET, PATCH, and DELETE actions for single records
+
+IMPORTANT: Even though `Crossfit_Class` table is not explicity provided a view, records in this table are created, read, and editted via assiocation proxy established within the Workout_Plan model. 
 
 ### models.py
+
+(Image map of my table)
+
+Here we have the database tables. My application uses 5 tables
+- Three of those tables are 1-to-many tables (`Exercise_Move`, `Coach`, `Workout_Plan`)
+- Two of those tables are many to many (`Crossfit_Class`, `Schedule`)
+- `Coach` and `Workout_Plan` have a many to many relationship, using `Schedule` as the intermediatry
+- `Schedule` also has 2 user submitiable attributes (`day` and `hour`)
+- `Workout_Plan` and `Exercise_Move` have a many to many relationship using association proxy and `Crossfit_Class` as the intermediatry
+
+`Coach -> Schedule <- Workout_Plan -> Crossfit_Class <- Exercise_Move`
 
 
 ### seed.py
 
+My seed file populates the database. It is broken down into the following steps
+- deletes all of the current records
+- creates all of the 1-to-many records first (`Exercise_Move`, `Coach`, `Workout_Plan`) and passes them to the function that adds it to the DB
+- relates the `Exercise_Move` records to `Workout_Plan` records and passes them to the function that adds it to the DB
+- creates the `Schedule` records with two of the generated user submitted attributes and passes them to the function that adds it to the DB
+- relates the `Schedule` records with randomly selected `Coach` and `Workout_Plan` records, and passes them to the function that adds it to the DB
 
-### app.py
+
 
 
 
