@@ -6,11 +6,11 @@
 1. [Overview](#overview)
 2. [Get Started](#get-started)
 3. [Detailed Project Info](#detailed-project-info)
-4. [Backend Details]
-.. 1. [Config]
-.. 2. [Models]
-.. 3. [Seed]
-.. 4. [App]
+4. [Backend Details](#backend-details)
+.. 1. [App](#apppy)
+.. 2. [Models](#modelspy)
+.. 3. [Config](#configpy)
+.. 4. [Seed](#seedpy)
 5. [Frontend Details]
 .. 1. [Hierachy Structure]
 .. 2. [App and Header]
@@ -28,7 +28,7 @@
 
 ## Get Started
 
-Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/installation/) for installing pipenv. Lastly, my project uses python_version = "3.8.13".
+Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/installation/) for installing pipenv. Please install the python version that my application uses. My project utilzies python_version = "3.8.13".
 
 - Clone this repo
 - `cd` into the folder
@@ -58,14 +58,6 @@ Below covers the details of each and the various importmant files and functions 
 
 My project uses python as the backend language, Flask as the web framework, sqlite as the database, SQLAlchemy as the ORM, and marshmallow for object serializaiton. 
 
-### config.py
-
-This file contains all of the library imports and instantiations of various apps and settings. The following is performed:
-- Creates the flask instance, links the database, and configures various settings
-- Defines the metadata and creates a Flask SQLAlchemy extension
-- Creates a flask migrate object to manage database schema migrations
-- Initialize the flask app to use the database
-- Instanizate REST API, marshamallow serialzier, and CORS
 
 ### app.py
 
@@ -76,23 +68,24 @@ This is my flask application. There are 4 views it provides; `Coach`, `Workout_P
     - For each of the schemas, the application create 2 object versions to handle a singular or a list of records to serialize
 
 2. RESTFUL API Routes:
+    - Each of the views inherits `Resources` from `flask_restful` library
     - Each of the views have 2 versions: the base `/route` path and the `/route/id` path.
-    - This application follows the project requirements: All tables / views have CREATE, READ actions plus EDIT as well
-    - This application follows the project requirements: The `Schedule` table / view also has DELETE actions
     - This application follows RESTful conventions:
         - Base `/route` paths handle GET actions for all records and POST actions for creating single records
         - `/route/id` paths handle GET, PATCH, and DELETE actions for single records
+    - This application follows the project requirements: All tables / views have CREATE, READ actions plus EDIT as well
+    - This application follows the project requirements: The `Schedule` table / view also has DELETE actions
 
-IMPORTANT: Even though `Crossfit_Class` table is not explicity provided a view, records in this table are created, read, and editted via assiocation proxy established within the Workout_Plan model. 
+IMPORTANT: Even though `Crossfit_Class` table is not explicity provided a view, records in this table are created, read, and edited via assiocation proxy established within the Workout_Plan model. 
 
 ### models.py
 
 (Image map of my table)
 
-Here we have the database tables. My application uses 5 tables
+Here we have my application's database table models. There are 5 tables in use here:
 - Three of those tables are 1-to-many tables (`Exercise_Move`, `Coach`, `Workout_Plan`)
-- Two of those tables are many to many (`Crossfit_Class`, `Schedule`)
-- `Coach` and `Workout_Plan` have a many to many relationship, using `Schedule` as the intermediatry
+- Two of those tables are many-to-many (`Crossfit_Class`, `Schedule`)
+- `Coach` and `Workout_Plan` have a many-to-many relationship, using `Schedule` as the intermediatry
 - `Schedule` also has 2 user submitiable attributes (`day` and `hour`)
 - `Workout_Plan` and `Exercise_Move` have a many to many relationship using association proxy and `Crossfit_Class` as the intermediatry
 
@@ -109,7 +102,14 @@ My seed file populates the database. It is broken down into the following steps
 - relates the `Schedule` records with randomly selected `Coach` and `Workout_Plan` records, and passes them to the function that adds it to the DB
 
 
+### config.py
 
+This file contains all of the library imports and instantiations of various apps and settings. The following is performed:
+- Creates the flask instance, links the database, and configures various settings
+- Defines the metadata and creates a Flask SQLAlchemy extension
+- Creates a flask migrate object to manage database schema migrations
+- Initialize the flask app to use the database
+- Instanizate REST API, marshamallow serialzier, and CORS
 
 
 ## Frontend Details
