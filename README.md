@@ -7,18 +7,18 @@
 2. [Get Started](#get-started)
 3. [Detailed Project Info](#detailed-project-info)
 4. [Backend Details](#backend-details)
-.. 1. [App](#apppy)
-.. 2. [Models](#modelspy)
-.. 3. [Config](#configpy)
-.. 4. [Seed](#seedpy)
+..1. [App](#apppy)
+..2. [Models](#modelspy)
+..3. [Config](#configpy)
+..4. [Seed](#seedpy)
 5. [Frontend Details]
-.. 1. [Hierachy Structure]
-.. 2. [App and Header]
-.. 3. [PageFrame and ListData Components]
-.. 3. [Coach Components]
-.. 4. [Exercise Move Components]
-.. 5. [Workout Plan Components]
-.. 6. [Class Schedule Components]
+..1. [Hierachy Structure]
+..2. [App and Header]
+..3. [PageFrame and ListData Components]
+..3. [Coach Components]
+..4. [Exercise Move Components]
+..5. [Workout Plan Components]
+..6. [Class Schedule Components]
 6. [Sources and Credit]
 
 
@@ -43,6 +43,7 @@ Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/ins
 - Run `npm start -prefix client`
 
 Your browser should open to http://localhost:3000/ and my fullstack app will run successfully. Explore arond, provide feedback if you like, and thank you for visiting!
+
 
 
 ## Detailed Project Info
