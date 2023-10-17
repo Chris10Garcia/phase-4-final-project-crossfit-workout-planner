@@ -2,7 +2,6 @@
 
 
 ## Table of Content  
-
 1. [Overview](#overview)
 2. [Get Started](#get-started)
 3. [Detailed Project Info](#detailed-project-info)
@@ -23,17 +22,14 @@
 
 
 ## Overview  
-  
 Welcome to my phase 4 final project: The Flatiron Crossfit Workout and Class viewer! This is meant to be a light version of the Wodify app, a gym and studio management software platform.
-
 With this app you can:
 - create, edit, and view various exercise moves and develop workout plans that uses these moves.
 - create, edit, and view coaches
 - create, edit, view and delete scheduling of crossfit classes; assign who teaches them, which workout plan they will use, and days plus time when that class occurs.
-   return
-   return
+
+
 ## Get Started  
-  
 Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/installation/) for installing pipenv. My project utilzies python_version = "3.8.13".
 
 - Clone this repo
