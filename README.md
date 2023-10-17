@@ -38,6 +38,7 @@ Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/ins
 - Clone this repo
 - `cd` into the folder
 - Run `pipenv install`
+- If Visual Studio Code ask if you would like to select the workspace folder for the newly created environment, select yes
 - Run `pipenv shell`
 - `cd` into the `server` folder
 - Run `flask db upgrade`
