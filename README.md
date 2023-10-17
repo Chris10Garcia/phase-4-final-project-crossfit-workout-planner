@@ -135,7 +135,7 @@ The root of my application is the App Component. Here I have routing to access t
 
 To ensure consistent page appearance, I created a reusable PageFrame component that uses various semantic UI components. Two key important children it accepts are for displaying the form component, and displaying the details of that page component.
 
-ListData uses route match to push the selected record to the details page component of that record. NavLink is utilized as well so that when the record is viewed, the link is selected.
+ListData is also a reusable component. It displays a list of all of the records it recieves and uses route match to push the selected record to the details page component. NavLink is utilized as well so that when the record is viewed, the link is selected.
 
 
 ### Coach, ExerciseMove, WorkoutPlan, ClassSchedule Components
@@ -144,6 +144,8 @@ Each of these 4 components are structured similarly to handle:
 - specific attributes
 - maintaining state of these attributes
 - Ordering the form component first, and details component second
+
+Even though formik does not require outside state variables, it is in use here to handle editing of exisiting records. 
 
 Coach, ExerciseMove, and WorkoutPlan uses PageFrame and ListData components to standardize their styling. ClassSchedule has a similar structure but it does not use these two components
 
