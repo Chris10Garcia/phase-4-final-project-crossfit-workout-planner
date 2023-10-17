@@ -1,7 +1,7 @@
 # Phase 4 Project: Flatiron Crossfit
 
 
-## Table of Content
+## Table of Content  
 
 1. [Overview](#overview)
 2. [Get Started](#get-started)
@@ -22,31 +22,19 @@
 6. [Sources and Credit]
 
 
-## Overview
+## Overview  
+  
+Welcome to my phase 4 final project: The Flatiron Crossfit Workout and Class viewer! This is meant to be a light version of the Wodify app, a gym and studio management software platform.
 
-Welcome to my phase 4 final project: The Flatiron Crossfit Workout and Class viewer! This is meant to be a light weight version of the Wodify app, a gym and studio management software platform.
-
-With this app you can 
+With this app you can:
 - create, edit, and view various exercise moves and develop workout plans that uses these moves.
 - create, edit, and view coaches
-- create, edit, view and delete scheduling of crossfit classes; assign who teaches them, which workout plan they will use, and days plus time occuring.
-
-For Flatiron Instructures reviewing my app: These are the requirements of the project and how my application satifities them
-- Use a Flask API backend with a React frontend
-- Uses 3 one-to-many relationship tables
-- Uses 2 reciprocal many-to-many relationships
-- One of those many-to-many relationship tables accepts 2 user submittable attribute
-- Full CRUD on one of those resource
-- CREATE, READ, EDIT for all resources
-- All inputs use Formik
-- All inputs have data validation through yup with data type, URL format, and string/number format validation
-- 4 Client-side routes using React Router. Additionally nested routing using useRouteMatch is utilized
-- Client and server are connected via fetch()
+- create, edit, view and delete scheduling of crossfit classes; assign who teaches them, which workout plan they will use, and days plus time when that class occurs.
 
 
-## Get Started
-
-Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/installation/) for installing pipenv. Please install the python version that my application uses. My project utilzies python_version = "3.8.13".
+## Get Started  
+  
+Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/installation/) for installing pipenv. My project utilzies python_version = "3.8.13".
 
 - Clone this repo
 - `cd` into the folder
@@ -60,12 +48,13 @@ Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/ins
 - Run `npm install -prefix client`
 - Run `npm start -prefix client`
 
-Your browser should open to http://localhost:3000/ and my fullstack app will run successfully. Explore arond, provide feedback if you like, and thank you for visiting!
+Your browser should open to `http://localhost:3000/` and my fullstack app will run successfully. Explore arond, provide feedback if you like, and thank you for visiting!
 
 If you would like to know more about the specific details of how my application functions, please keep reading below.
-
-## Detailed Project Info
-
+  
+  
+## Detailed Project Info  
+  
 My project is broken into two major parts: 
 1. the backend which covers the DB tables, the relationships between them, and the various API's and RESTful views.
 2. the frontend which covers all of the various React compoments that visually make my application.
