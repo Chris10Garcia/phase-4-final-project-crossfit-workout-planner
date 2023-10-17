@@ -43,7 +43,7 @@ Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/ins
 - `cd` into the `server` folder
 - Run `flask db upgrade`
 - Run `python seed.py`
-- Run `python app.y`
+- Run `python app.py`
 - Open another terminal (ensure you're within the parent folder of the repo)
 - Run `npm install -prefix client`
 - Run `npm start -prefix client`
