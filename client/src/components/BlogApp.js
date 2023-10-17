@@ -2,20 +2,11 @@ import React from "react";
 
 import { Formik, Form, Field, FieldArray } from "formik";
 
-/*
 
-Coach
-- OPTIONAL:
-  - if i do authentication, have coach can edit their own profile
-  - move the adding coach form to sign up / log in page
-
-*/
 export default function BlogApp() {
   /*
   NOT TO BE GRADED. PURPOSE OF THIS COMPONENT IS TO ENSURE CODE WORKS FOR MY BLOG ENTRY
   */
-
-  // const [dispalyData, setDisplayData] = useState(initialValues)
 
   const colors = ["Red", "Green", "Blue", "White", "Black", "Yellow", "Orange"];
   const subjects = ["Calculus", "English Lit", "History", "Social Studies", "Physics"];

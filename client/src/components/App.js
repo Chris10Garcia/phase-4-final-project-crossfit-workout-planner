@@ -25,26 +25,20 @@ function App() {
     fetch("/workout_plans")
       .then( r => r.json())
       .then( d => setPlans(d))
-  }, [refresh])
 
-  useEffect(()=>{
     fetch("/schedules")
       .then( r => r.json())
       .then( d => setSchClasses(d))
-  }, [refresh])
 
-  useEffect(()=>{
     fetch("/coaches")
       .then( r => r.json())
       .then( d => setCoaches(d))
-  }, [refresh])
 
-  useEffect(()=>{
     fetch("/exercise_moves")
       .then( r => r.json())
       .then( d => setMoves(d))
-  }, [refresh])
 
+  }, [refresh])
 
   return (
   <SegmentUI.Group>
@@ -62,12 +56,14 @@ function App() {
       <Route path = "/coaches" >
         <Coach coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
+
       {/* NOT TO BE GRADED. PURPOSE OF THIS IS TO ENSURE CODE FOR BLOG WORKS */}
       <Route path = "/blog" >
         <SegmentUI>
           <BlogApp  />
         </SegmentUI>
       </Route>
+      
     </Switch>
   </ SegmentUI.Group>
   )
