@@ -20,8 +20,9 @@ function App() {
   const [plans, setPlans] = useState([])
   const [refresh, setRefresh] = useState(false)
 
-  // I should just one useEffect and call all 4 fetches within
+
   useEffect(()=>{
+    
     fetch("/workout_plans")
       .then( r => r.json())
       .then( d => setPlans(d))
@@ -63,7 +64,7 @@ function App() {
           <BlogApp  />
         </SegmentUI>
       </Route>
-      
+
     </Switch>
   </ SegmentUI.Group>
   )
