@@ -8,19 +8,17 @@
 2. [Get Started](#get-started)
 3. [Detailed Project Info](#detailed-project-info)
 4. [Backend Details](#backend-details)
-1. [App](#apppy)
-2. [Models](#modelspy)
-3. [Config](#configpy)
-4. [Seed](#seedpy)
-5. [Frontend Details]
-1. [Hierarchy Structure]
-2. [App and Header]
-3. [PageFrame and ListData Components]
-4. [Coach Components]
-5. [Exercise Move Components]
-6. [Workout Plan Components]
-7. [Class Schedule Components]
-6. [Sources and Credit]
+    1. [app.py](#apppy)
+    2. [models.py](#modelspy)
+    3. [seed.py](#seedpy)
+    4. [config.py](#configpy)
+5. [Frontend Details](#frontend-details)
+    1. [App and Header Components](#app-and-header-components)
+    2. [PageFrame and ListData Components](#pageframe-and-listdata-components)
+    3. [Coach, ExerciseMove, WorkoutPlan, ClassSchedule Components](#coach-exercisemove-workoutplan-classschedule-components)
+    4. [CoachForm, ExerciseMoveForm, WorkoutPlanForm, ClassScheduleForm Components](#coachform-exercisemoveform-workoutplanform-classscheduleform-components)
+    5. [CoachDetails, ExerciseMoveDetails, WorkoutPlanDetails, ClassScheduleDetails Components](#coachdetails-exercisemovedetails-workoutplandetails-classscheduledetails-components)
+6. [Sources and Credit](#sources-and-credit)
 
 
 ## Overview
@@ -30,7 +28,7 @@ Welcome to my phase 4 final project: The Flatiron Crossfit Workout and Class vie
 With this app you can:
 - create, edit, and view various exercise moves and develop workout plans that use these moves.
 - create, edit, and view coaches
-- create, edit, view and delete scheduling of crossfit classes; assign who teaches them, which workout plan they will use, and days plus time when that class occurs.
+- create, edit, view and delete scheduling of crossfit classes; assign who teaches them, which workout plan they will use, and schedule the day and time that class occurs.
 
 
 ## Get Started
@@ -49,7 +47,7 @@ Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/ins
 - Run `npm install -prefix client`
 - Run `npm start -prefix client`
 
-Your browser should open to `http://localhost:3000/` and my fullstack app will run successfully. Explore around, provide feedback if you like, and thank you for visiting!
+Your browser should open to `http://localhost:3000/`. Explore around, provide feedback if you like, and thank you for visiting!
 
 If you would like to know more about the specific details of how my application functions, please keep reading below.
 
@@ -60,7 +58,7 @@ My project is broken into two major parts:
 1. the backend which covers the DB tables, the relationships between them, and the various API's and RESTful views.
 2. the frontend which covers all of the various React components that visually make my application.
 
-Below covers the details of each and the various important files and functions that make it work.
+Below covers the details of each and the various important files that make it work.
 
 
 ## Backend Details
@@ -73,24 +71,25 @@ My project uses python as the backend language, Flask as the web framework, sqli
 This is my flask application. There are 4 views it provides; `Coach`, `Workout_Plan`, `Exercise_Move`, and `Schedule`. It is broken down into 2 main substructures to handle this:
 1. The API schema:
 - Each of the schemas inherits from the `flask_marshmallow` library. To automate and make life easier, I utilize auto generate to automatically generate each of the columns of the tables.
-- For the Schedule and Workout_Plan schema, I use the `fields` function from the `marshmallow` (and not from `flask_marshmallow`) library to load in the many-to-many relationship records. Additionally, only specific columns are loaded to prevent a circular recursion issue.
-- For each of the schemas, 2 object versions are created to handle a singular or a list of records to serialize
+- For the `Schedule` and `Workout_Plan` schema, I use the `fields` function from the `marshmallow` (and not from `flask_marshmallow`) library to load in the many-to-many relationship records. Additionally, only specific columns are loaded to prevent a circular recursion issue.
+- For each of the schemas, 2 object versions are created to handle a singular or a list of object records to serialize.
 
 2. RESTFUL API Routes:
 - Each of the views inherits `Resources` from the `flask_restful` library.
 - Each of the views have 2 versions: the base `/route` path and the `/route/id` path.
 - This application follows RESTful conventions:
-- Base `/route` paths handle GET actions for all records and POST actions for creating single records
-- `/route/id` paths handle GET, PATCH, and DELETE actions for single records
-- This application follows the project requirements: All tables / views have CREATE, READ actions plus EDIT as well
-- This application follows the project requirements: The `Schedule` table / view also has DELETE actions
+    - Base `/route` paths handle GET actions for all records and POST actions for creating single records
+    - `/route/<id>` paths handle GET, PATCH, and DELETE actions for single records
+- This application follows the project requirements: 
+    - All tables / views have CREATE, READ actions plus EDIT as well
+    - The `Schedule` table / view also has DELETE actions
 
 IMPORTANT: Even though `Crossfit_Class` table is not explicitly provided a view, records in this table are created, read, and edited by association proxy established within the `Workout_Plan` and `Exercise_Move` model.
 
 
 ### models.py
 
-(Image map of my table)
+[![Database Relationship Diagram](/github_assets/Workout_Planner_DB_diagram.png 'db diagram')](https://dbdiagram.io/d/Workout_Planner-6501f5fe02bd1c4a5e848a9c)
 
 `Coach -> Schedule <- Workout_Plan -> Crossfit_Class <- Exercise_Move`
 
@@ -114,12 +113,12 @@ My seed file populates the database. It is broken down into the following steps
 
 ### config.py
 
-This file contains all of the library imports and instantiations of various apps and settings. The following is performed:
+This file contains all of the library imports and instantiations of various apps and settings. A config file is utilized to prevent circular import issues. The following is performed:
 - Creates the flask instance, links the database, and configures various settings
 - Defines the metadata and creates a Flask SQLAlchemy extension
 - Creates a flask migrate object to manage database schema migrations
 - Initialize the flask app to use the database
-- Instanizate REST API, marshmallow serializer, and CORS
+- Instanizate REST API, marshmallow serializer, and CORS objects
 
 
 ## Frontend Details
@@ -129,12 +128,12 @@ My project uses React as the front-end framework. For styling and themes, I use 
 
 ### App and Header Components
 
-The root of my application is the App Component. Here I have routing to access the other components of my page. Additionally, the Header component lies here as well. Please note, the Blog component can be ignored, not used for testing. I used this component to ensure the code I wrote for my blog functions as intended.
+The root of my application is the App Component. Here I have routing to access the other components of my page. Additionally, the Header component lies here as well. Please note, the Blog component can be ignored, is not to be used for grade evaluation. I used this component to ensure the code I wrote for my blog functions as intended.
 
 
 ### PageFrame and ListData Components
 
-To ensure consistent page appearance, I created a reusable component that uses various semantic UI components. Two key important children it accepts are for displaying the form component, and displaying the details of that page component.
+To ensure consistent page appearance, I created a reusable PageFrame component that uses various semantic UI components. Two key important children it accepts are for displaying the form component, and displaying the details of that page component.
 
 ListData uses route match to push the selected record to the details page component of that record. NavLink is utilized as well so that when the record is viewed, the link is selected.
 
@@ -153,10 +152,10 @@ Coach, ExerciseMove, and WorkoutPlan uses PageFrame and ListData components to s
 
 Each of these form components:
 - use formik forms and yup
-- The same form contains logic that can handle creating new records or an existing record.
-- performs fetch requests. If the form contains an ID, a fetch PATCH request is performed to update the record's details. If the form contains a blank ID, a fetch POST request is performed to create the record. Once either of these actions are performed, a dependency array is changed and the components refresh to show the new or updated record
+- the same form can handle creating new records or editting an existing record
+- performs fetch requests for PATCH or POST actions
 
-For the WorkoutPlanForm component, I created logic that can handle adding or removing a dynamic list of field selection inputs. This is to ensure the user will be selecting from exercise moves that exist in the database.
+For the WorkoutPlanForm component, I created logic that can handle adding or removing a dynamic list of field selection inputs. This is to ensure the user will be selecting from exercise moves that exist in the database and can add or adjust a variable number of moves to that specific plan
 
 For the ClassSchedule component, the user submittable fields are selection inputs to ensure the data input is standardized.
 
@@ -168,29 +167,26 @@ Each of these components
 
 CoachDetails, ExerciseMoveDetails, and WorkoutPlanDetails utilizes useParams to ensure when a specific record is navigated to, it captures the ID number and displays the correct record.
 
-ClassScheduleDetails displays all of the scheduled classes with their days, hours and the related coach and workout plan record that belongs to it. Plus this component handles the deletion logic.
+ClassScheduleDetails displays all of the scheduled classes with their days, hours and the related coach plus workout plan record that belongs to it. Additionally, this component handles the deletion logic.
 
 
 ## Sources and Credit
 
-- [Marshmallow]
-- [Marshmallow Flask]
-- [Flask]
-- [SQLAlchemy]
-- [React]
-- [React Semantic UI]
-- [Formik]
-- [Yup]
+Backend
+- [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+- [Marshmallow](https://marshmallow.readthedocs.io/en/stable/)
+- [Flask Marshmallow](https://flask-marshmallow.readthedocs.io/en/latest/)
+- [Marshmallow SQLAchelmy](https://marshmallow-sqlalchemy.readthedocs.io/en/latest/)
+- [SQLAlchemy](https://www.sqlalchemy.org/)
+- [Draw Entity-Relationship Diagrams](https://dbdiagram.io/)
 
-- [Official Crossfit Youtube Channel]
-- [Wodify]
-- 
+Frontend
+- [React](https://react.dev/)
+- [React Semantic UI](https://react.semantic-ui.com/)
+- [Formik](https://formik.org/docs/overview)
+- [Yup](https://github.com/jquense/yup)
 
-
-## Resources
-
-- [Setting up a repository - Atlassian](https://www.atlassian.com/git/tutorials/setting-up-a-repository)
-- [Create a repo- GitHub Docs](https://docs.github.com/en/get-started/quickstart/create-a-repo)
-- [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/)
-- [Python Circular Imports - StackAbuse](https://stackabuse.com/python-circular-imports/)
-- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/)
+Miscellaneous
+- [Official Crossfit Youtube Channel](https://www.youtube.com/@crossfit)
+- [Wodify](https://www.wodify.com/)
+- [Crossfit Athletes](https://games.crossfit.com/athletes) 
