@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 from flask import request, make_response
 from flask_restful import Resource
 from marshmallow import fields
@@ -8,12 +7,6 @@ from marshmallow import fields
 from config import app, db, api, ma
 from models import Coach, Workout_Plan, Exercise_Move, Schedule
 
-
-
-# This is not needed, should remove
-@app.route('/')
-def index():
-    return '<h1>Project Server</h1>'
 
 ########################################################################
 # SCHEMA PLANS

@@ -1,6 +1,3 @@
-# Standard library imports
-
-# Remote library imports
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -8,9 +5,7 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_marshmallow import Marshmallow
-from flask_bcrypt import Bcrypt
 
-# Local imports
 
 # Instantiate app, set attributes
 app = Flask(__name__)
@@ -25,9 +20,6 @@ metadata = MetaData(naming_convention={
 db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
-
-# Instantiate Authentication
-bcrypt = Bcrypt(app)
 
 # Instantiate REST API
 ma = Marshmallow(app)

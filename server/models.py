@@ -12,13 +12,10 @@ class Exercise_Move(db.Model):
     description = db.Column(db.String)
     video_link = db.Column(db.String)
 
-    # change this to back_populates to make easier to keep track?
     crossfit_classes = db.relationship("Crossfit_Class", backref="exercise_move")
-
     
     def __repr__(self):
         return f"<Exercise Move: {self.name}, ID: {self.id}>"
-
 
 
 class Coach(db.Model):
@@ -28,38 +25,11 @@ class Coach(db.Model):
     name = db.Column(db.String)
     age = db.Column(db.Integer)
     picture = db.Column(db.String)
-    # created_at = db.Column(db.DateTime, server_default=db.func.now())
-    
-    # I should add a bio column
-    # bio = db.Column(db.String)
 
     schedules = db.relationship("Schedule", back_populates="coach")
 
     def __repr__(self):
         return f"<Coach: {self.name}, ID: {self.id}>"
-
-    # columns for authentication (add later)
-    """
-    username
-    _password_hash
-    """
-
-    # Authentication
-    """
-    # protect password property
-    @hybrid_property
-    def password_hash
-
-    # set password property
-    @password_hash.setter
-    def password_hash
-        need to use bcrypt
-
-    # check password
-    def authenticate
-
-    """
-
 
 
 class Workout_Plan(db.Model):
@@ -87,11 +57,8 @@ class Crossfit_Class(db.Model):
     exercise_move_id = db.Column(db.Integer, db.ForeignKey('exercise_moves.id'))
     workout_plan_id = db.Column(db.Integer, db.ForeignKey('workout_plans.id'))
 
-
-    # Not a fan of this repr. Should I redo this?
     def __repr__(self):
-        return f"<Crossfit Class Workout: {self.workout_plan.name}>"
-
+        return f"<Crossfit Class Workout: {self.id}, Move ID: {self.exercise_move_id}, Workout Plan ID: {self.workout_plan_id}>"
 
 
 class Schedule(db.Model):
@@ -102,9 +69,8 @@ class Schedule(db.Model):
     hour = db.Column(db.String)
     coach_id = db.Column(db.Integer, db.ForeignKey("coaches.id"))
     workout_plan_id = db.Column(db.Integer, db.ForeignKey("workout_plans.id"))
+    
     coach = db.relationship("Coach", back_populates="schedules")
-
-
     workout_plan = db.relationship("Workout_Plan", back_populates="schedules")
     
     def __repr__(self):
