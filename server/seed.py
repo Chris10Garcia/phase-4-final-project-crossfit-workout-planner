@@ -121,7 +121,7 @@ def create_workout_plans():
 
     leg_burner = Workout_Plan(
         name = "Leg Burner",
-        difficulty = "medium",
+        difficulty = "Medium",
         description = "Leg focused workout that will help you increase size and strength"
     )
 
@@ -131,7 +131,14 @@ def create_workout_plans():
         description = "An entry level class to teach you the basics"
     )
 
-    plans = [leg_burner, beginner]
+    advance_class = Workout_Plan(
+        name = "Advance Workout Class",
+        difficulty = "Hard",
+        description = "A workout plan that uses advanced moves and tests the limits of your strength"
+
+    )
+
+    plans = [leg_burner, beginner, advance_class]
 
     add_records(plans)
 
@@ -196,12 +203,13 @@ if __name__ == '__main__':
 
         [ coach_chris, coach_brent, coach_dan, coach_rose ] = coaches
         [ bench_press, dead_lift, burpee, clean, snatch, running ] = moves
-        [ leg_burner, beginner ] = plans
+        [ leg_burner, beginner, advance_class ] = plans
 
         print("Relating Exercise Move records with a Workout Plan records...")
 
         relate_workout_plans_and_moves(leg_burner, [dead_lift, clean, snatch] )
         relate_workout_plans_and_moves(beginner, [clean, running, burpee])
+        relate_workout_plans_and_moves(advance_class, [clean, dead_lift, snatch, running, burpee])
 
         print("Relationship complete")
 

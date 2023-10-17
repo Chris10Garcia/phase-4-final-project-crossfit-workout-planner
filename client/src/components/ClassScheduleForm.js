@@ -12,7 +12,7 @@ import {
 function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, plans, coaches, days, clearFormValues }) {
 
   const hours = []
-  for (let i = 900; i < 1800; i = i + 100){
+  for (let i = 800; i < 1800; i = i + 100){
     hours.push(i)
   }
 
