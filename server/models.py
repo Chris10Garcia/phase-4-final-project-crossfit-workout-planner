@@ -44,6 +44,8 @@ class Workout_Plan(db.Model):
     crossfit_classes = db.relationship("Crossfit_Class", backref="workout_plan")
     
     exercise_moves = association_proxy("crossfit_classes", "exercise_move", creator = lambda data: Crossfit_Class(exercise_move = data) )
+    coaches = db.relationship("Coach", secondary="schedules", backref="workout_plans")
+
 
     def __repr__(self):
         return f"<Workout Plan: {self.name}, ID: {self.id}>"
