@@ -31,24 +31,28 @@ def create_coaches():
             name = "Dan Baily",
             age = 30,
             picture = "https://www.themodestman.com/wp-content/uploads/2020/03/Dan-Bailey-CrossFit.jpg",
+            username = "danbaily"
         )
 
     coach_rose = Coach(
             name = "Rose Smith",
             age = 25,
-            picture = "https://misfitathletics.com/wp-content/uploads/2021/03/20200801-TED03193.cjpg_-819x1024.jpg"
+            picture = "https://misfitathletics.com/wp-content/uploads/2021/03/20200801-TED03193.cjpg_-819x1024.jpg",
+            username = "rosesmith"
         )
 
     coach_brent = Coach(
             name = "Brent Fikowski",
             age = 40,
-            picture = "https://upload.wikimedia.org/wikipedia/commons/5/5d/Brent_Fikowski_at_the_Asia_CrossFit_Championship.jpg"
+            picture = "https://upload.wikimedia.org/wikipedia/commons/5/5d/Brent_Fikowski_at_the_Asia_CrossFit_Championship.jpg",
+            username = "brentfikowski"
     )
 
     coach_chris = Coach(
             name = "Chris Garcia",
             age = 33,
-            picture = "https://avatars.githubusercontent.com/u/10578405?v=4"
+            picture = "https://avatars.githubusercontent.com/u/10578405?v=4",
+            username = "chrisgarcia"
         )
     
     coaches = [coach_chris, coach_brent, coach_dan, coach_rose, ]

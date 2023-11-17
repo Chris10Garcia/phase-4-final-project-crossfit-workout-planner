@@ -26,6 +26,9 @@ class Coach(db.Model):
     age = db.Column(db.Integer)
     picture = db.Column(db.String)
 
+    username = db.Column(db.String)
+    # password_hash
+
     schedules = db.relationship("Schedule", back_populates="coach")
     workout_plans = association_proxy("schedules", "workout_plan", )
 

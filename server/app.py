@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import request, make_response
+from flask import request, make_response, session
 from flask_restful import Resource
 from marshmallow import fields
 
@@ -53,6 +53,51 @@ workout_plans_schema = Workout_Plan_Schema(many=True)
 ########################################################################
 # RESTful API VIEW ROUTES
 ########################################################################
+
+#######################
+# /Sessions
+
+class ClearSession(Resource):
+    def get(self):
+        session["user_id"] = None
+        return {"message": "session cleared"}, 204
+    
+class CheckSession(Resource):
+    def get(self):
+        print(session)
+        user_id = session["user_id"] if "user_id" in session else None
+
+        if user_id:
+            user = Coach.query.filter(Coach.id == user_id).first()
+            return coach_schema.dump(user), 200
+        
+        return {"message": "Unauthorized, you are currently not logged in"}, 401
+
+#######################
+# /Login and Out 
+class Login(Resource):
+    def post(self):
+        user_data = request.get_json()
+
+        username = user_data["username"] if "username" in user_data else None
+
+        if not username or username == "":
+            return {"message": "Blank username, please supply username"}, 401
+        
+        user = Coach.query.filter(Coach.username == username ).first()
+
+        if not user:
+            return {"message": "User does not exist"}
+        
+        session["user_id"] = user.id
+        response = make_response(
+            coach_schema.dump(user),
+            200
+        )
+        return response
+
+
+
 
  
 #######################
@@ -350,7 +395,10 @@ api.add_resource(WorkoutPlansByID, "/workout_plans/<int:id>")
 api.add_resource(ExerciseMovesIndex, "/exercise_moves")
 api.add_resource(ExerciseMovesByID, "/exercise_moves/<int:id>")
 
+api.add_resource(Login, "/login")
 
+api.add_resource(CheckSession, "/checkSession")
+api.add_resource(ClearSession, "/clearSession")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
