@@ -87,7 +87,7 @@ class Login(Resource):
         user = Coach.query.filter(Coach.username == username ).first()
 
         if not user:
-            return {"message": "User does not exist"}
+            return {"message": "User does not exist"}, 401
         
         session["user_id"] = user.id
         response = make_response(
