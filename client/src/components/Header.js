@@ -17,7 +17,11 @@ function Header() {
         <MenuUI.Item
             as={NavLink}
             exact to="/"
-            name="Class Schedule" />
+            name="Home" />
+          <MenuUI.Item
+            as={NavLink}
+             to="/schedules"
+            name="Class Schedules" />
         <MenuUI.Item
             as={NavLink}
             to="/workout_plans"

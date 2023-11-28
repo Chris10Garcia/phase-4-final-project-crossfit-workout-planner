@@ -64,7 +64,6 @@ class ClearSession(Resource):
     
 class CheckSession(Resource):
     def get(self):
-        print(session)
         user_id = session["user_id"] if "user_id" in session else None
 
         if user_id:
@@ -80,7 +79,6 @@ class Login(Resource):
         user_data = request.get_json()
 
         username = user_data["username"] if "username" in user_data else None
-
         if not username or username == "":
             return {"message": "Blank username, please supply username"}, 401
         
@@ -96,9 +94,18 @@ class Login(Resource):
         )
         return response
 
+class Logout (Resource):
+    def delete(self):
 
+        user_id = session["user_id"] if "user_id" in session else None
 
+        if not user_id or user_id == "":
+            response = make_response ({"message": "No users are logged in"}, 401)
+        else:
+            session["user_id"] = None
+            response = make_response( {"message" : "Current user is logged out"}, 204 )
 
+        return response
  
 #######################
 # /coaches 
@@ -396,6 +403,7 @@ api.add_resource(ExerciseMovesIndex, "/exercise_moves")
 api.add_resource(ExerciseMovesByID, "/exercise_moves/<int:id>")
 
 api.add_resource(Login, "/login")
+api.add_resource(Logout, "/logout")
 
 api.add_resource(CheckSession, "/checkSession")
 api.add_resource(ClearSession, "/clearSession")

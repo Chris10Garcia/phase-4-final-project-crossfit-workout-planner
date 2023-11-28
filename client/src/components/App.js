@@ -46,6 +46,9 @@ function App() {
     <Header />
     <Switch>
       <Route exact path = "/">
+        <h1>Welcome and log in here</h1>
+      </Route>
+      <Route path = "/schedules">
         <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
       </Route>
       <Route path = "/workout_plans" > 
