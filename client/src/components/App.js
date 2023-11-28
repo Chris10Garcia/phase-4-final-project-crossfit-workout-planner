@@ -11,7 +11,48 @@ import BlogApp from "./BlogApp";
 import { 
   Segment as SegmentUI, 
   } from 'semantic-ui-react'
+import { Field, Form, Formik } from "formik";
 
+
+
+function LogIn(){
+  const [user, setUser] = useState(null)
+
+
+  return(
+  
+  <React.Fragment>
+    <Formik
+      initialValues = { {username : "",}}
+      onSubmit={values => {
+        
+        console.log(values)
+        fetch("/login", {
+          method: "POST",
+          headers: {"Content-Type" : "application/json"},
+          body: JSON.stringify(values) 
+        })
+        .then(r => r.json())
+        .then(data => {
+          setUser(data.id)
+          console.log(user)
+        })
+      }      
+      }
+    >
+      {formik => (
+            <Form>
+              <label>Username</label>
+              <Field id="username" name="username" placeholder= "Type in username" value={formik.values.username} onChange = {formik.handleChange}/>
+              <button type="submit">Submit</button>
+            </Form>
+      )}
+
+    </Formik>
+  </React.Fragment>
+  
+  )
+}
 
 function App() {
   const [coaches, setCoaches] = useState([])
@@ -47,6 +88,7 @@ function App() {
     <Switch>
       <Route exact path = "/">
         <h1>Welcome and log in here</h1>
+        <LogIn />
       </Route>
       <Route path = "/schedules">
         <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
