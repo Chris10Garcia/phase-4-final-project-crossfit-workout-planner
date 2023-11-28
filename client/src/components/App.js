@@ -32,7 +32,13 @@ function LogIn(){
           headers: {"Content-Type" : "application/json"},
           body: JSON.stringify(values) 
         })
-        .then(r => r.json())
+        .then(r => {
+          if (r.ok){
+            r.json()
+          }
+          
+        
+        })
         .then(data => {
           setUser(data.id)
           console.log(user)
