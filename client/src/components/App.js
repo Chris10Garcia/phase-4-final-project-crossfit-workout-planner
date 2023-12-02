@@ -33,19 +33,17 @@ function LogIn(){
           body: JSON.stringify(values) 
         })
         .then(r => {
+          console.log(r)
           if (r.ok){
-            r.json()
+            r.json().then(data => setUser(data.id))
+          } else {
+            r.json().then( err => console.log(err)) // log in failed, try again
           }
-          
-        
         })
-        .then(data => {
-          setUser(data.id)
-          console.log(user)
-        })
-      }      
+        }      
       }
     >
+
       {formik => (
             <Form>
               <label>Username</label>
