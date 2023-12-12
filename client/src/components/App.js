@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, createContext } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import Header from "./Header";
@@ -14,10 +14,11 @@ import {
 import { Field, Form, Formik } from "formik";
 
 
+const CurrentUserContext = createContext(null)
+
 
 function LogIn(){
-  const [user, setUser] = useState(null)
-
+  const {user, setUser} = useContext(CurrentUserContext)
 
   return(
   
@@ -35,7 +36,7 @@ function LogIn(){
         .then(r => {
           console.log(r)
           if (r.ok){
-            r.json().then(data => setUser(data.id))
+            r.json().then(data => setUser(data))
           } else {
             r.json().then( err => console.log(err)) // log in failed, try again
           }
@@ -53,6 +54,7 @@ function LogIn(){
       )}
 
     </Formik>
+    <p>Current user is {user ? user.name : null}</p>
   </React.Fragment>
   
   )
@@ -64,6 +66,8 @@ function App() {
   const [sch_classes, setSchClasses] = useState([])
   const [plans, setPlans] = useState([])
   const [refresh, setRefresh] = useState(false)
+
+  const [user, setUser] = useState(null)
 
 
   useEffect(()=>{
@@ -87,35 +91,37 @@ function App() {
   }, [refresh])
 
   return (
-  <SegmentUI.Group>
-    <Header />
-    <Switch>
-      <Route exact path = "/">
-        <h1>Welcome and log in here</h1>
-        <LogIn />
-      </Route>
-      <Route path = "/schedules">
-        <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
-      </Route>
-      <Route path = "/workout_plans" > 
-        <WorkoutPlan plans = { plans } moves={ moves } refresh={refresh} setRefresh ={setRefresh}/>
-      </Route>
-      <Route path = "/exercise_moves" >
-        <ExerciseMove moves = { moves } refresh={refresh} setRefresh ={setRefresh} />
-      </Route>
-      <Route path = "/coaches" >
-        <Coach coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
-      </Route>
+  <CurrentUserContext.Provider value={{user, setUser}}>
+    <SegmentUI.Group>
+      <Header />
+      <Switch>
+        <Route exact path = "/">
+          <h1>Welcome and log in here</h1>
+          <LogIn />
+        </Route>
+        <Route path = "/schedules">
+          <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
+        </Route>
+        <Route path = "/workout_plans" > 
+          <WorkoutPlan plans = { plans } moves={ moves } refresh={refresh} setRefresh ={setRefresh}/>
+        </Route>
+        <Route path = "/exercise_moves" >
+          <ExerciseMove moves = { moves } refresh={refresh} setRefresh ={setRefresh} />
+        </Route>
+        <Route path = "/coaches" >
+          <Coach coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
+        </Route>
 
-      {/* NOT TO BE GRADED. PURPOSE OF THIS IS TO ENSURE CODE FOR BLOG WORKS */}
-      <Route path = "/blog" >
-        <SegmentUI>
-          <BlogApp  />
-        </SegmentUI>
-      </Route>
+        {/* NOT TO BE GRADED. PURPOSE OF THIS IS TO ENSURE CODE FOR BLOG WORKS */}
+        <Route path = "/blog" >
+          <SegmentUI>
+            <BlogApp  />
+          </SegmentUI>
+        </Route>
 
-    </Switch>
-  </ SegmentUI.Group>
+      </Switch>
+    </ SegmentUI.Group>
+  </CurrentUserContext.Provider>
   )
 
 }
