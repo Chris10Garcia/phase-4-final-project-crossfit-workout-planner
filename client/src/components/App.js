@@ -34,9 +34,10 @@ function LogIn(){
           body: JSON.stringify(values) 
         })
         .then(r => {
-          console.log(r)
+          // console.log(r)
           if (r.ok){
             r.json().then(data => setUser(data))
+            console.log(user)
           } else {
             r.json().then( err => console.log(err)) // log in failed, try again
           }
@@ -71,7 +72,11 @@ function App() {
 
 
   useEffect(()=>{
-    
+    fetch("/checkSession")
+      .then( r => {
+        console.log(r)
+        r.json().then(data => console.log(data))
+      } )
     fetch("/workout_plans")
       .then( r => r.json())
       .then( d => setPlans(d))
