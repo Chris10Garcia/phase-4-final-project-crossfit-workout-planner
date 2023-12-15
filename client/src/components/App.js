@@ -77,6 +77,7 @@ function App() {
         console.log(r)
         r.json().then(data => console.log(data))
       } )
+      
     fetch("/workout_plans")
       .then( r => r.json())
       .then( d => setPlans(d))
@@ -132,3 +133,4 @@ function App() {
 }
 
 export default App;
+export {CurrentUserContext}

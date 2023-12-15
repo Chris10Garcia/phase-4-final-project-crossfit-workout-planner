@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+
+import {CurrentUserContext} from "./App"
 
 import {
   Segment as SegmentUI,
@@ -8,11 +10,15 @@ import {
 } from 'semantic-ui-react';
 
 function Header() {
+  const {user} = useContext(CurrentUserContext)
+  console.log(user)
+
   return (
     <SegmentUI>
       <HeaderUI>
         <h1>Welcome to Flatiron Crossfit</h1>
       </HeaderUI>
+      { user ? <p>Welcome {user.name}</p> : "no user" }
       <MenuUI width={5} size="large" pointing color="red">
         <MenuUI.Item
             as={NavLink}
