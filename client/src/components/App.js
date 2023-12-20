@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import Header from "./Header";
@@ -11,55 +11,11 @@ import BlogApp from "./BlogApp";
 import { 
   Segment as SegmentUI, 
   } from 'semantic-ui-react'
-import { Field, Form, Formik } from "formik";
+import { LogIn } from "./LogIn";
 
 
 const CurrentUserContext = createContext(null)
 
-
-function LogIn(){
-  const {user, setUser} = useContext(CurrentUserContext)
-
-  return(
-  
-  <React.Fragment>
-    <Formik
-      initialValues = { {username : "",}}
-      onSubmit={values => {
-        
-        console.log(values)
-        fetch("/login", {
-          method: "POST",
-          headers: {"Content-Type" : "application/json"},
-          body: JSON.stringify(values) 
-        })
-        .then(r => {
-          // console.log(r)
-          if (r.ok){
-            r.json().then(data => setUser(data))
-            console.log(user)
-          } else {
-            r.json().then( err => console.log(err)) // log in failed, try again
-          }
-        })
-        }      
-      }
-    >
-
-      {formik => (
-            <Form>
-              <label>Username</label>
-              <Field id="username" name="username" placeholder= "Type in username" value={formik.values.username} onChange = {formik.handleChange}/>
-              <button type="submit">Submit</button>
-            </Form>
-      )}
-
-    </Formik>
-    <p>Current user is {user ? user.name : null}</p>
-  </React.Fragment>
-  
-  )
-}
 
 function App() {
   const [coaches, setCoaches] = useState([])
@@ -72,10 +28,12 @@ function App() {
 
 
   useEffect(()=>{
+
     fetch("/checkSession")
       .then( r => {
-        console.log(r)
-        r.json().then(data => console.log(data))
+        if (r.ok){
+          r.json().then(data => setUser(data))
+        }
       } )
       
     fetch("/workout_plans")

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, useRouteMatch } from "react-router-dom";
 
 import ListData from "./ListData";
+import { CurrentUserContext } from "./App";
 
 import {
   Segment as SegmentUI,
@@ -15,13 +16,17 @@ import {
 function PageFrame({ children, title, dataList, setDisplayButton, displayButton }) {
   const match = useRouteMatch();
 
+  const {user} = useContext(CurrentUserContext)
+  
   return (
     <SegmentUI>
       <HeaderUI>
         <h2>{title} Page</h2> 
-        <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >
-            { displayButton ? "Hide Form" : `Show Add New / Edit Form`}
-        </ButtonUI>
+        { user  ? <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >
+                              { displayButton ? "Hide Form" : `Show Add New / Edit Form`}
+                  </ButtonUI>
+                :  ""}
+
       </HeaderUI>
 
       <GridUI celled columns="equal" stackable>

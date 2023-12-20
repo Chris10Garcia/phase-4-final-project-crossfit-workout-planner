@@ -4,10 +4,11 @@ import ExerciseMoveForm from "./ExerciseMoveForm";
 import PageFrame from "./PageFrame";
 import ExerciseMoveDetails from "./ExerciseMoveDetails";
 
+// import { CurrentUserContext } from "./App";
 
 function ExerciseMove({ moves, refresh, setRefresh}) {
   const title = "Exercise Move"
-
+  // const {user} = useContext(CurrentUserContext)
   const [displayButton, setDisplayButton] = useState(false)
 
   const clearFormValues = {
@@ -20,14 +21,20 @@ function ExerciseMove({ moves, refresh, setRefresh}) {
 
   const [formData, setFormData] = useState(clearFormValues)
 
+  // const displayForm = displayButton   ? <ExerciseMoveForm 
+  //                                         title= {title} formData = {formData} 
+  //                                         setFormData={setFormData} refresh={refresh} 
+  //                                         setRefresh ={setRefresh} clearFormValues={clearFormValues} /> 
+  //                                     : ""
 
   return (
     <PageFrame title = {title} dataList={moves} displayButton = {displayButton} setDisplayButton={setDisplayButton}>
-      {displayButton  ? <ExerciseMoveForm 
-                                  title= {title} formData = {formData} 
-                                  setFormData={setFormData} refresh={refresh} 
-                                  setRefresh ={setRefresh} clearFormValues={clearFormValues} /> 
-                      : "" }
+      {/* { user ? displayForm : ""} */}
+      { displayButton   ? <ExerciseMoveForm 
+                                          title= {title} formData = {formData} 
+                                          setFormData={setFormData} refresh={refresh} 
+                                          setRefresh ={setRefresh} clearFormValues={clearFormValues} /> 
+                                      : "" }
       <ExerciseMoveDetails 
             dataList={moves} 
             setDisplayButton={setDisplayButton} 
