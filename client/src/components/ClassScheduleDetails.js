@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom"
 
 import {
@@ -8,10 +8,13 @@ import {
   Divider as DividerUI,
   Button as ButtonUI
 } from 'semantic-ui-react';
+import { CurrentUserContext } from "./App";
 
 function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData, refresh, setRefresh, formData }) {
 
   const classesFiltered = sch_classes.filter(sch_classes => day === sch_classes.day);
+
+  const {user} = useContext(CurrentUserContext)
 
   classesFiltered.sort (( a,b ) => a.hour - b.hour)
 
@@ -54,9 +57,9 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
             <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
             <p>Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
             
-            <FeedUI.Extra>  
-              <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI>
-              <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI>
+            <FeedUI.Extra>
+              { user ? <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI> : ""}  
+              { user ? <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI> : ""}
             </FeedUI.Extra>
 
           </FeedUI.Content>

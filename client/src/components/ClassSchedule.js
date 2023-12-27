@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import ClassScheduleDetails  from "./ClassScheduleDetails";
 import ClassScheduleForm from "./ClassScheduleForm";
@@ -9,12 +9,15 @@ import {
   Card as CardUI,
   Button as ButtonUI
 } from 'semantic-ui-react';
+import { CurrentUserContext } from "./App";
 
 
 
 
 function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
   const [displayButton, setDisplayButton] = useState(false)
+
+  const { user } = useContext(CurrentUserContext)
 
   const clearFormValues = {
       id : "",
@@ -34,7 +37,7 @@ function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
     <SegmentUI>
       <HeaderUI>
         <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
-        <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI>
+        { user ? <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI> : ""}
       </HeaderUI>
       
       <CardUI.Group stackable doubling>

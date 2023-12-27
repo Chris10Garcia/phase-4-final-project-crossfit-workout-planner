@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
+
+import { CurrentUserContext } from "./App";
 
 import {
   Header as HeaderUI, 
@@ -13,6 +15,8 @@ function CoachDetails({ dataList, setDisplayButton, setFormData }) {
   const params = useParams();
   const coach = dataList[params.itemID - 1];
 
+  const { user } = useContext(CurrentUserContext)
+
   if (!coach) return <h2>page loading...</h2>;
 
   function editButton(){
@@ -23,8 +27,8 @@ function CoachDetails({ dataList, setDisplayButton, setFormData }) {
   return (
     <React.Fragment>
         <HeaderUI>Coach Details</HeaderUI>
-        <ButtonUI id = {coach.id} onClick={() => editButton()}>Edit</ButtonUI> 
-        <br /><br />
+        { user ? <ButtonUI id = {coach.id} onClick={() => editButton()}>Edit</ButtonUI> : ""}
+
         <ContainerUI>
             <HeaderUI as="h2">{coach.name}</HeaderUI>
             <ImageUI src = {coach.picture} size = "medium"/>

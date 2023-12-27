@@ -11,7 +11,6 @@ import {
 
 function Header() {
   const {user} = useContext(CurrentUserContext)
-  console.log(user)
 
   return (
     <SegmentUI>

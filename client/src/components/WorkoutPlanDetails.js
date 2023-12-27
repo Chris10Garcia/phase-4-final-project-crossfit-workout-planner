@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams, Link} from "react-router-dom";
 
 import {
@@ -9,9 +9,13 @@ import {
   Button as ButtonUI
 } from 'semantic-ui-react';
 
+import { CurrentUserContext } from "./App";
+
 function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton, displayButton }) {
   const params = useParams();
   const workoutPlan = dataList[params.itemID - 1];
+
+  const {user} = useContext(CurrentUserContext)
 
   function editButton(){
     setDisplayButton(true)  
@@ -50,9 +54,8 @@ function WorkoutPlanDetails({ dataList, setFormData, setDisplayButton, displayBu
     <React.Fragment>
 
       <HeaderUI> Workout Plan Details</HeaderUI>
-      <ButtonUI id = {workoutPlan.id} onClick={() => editButton()}> Edit</ButtonUI> 
-      <br /><br />
-
+      { user ? <ButtonUI id = {workoutPlan.id} onClick={() => editButton()}> Edit</ButtonUI> : "" }
+      
       <HeaderUI as="h2">{workoutPlan.name}</HeaderUI>
       <p><b>Workout Plan ID:</b> {workoutPlan.id}</p>
       <p><b>Difficulty:</b> {workoutPlan.difficulty}</p>
