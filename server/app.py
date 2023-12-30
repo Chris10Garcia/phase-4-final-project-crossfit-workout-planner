@@ -103,9 +103,11 @@ class Logout (Resource):
             response = make_response ({"message": "No users are logged in"}, 401)
         else:
             session["user_id"] = None
-            response = make_response( {"message" : "Current user is logged out"}, 204 )
+            response =  {}, 204
 
         return response
+ 
+
  
 #######################
 # /coaches 
