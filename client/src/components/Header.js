@@ -11,8 +11,8 @@ import {
   Button
 } from 'semantic-ui-react';
 
-function MiniWelcome({user}){
-
+function MiniWelcome(){
+    const {user, setUser} = useContext(CurrentUserContext)
     // if (!user) return <span> Welcome Guest</span>
 
     if (!user){
@@ -29,7 +29,7 @@ function MiniWelcome({user}){
         method: "DELETE",
         headers: {"Content-Type" : "application/json"}
       })
-      .then(r => console.log(r)  )  // NEED TO REFRESH THE PAGE
+      .then(r => setUser(null) )  // NEED TO REFRESH THE PAGE
       // .then(m => console.log(m))
       .catch(err => console.log(err))
     }
@@ -46,13 +46,12 @@ function MiniWelcome({user}){
 }
 
 function Header() {
-  const {user} = useContext(CurrentUserContext)
 
   return (
     <SegmentUI>
       <HeaderUI>
         <h1>Welcome to Flatiron Crossfit </h1>
-        <MiniWelcome user = {user} />
+        <MiniWelcome />
         
       </HeaderUI>
       {/* { user ? <p>Welcome {user.name}</p> : "no user" } */}
