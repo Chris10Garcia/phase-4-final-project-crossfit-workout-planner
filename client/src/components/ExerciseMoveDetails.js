@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import {
   Header as HeaderUI, 
   Divider as DividerUI,
-  Container as ContainerUI,
   Button as ButtonUI
 } from 'semantic-ui-react';
 import { CurrentUserContext } from "./App";

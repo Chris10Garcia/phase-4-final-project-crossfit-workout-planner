@@ -14,14 +14,13 @@ export function LogIn() {
         initialValues={{ username: "", }}
         onSubmit={values => {
 
-          console.log(values);
+          // console.log(values);
           fetch("/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values)
           })
             .then(r => {
-              // console.log(r)
               if (r.ok) {
                 r.json().then(data => setUser(data));
                 console.log(user);

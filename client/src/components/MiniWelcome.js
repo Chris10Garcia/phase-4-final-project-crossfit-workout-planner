@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import {useHistory } from "react-router-dom"
 import { CurrentUserContext } from "./App";
 import {
   Image,
@@ -7,6 +8,9 @@ import {
 
 function MiniWelcome() {
   const { user, setUser } = useContext(CurrentUserContext);
+
+  const history = useHistory()
+
   // if (!user) return <span> Welcome Guest</span>
   if (!user) {
     return (
@@ -22,9 +26,10 @@ function MiniWelcome() {
       method: "DELETE",
       headers: { "Content-Type": "application/json" }
     })
-      .then(r => setUser(null)) // NEED TO REFRESH THE PAGE
-
-      // .then(m => console.log(m))
+      .then(r => {
+        setUser(null)
+        history.push("/")
+      })
       .catch(err => console.log(err));
   }
 
