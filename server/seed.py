@@ -67,7 +67,7 @@ def create_coaches():
 def update_with_password(coaches):
     "UPDATE ALL COACH RECORDS WITH A PASSWORD"
 
-    coaches = [ setattr(coach, "_password_hash", coach.username + "_password") for coach in coaches]
+    coaches = [ setattr(coach, "password_hash", coach.username + "_password") for coach in coaches]
 
     return coaches
 

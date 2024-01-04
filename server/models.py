@@ -1,5 +1,6 @@
 from sqlalchemy.ext.associationproxy import association_proxy
-from config import db
+from sqlalchemy.ext.hybrid import hybrid_property
+from config import db, bcrypt
 
 
 class Exercise_Move(db.Model):
@@ -28,11 +29,20 @@ class Coach(db.Model):
 
     username = db.Column(db.String)
     _password_hash = db.Column(db.String)
-    # password_hash
 
     schedules = db.relationship("Schedule", back_populates="coach")
     workout_plans = association_proxy("schedules", "workout_plan", )
 
+    @hybrid_property
+    def password_hash(self):
+        if not self._password_hash:
+            return self._password_hash
+        raise AttributeError
+    
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(password.encode("utf-8"))
+        self._password_hash = password_hash
 
     def __repr__(self):
         return f"<Coach: {self.name}, ID: {self.id}>"

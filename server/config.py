@@ -5,6 +5,7 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_marshmallow import Marshmallow
+from flask_bcrypt import Bcrypt
 
 
 # Instantiate app, set attributes
@@ -25,6 +26,9 @@ db.init_app(app)
 # Instantiate REST API
 ma = Marshmallow(app)
 api = Api(app)
+
+# Instantiate Encryption
+bcrypt = Bcrypt(app)
 
 # Instantiate CORS
 CORS(app)
