@@ -37,8 +37,8 @@ class Workout_Plan_Schema(ma.SQLAlchemyAutoSchema):
     exercise_moves = fields.List(fields.Nested(Exercise_Move_Schema))
 
 
-coach_schema = Coach_Schema()
-coaches_schema = Coach_Schema(many=True)
+coach_schema = Coach_Schema(exclude=["_password_hash"])
+coaches_schema = Coach_Schema(many=True, exclude=["_password_hash"])
 
 schedule_schema = Schedule_Schema()
 schedules_schema = Schedule_Schema(many = True)
