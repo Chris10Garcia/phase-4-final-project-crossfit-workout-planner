@@ -22,6 +22,7 @@ def delete_all_records():
 
 
 
+
 def create_coaches():
     "CREATE ALL COACH RECORDS WITHIN DB"
 
@@ -33,6 +34,8 @@ def create_coaches():
             picture = "https://www.themodestman.com/wp-content/uploads/2020/03/Dan-Bailey-CrossFit.jpg",
             username = "danbaily"
         )
+    
+    coach_dan._password_hash = coach_dan.username + "_password"
 
     coach_rose = Coach(
             name = "Rose Smith",
@@ -61,7 +64,12 @@ def create_coaches():
 
     return coaches
 
+def update_with_password(coaches):
+    "UPDATE ALL COACH RECORDS WITH A PASSWORD"
 
+    coaches = [ setattr(coach, "_password_hash", coach.username + "_password") for coach in coaches]
+
+    return coaches
 
 def create_exercise_moves():
     "CREATE ALL EXERCISE MOVE RECORDS WITHIN DB"
@@ -200,6 +208,7 @@ if __name__ == '__main__':
         delete_all_records()
         
         coaches = create_coaches()
+        coaches = update_with_password(coaches)
         moves = create_exercise_moves()
         plans = create_workout_plans()
 

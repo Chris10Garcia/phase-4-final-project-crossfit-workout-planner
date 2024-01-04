@@ -27,6 +27,7 @@ class Coach(db.Model):
     picture = db.Column(db.String)
 
     username = db.Column(db.String)
+    _password_hash = db.Column(db.String)
     # password_hash
 
     schedules = db.relationship("Schedule", back_populates="coach")
