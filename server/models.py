@@ -35,9 +35,7 @@ class Coach(db.Model):
 
     @hybrid_property
     def password_hash(self):
-        if not self._password_hash:
-            return self._password_hash
-        raise AttributeError
+        return self._password_hash
     
     @password_hash.setter
     def password_hash(self, password):
