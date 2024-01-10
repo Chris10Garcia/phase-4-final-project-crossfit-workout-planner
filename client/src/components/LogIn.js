@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { CurrentUserContext } from "./App";
 import { Segment } from "semantic-ui-react";
 
 export function LogIn() {
   const { user, setUser } = useContext(CurrentUserContext);
+  const [ errors, setErrors] = useState([])
 
   return (
 
@@ -13,8 +14,6 @@ export function LogIn() {
       <Formik
         initialValues={{ username: "", }}
         onSubmit={values => {
-
-          // console.log(values);
           fetch("/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -23,9 +22,8 @@ export function LogIn() {
             .then(r => {
               if (r.ok) {
                 r.json().then(data => setUser(data));
-                console.log(user);
               } else {
-                r.json().then(err => console.log(err)); // log in failed, try again
+                r.json().then(err => setErrors(err));
               }
             });
         }}
@@ -36,6 +34,8 @@ export function LogIn() {
             <label>Username</label>
             <Field id="username" name="username" placeholder="Type in username" value={formik.values.username} onChange={formik.handleChange} />
             <button type="submit">Submit</button>
+            <br/>
+            { errors ? <p style ={{color: "red"}}> {errors.message} </p> : ""}
           </Form>
         )}
 

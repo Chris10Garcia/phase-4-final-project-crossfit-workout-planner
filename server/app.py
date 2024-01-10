@@ -60,6 +60,7 @@ workout_plans_schema = Workout_Plan_Schema(many=True)
 class ClearSession(Resource):
     def get(self):
         session["user_id"] = None
+        session["username"] = None
         return {"message": "session cleared"}, 204
     
 class CheckSession(Resource):
@@ -88,6 +89,7 @@ class Login(Resource):
             return {"message": "User does not exist"}, 401
         
         session["user_id"] = user.id
+        session["username"] = user.username
         response = make_response(
             coach_schema.dump(user),
             200
