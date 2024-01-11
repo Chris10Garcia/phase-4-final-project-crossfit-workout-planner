@@ -12,7 +12,7 @@ export function LogIn() {
     <Segment>
       <h1>Welcome and log in here</h1>
       <Formik
-        initialValues={{ username: "", }}
+        initialValues={{ username: "", password: ""}}
         onSubmit={values => {
           fetch("/login", {
             method: "POST",
@@ -24,6 +24,7 @@ export function LogIn() {
                 r.json().then(data => setUser(data));
               } else {
                 r.json().then(err => setErrors(err));
+                // r.json().then(err => console.log(err));
               }
             });
         }}
@@ -33,9 +34,14 @@ export function LogIn() {
           <Form>
             <label>Username</label>
             <Field id="username" name="username" placeholder="Type in username" value={formik.values.username} onChange={formik.handleChange} />
-            <button type="submit">Submit</button>
             <br/>
-            { errors ? <p style ={{color: "red"}}> {errors.message} </p> : ""}
+            { errors ? <p style ={{color: "red"}}> {errors.username} </p> : ""}
+            <br />
+            <label>Password</label>
+            <Field id="password" name="password" placeholder="Type in password" value={formik.values.password} onChange={formik.handleChange} />
+            <br/>
+            { errors ? <p style ={{color: "red"}}> {errors.password} </p> : ""}
+            <button type="submit">Submit</button>
           </Form>
         )}
 

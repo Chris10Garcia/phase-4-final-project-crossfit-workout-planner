@@ -77,17 +77,36 @@ class CheckSession(Resource):
 # /Login and Out 
 class Login(Resource):
     def post(self):
+        errors = {}
         user_data = request.get_json()
 
         username = user_data["username"] if "username" in user_data else None
+        password = user_data["password"] if "password" in user_data else None
+
         if not username or username == "":
-            return {"message": "Blank username, please supply username"}, 401
+            errors["username"] = "Blank username, please supply username"
+            
+        if not password or password == "":
+            errors["password"] = "Blank password, please supply password"
+
+        if len(errors):
+            return errors, 401
         
         user = Coach.query.filter(Coach.username == username ).first()
 
         if not user:
-            return {"message": "User does not exist"}, 401
+            errors["username"] = "Incorrect user or password"
+            errors["password"] = "Incorrect user or password"
+        else:
+            
+            if not user.authenticate(password):
+                errors["username"] = "Incorrect user or password"
+                errors["password"] = "Incorrect user or password"
         
+        if len(errors):
+            return errors, 401
+
+
         session["user_id"] = user.id
         session["username"] = user.username
         response = make_response(
