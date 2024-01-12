@@ -31,7 +31,6 @@ function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
   } else {
     heading = <h2>Welcome Coach {user.name}, here are all of your classes you are teaching </h2>
     user_classes = sch_classes.filter(sch_class => sch_class.coach.id === user.id);
-    console.log(user_classes)
   }
 
 
@@ -48,12 +47,18 @@ function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
   const title = "Class Schedule"
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
+  function hideForm (){
+    setDisplayButton(!displayButton)
+    if (displayButton === true){
+      setFormData(clearFormValues)
+    }
+  }
 
   return (
     <SegmentUI>
       <HeaderUI>
         { heading }
-        { user && location === "/schedules" ? <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI> : ""}
+        { user && location === "/schedules" ? <ButtonUI onClick ={hideForm} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI> : ""}
       </HeaderUI>
 
       <CardUI.Group stackable doubling>

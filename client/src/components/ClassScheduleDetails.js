@@ -71,7 +71,8 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
             </FeedUI.Meta>   
             
             <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
-            <p>Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
+            <p style={ user.id === class_details.coach.id && location === "/schedules" ? {backgroundColor: "yellow"} : {}}
+              >Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
             
             { displayEditButton }
 

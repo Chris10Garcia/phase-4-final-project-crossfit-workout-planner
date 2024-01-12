@@ -7,13 +7,12 @@ import {
 } from "semantic-ui-react";
 
 export function LogInForm() {
-  const { user, setUser } = useContext(CurrentUserContext);
+  const { setUser } = useContext(CurrentUserContext);
   const [ errors, setErrors] = useState({})
 
   const logInForm = { username : "", password : ""}
 
   function submitLogIn(data){
-    console.log(data)
     fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -41,7 +40,7 @@ export function LogInForm() {
             <FormUI.Field id="username" name="username" placeholder="Type in username" control = "input" value={formik.values.username} onChange={formik.handleChange} />
             { errors ? <p style ={{color: "red"}}> {errors.username} </p> : ""}
             <label>Password</label>
-            <FormUI.Field id="password" name="password" placeholder="Type in password" control = "input" value={formik.values.password} onChange={formik.handleChange} />
+            <FormUI.Field id="password" name="password" placeholder="Type in password" control = "input" type="password"value={formik.values.password} onChange={formik.handleChange} />
             { errors ? <p style ={{color: "red"}}> {errors.password} </p> : ""}
             
             <FormUI.Button type="submit">Submit</FormUI.Button>
