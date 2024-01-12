@@ -1,53 +1,56 @@
 import React, { useContext, useState } from "react";
-import { Field, Form, Formik } from "formik";
+import { Formik } from "formik";
 import { CurrentUserContext } from "./App";
-import { Segment } from "semantic-ui-react";
+import { 
+  Segment as SegmentUI,
+  Form as FormUI
+} from "semantic-ui-react";
 
 export function LogIn() {
   const { user, setUser } = useContext(CurrentUserContext);
-  const [ errors, setErrors] = useState([])
+  const [ errors, setErrors] = useState({})
+
+  const logInForm = { username : "", password : ""}
+
+  function submitLogIn(data){
+    console.log(data)
+    fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(r => {
+        if (r.ok) {
+          r.json().then(data => setUser(data));
+        } else {
+          r.json().then(err => {
+            setErrors(err)
+          });
+        }
+      });
+  }
 
   return (
 
-    <Segment>
+    <SegmentUI>
       <h1>Welcome and log in here</h1>
-      <Formik
-        initialValues={{ username: "", password: ""}}
-        onSubmit={values => {
-          fetch("/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(values)
-          })
-            .then(r => {
-              if (r.ok) {
-                r.json().then(data => setUser(data));
-              } else {
-                r.json().then(err => setErrors(err));
-                // r.json().then(err => console.log(err));
-              }
-            });
-        }}
-      >
-
-        {formik => (
-          <Form>
+      <Formik initialValues={logInForm} onSubmit={ submitLogIn } >
+        { formik => (
+          <FormUI onSubmit={formik.handleSubmit}>
             <label>Username</label>
-            <Field id="username" name="username" placeholder="Type in username" value={formik.values.username} onChange={formik.handleChange} />
-            <br/>
+            <FormUI.Field id="username" name="username" placeholder="Type in username" control = "input" value={formik.values.username} onChange={formik.handleChange} />
             { errors ? <p style ={{color: "red"}}> {errors.username} </p> : ""}
-            <br />
             <label>Password</label>
-            <Field id="password" name="password" placeholder="Type in password" value={formik.values.password} onChange={formik.handleChange} />
-            <br/>
+            <FormUI.Field id="password" name="password" placeholder="Type in password" control = "input" value={formik.values.password} onChange={formik.handleChange} />
             { errors ? <p style ={{color: "red"}}> {errors.password} </p> : ""}
-            <button type="submit">Submit</button>
-          </Form>
+            
+            <FormUI.Button type="submit">Submit</FormUI.Button>
+          </FormUI>
         )}
 
       </Formik>
       <p>Current user is {user ? user.name : null}</p>
-    </Segment>
+    </SegmentUI>
 
   );
 }
