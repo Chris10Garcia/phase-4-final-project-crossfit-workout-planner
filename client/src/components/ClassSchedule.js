@@ -24,12 +24,14 @@ function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
   const location = history.location.pathname
 
   let heading
+  let user_classes = sch_classes
 
   if (location === "/schedules"){
-    console.log(location)
     heading = <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
   } else {
-    heading = <h2>Here are all of your classes you are teaching Coach {user.name}</h2>
+    heading = <h2>Welcome Coach {user.name}, here are all of your classes you are teaching </h2>
+    user_classes = sch_classes.filter(sch_class => sch_class.coach.id === user.id);
+    console.log(user_classes)
   }
 
 
@@ -51,18 +53,18 @@ function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
     <SegmentUI>
       <HeaderUI>
         { heading }
-        { user ? <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI> : ""}
+        { user && location === "/schedules" ? <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI> : ""}
       </HeaderUI>
-      
+
       <CardUI.Group stackable doubling>
-        { displayButton ? <ClassScheduleForm 
+        { displayButton && location === "/schedules" ? <ClassScheduleForm 
                               title= {title} coaches = {coaches} plans = {plans} 
                               formData = {formData} setFormData={setFormData} 
                               refresh={refresh} setRefresh ={setRefresh} days={days} 
                               clearFormValues={clearFormValues} /> 
                         : "" }
         { days.map(day => <ClassScheduleDetails 
-                              key={day} day={day} sch_classes={sch_classes} 
+                              key={day} day={day} sch_classes={user_classes} 
                               refresh={refresh} setRefresh ={setRefresh} 
                               displayButton = {displayButton} setDisplayButton = {setDisplayButton} 
                               setFormData = {setFormData} formData={formData}/> )}

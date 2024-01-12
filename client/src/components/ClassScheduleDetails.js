@@ -13,7 +13,9 @@ import { useHistory } from "react-router-dom";
 
 function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData, refresh, setRefresh, formData }) {
   const {user} = useContext(CurrentUserContext)
-  
+
+
+
   const history = useHistory()
   const location = history.location.pathname
 
@@ -56,7 +58,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
     }
 
     return (
-      <div key={class_details.id} style={ formData.id === class_details.id ? {backgroundColor: "LightGray"} : {}} >
+      <div key={class_details.id} style={ formData.id === class_details.id && location === "/schedules" ? {backgroundColor: "LightGray"} : {}} >
         <FeedUI.Event >
           <FeedUI.Content >
             

@@ -12,7 +12,6 @@ import {
   Segment as SegmentUI, 
   } from 'semantic-ui-react'
 import { LogInForm } from "./LogInForm";
-import { HomePage } from "./HomePage";
 
 
 const CurrentUserContext = createContext(null)
@@ -61,7 +60,7 @@ function App() {
       <Header />
       <Switch>
         <Route exact path = "/">
-          { user ? <HomePage sch_classes = {sch_classes} plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh} /> : <LogInForm />}
+          { user ? <ClassSchedule sch_classes = {sch_classes} plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh} /> : <LogInForm />}
         </Route>
         <Route path = "/schedules">
           <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
