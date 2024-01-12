@@ -49,13 +49,17 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
 
   const feedClassesContentJSX = classesFiltered.map(class_details => {
     let displayEditButton
+    let styleLogedIn = {}
 
     if (location === "/schedules"){
-      displayEditButton = <FeedUI.Extra>
-      { user ? <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI> : ""}  
-      { user ? <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI> : ""}
-         </FeedUI.Extra>
-    }
+      displayEditButton = 
+                        <FeedUI.Extra>
+                          { user ? <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI> : ""}  
+                          { user ? <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI> : ""}
+                        </FeedUI.Extra>
+      if (user){
+        styleLogedIn = user.id === class_details.coach.id && location === "/schedules" ? {backgroundColor: "yellow"} : {}
+      }}
 
     return (
       <div key={class_details.id} style={ formData.id === class_details.id && location === "/schedules" ? {backgroundColor: "LightGray"} : {}} >
@@ -71,7 +75,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
             </FeedUI.Meta>   
             
             <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
-            <p style={ user.id === class_details.coach.id && location === "/schedules" ? {backgroundColor: "yellow"} : {}}
+            <p style= {styleLogedIn}
               >Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
             
             { displayEditButton }
