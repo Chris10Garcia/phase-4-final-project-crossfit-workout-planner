@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import Header from "./Header";
@@ -11,24 +11,11 @@ import BlogApp from "./BlogApp";
 import { 
   Segment as SegmentUI, 
   } from 'semantic-ui-react'
-import { LogIn } from "./LogIn";
+import { LogInForm } from "./LogInForm";
+import { HomePage } from "./HomePage";
 
 
 const CurrentUserContext = createContext(null)
-
-
-function HomePage({sch_classes}){
-  const {user} = useContext(CurrentUserContext)
-
-  const user_classes = sch_classes.filter( sch_class => sch_class.coach.id === user.id)
-
-  console.log(user_classes)
-  return (
-    <SegmentUI>
-      <h1>Welcome Coach {user.name}</h1>
-    </SegmentUI>
-  )
-}
 
 
 function App() {
@@ -74,7 +61,7 @@ function App() {
       <Header />
       <Switch>
         <Route exact path = "/">
-          { user ? <HomePage sch_classes = {sch_classes} /> : <LogIn />}
+          { user ? <HomePage sch_classes = {sch_classes} plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh} /> : <LogInForm />}
         </Route>
         <Route path = "/schedules">
           <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>

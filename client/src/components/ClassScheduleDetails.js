@@ -9,12 +9,15 @@ import {
   Button as ButtonUI
 } from 'semantic-ui-react';
 import { CurrentUserContext } from "./App";
+import { useHistory } from "react-router-dom";
 
 function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData, refresh, setRefresh, formData }) {
+  const {user} = useContext(CurrentUserContext)
+  
+  const history = useHistory()
+  const location = history.location.pathname
 
   const classesFiltered = sch_classes.filter(sch_classes => day === sch_classes.day);
-
-  const {user} = useContext(CurrentUserContext)
 
   classesFiltered.sort (( a,b ) => a.hour - b.hour)
 
@@ -40,7 +43,18 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
     })
   }
 
+
+
   const feedClassesContentJSX = classesFiltered.map(class_details => {
+    let displayEditButton
+
+    if (location === "/schedules"){
+      displayEditButton = <FeedUI.Extra>
+      { user ? <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI> : ""}  
+      { user ? <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI> : ""}
+         </FeedUI.Extra>
+    }
+
     return (
       <div key={class_details.id} style={ formData.id === class_details.id ? {backgroundColor: "LightGray"} : {}} >
         <FeedUI.Event >
@@ -57,10 +71,7 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
             <FeedUI.Summary>Time: {class_details.hour}</FeedUI.Summary>
             <p>Coach: <FeedUI.User as={Link} to={`/coaches/${class_details.coach.id}`}>{class_details.coach.name} </FeedUI.User></p>
             
-            <FeedUI.Extra>
-              { user ? <ButtonUI onClick={()=>editButton(class_details)} size="mini">Edit</ButtonUI> : ""}  
-              { user ? <ButtonUI onClick={()=>deleteButton(class_details)} size="mini">Delete</ButtonUI> : ""}
-            </FeedUI.Extra>
+            { displayEditButton }
 
           </FeedUI.Content>
 

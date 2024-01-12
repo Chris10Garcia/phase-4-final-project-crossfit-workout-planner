@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 
 import ClassScheduleDetails  from "./ClassScheduleDetails";
-import ClassScheduleForm from "./ClassScheduleForm";
 
 import {
   Segment as SegmentUI,
@@ -9,29 +8,23 @@ import {
   Card as CardUI,
   Button as ButtonUI
 } from 'semantic-ui-react';
-import { CurrentUserContext } from "./App";
 import { useHistory } from "react-router-dom";
 
 
-
-
-function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
+function HomePageClassSchedule( { sch_classes, refresh, setRefresh } ){
   const [displayButton, setDisplayButton] = useState(false)
-
-  const { user } = useContext(CurrentUserContext)
 
   const history = useHistory()
   const location = history.location.pathname
 
-  let heading
+  // let heading
 
-  if (location === "/schedules"){
-    console.log(location)
-    heading = <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
-  } else {
-    heading = <h2>Here are all of your classes you are teaching Coach {user.name}</h2>
-  }
-
+  // if (location === "/schedules"){
+  //   console.log(location)
+  //   heading = <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
+  // } else {
+  //   heading = <h2>Here are all of your classes you are teaching Coach {user.name}</h2>
+  // }
 
   const clearFormValues = {
       id : "",
@@ -43,24 +36,16 @@ function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
 
   const [formData, setFormData] = useState( clearFormValues )
   
-  const title = "Class Schedule"
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 
   return (
     <SegmentUI>
       <HeaderUI>
-        { heading }
-        { user ? <ButtonUI onClick ={() => setDisplayButton(!displayButton)} >{ displayButton ? "Hide Form" : `Show Add New / Edit Form`}</ButtonUI> : ""}
+        <h2>Here are all the classes being taught, what the plan is and the coach teaching it</h2>
       </HeaderUI>
       
       <CardUI.Group stackable doubling>
-        { displayButton ? <ClassScheduleForm 
-                              title= {title} coaches = {coaches} plans = {plans} 
-                              formData = {formData} setFormData={setFormData} 
-                              refresh={refresh} setRefresh ={setRefresh} days={days} 
-                              clearFormValues={clearFormValues} /> 
-                        : "" }
         { days.map(day => <ClassScheduleDetails 
                               key={day} day={day} sch_classes={sch_classes} 
                               refresh={refresh} setRefresh ={setRefresh} 
@@ -71,4 +56,4 @@ function ClassSchedule( { sch_classes, plans, coaches, refresh, setRefresh } ){
   );
 }
 
-export default ClassSchedule
+export default HomePageClassSchedule

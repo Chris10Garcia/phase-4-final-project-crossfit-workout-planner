@@ -6,7 +6,7 @@ import {
   Form as FormUI
 } from "semantic-ui-react";
 
-export function LogIn() {
+export function LogInForm() {
   const { user, setUser } = useContext(CurrentUserContext);
   const [ errors, setErrors] = useState({})
 
@@ -49,7 +49,6 @@ export function LogIn() {
         )}
 
       </Formik>
-      <p>Current user is {user ? user.name : null}</p>
     </SegmentUI>
 
   );
