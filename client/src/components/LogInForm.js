@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Formik } from "formik";
 import { CurrentUserContext } from "./App";
 import { 
@@ -9,7 +9,6 @@ import * as yup from "yup";
 
 export function LogInForm() {
   const { setUser } = useContext(CurrentUserContext);
-  const [ backendErrors, setBackEndErrors] = useState({})
 
   const logInForm = { username : "", password : ""}
 
@@ -26,40 +25,38 @@ export function LogInForm() {
       ,
   });
 
-  function submitLogIn(data){
-
-    fetch("/login", {
+  async function submitLogIn(data){
+    return fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
-    .then(r => {
-        if (r.ok) {
-          r.json().then(data => setUser(data));
-        } else {
-          r.json().then(err => {
-            setBackEndErrors(() => err)
-          });
-        }
-      });
   }
 
   return (
 
     <SegmentUI>
       <h1>Welcome and log in here</h1>
-      <Formik initialValues={logInForm} onSubmit={ submitLogIn} validationSchema={formSchema}>
+      <Formik initialValues={logInForm} onSubmit={(values, actions)=> {
+        const result = submitLogIn(values)
+        result.then(r => {
+          if (r.ok) {
+            r.json().then(data => setUser(data));
+          } else {
+            r.json().then(err => actions.setErrors(err));
+          }
+        });
+      } }
+      
+      validationSchema={formSchema}>
         { formik => (
           <FormUI onSubmit={formik.handleSubmit}>
             <label>Username</label>
             <FormUI.Field id="username" name="username" placeholder="Type in username" control = "input" value={formik.values.username} onChange={formik.handleChange} />
-            { formik.errors ? <p style ={{color: "red"}}> {formik.errors.username} </p> : ""} 
-            { backendErrors ? <p style ={{color: "red"}}> {backendErrors.username} </p> : ""}           
+            <p style ={{color: "red"}}> {formik.errors.username} </p>
             <label>Password</label>
             <FormUI.Field id="password" name="password" placeholder="Type in password" control = "input" type="password"value={formik.values.password} onChange={formik.handleChange} />
-
-            { formik.errors ? <p style ={{color: "red"}}> {formik.errors.password} </p> : ""} 
-            { backendErrors ? <p style ={{color: "red"}}> {backendErrors.password} </p> : ""}               
+            <p style ={{color: "red"}}> {formik.errors.password} </p>            
             <FormUI.Button type="submit">Submit</FormUI.Button>
           </FormUI>
         )}
