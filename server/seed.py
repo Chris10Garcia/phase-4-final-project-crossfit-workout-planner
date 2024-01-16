@@ -56,7 +56,14 @@ def create_coaches():
             username = "chrisgarcia"
         )
     
-    coaches = [ coach_chris, coach_brent, coach_dan, coach_rose, ]
+    coach_felipe = Coach(
+        name = "Felipe Serrano",
+        age = 35,
+        picture = "https://www.mountsinai.org/files/fad_img_new/0/0000076810098048434641/0000072500072049451191.jpg",
+        username = "felipeserrano"
+    )
+    
+    coaches = [ coach_chris, coach_brent, coach_dan, coach_rose, coach_felipe]
 
     for coach in coaches:
         coach.password_hash = coach.username + "_password"
@@ -208,7 +215,6 @@ if __name__ == '__main__':
 
         print("Coach, workout plan, and exercise move records added to db")
 
-        [ coach_chris, coach_brent, coach_dan, coach_rose ] = coaches
         [ bench_press, dead_lift, burpee, clean, snatch, running ] = moves
         [ leg_burner, beginner, advance_class ] = plans
 
