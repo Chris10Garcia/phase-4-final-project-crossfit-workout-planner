@@ -17,8 +17,20 @@ class Exercise_Move(db.Model):
     @validates("name")
     def check_name(self, key, address):
         if address == "":
-            return ValueError("Please input a name")
+            raise Exception("Please input a name")
         return address
+
+    @validates("focus")
+    def check_name(self, key, address):
+        if address == "":
+            raise Exception("Please input a focus")
+        return address
+    
+    # @validates("description")
+    # def check_name(self, key, address):
+    #     if address == "":
+    #         raise ValueError("Please input a description")
+    #     return address
 
     crossfit_classes = db.relationship("Crossfit_Class", back_populates="exercise_move", cascade = "all, delete-orphan")
     workout_plans = association_proxy("crossfit_classes", "workout_plan", creator = lambda data: Crossfit_Class(workout_plan = data) )

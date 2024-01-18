@@ -51,10 +51,12 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
           })
         } else {
           r.json().then( err => {
+            // console.log("this is working")
             console.log(err)
           })
         }
       })
+      .catch(e => console.log("how about now?"))
 
     } else {
       fetch(`${values.id}`, {

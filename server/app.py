@@ -375,12 +375,20 @@ class ExerciseMovesIndex(Resource):
             db.session.add(new_exercise_move)
             db.session.commit()
         except Exception as e:
+            # print (e)
             # print(dir(e))
-            for error in e.params:
-                if error != "":
-                    print (error)
-            # print(e.params[0])
-            return {"message" : "this worked"}, 500
+            # for error in e.params:
+            #     if error != "":
+            #         print (error)
+            # print(e.params)
+            
+            # response = make_response(str(e), 400)
+            
+            # return response
+            print(e.args)
+            test = str(e)
+            print(e)
+            return {"message" :  test}, 500
 
         response = make_response(
             exercise_move_schema.dump(new_exercise_move),
@@ -450,7 +458,7 @@ api.add_resource(Logout, "/logout")
 api.add_resource(CheckSession, "/checkSession")
 api.add_resource(ClearSession, "/clearSession")
 
-app.register_error_handler(500, code_500)
+app.register_error_handler(400, code_500)
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
