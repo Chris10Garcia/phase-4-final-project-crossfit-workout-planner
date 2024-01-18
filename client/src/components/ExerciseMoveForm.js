@@ -83,7 +83,7 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
     initialValues: formData,
     onSubmit: values => submitData(values),
     enableReinitialize: true,
-    validationSchema: formSchema
+    // validationSchema: formSchema
   });
 
   function clearForm(){

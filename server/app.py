@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
-from flask import request, make_response, session
+from flask import request, make_response, session, render_template
 from flask_restful import Resource
 from marshmallow import fields
+from werkzeug.exceptions import InternalServerError
+from sqlalchemy import exc
 
 from config import app, db, api, ma
 from models import Coach, Workout_Plan, Exercise_Move, Schedule
@@ -367,11 +369,18 @@ class ExerciseMovesIndex(Resource):
     def post(self):
         em_data = request.get_json()
         del em_data["id"]
-        
-        new_exercise_move = Exercise_Move(**em_data)
 
-        db.session.add(new_exercise_move)
-        db.session.commit()
+        try: 
+            new_exercise_move = Exercise_Move(**em_data)
+            db.session.add(new_exercise_move)
+            db.session.commit()
+        except Exception as e:
+            # print(dir(e))
+            for error in e.params:
+                if error != "":
+                    print (error)
+            # print(e.params[0])
+            return {"message" : "this worked"}, 500
 
         response = make_response(
             exercise_move_schema.dump(new_exercise_move),
@@ -408,7 +417,17 @@ class ExerciseMovesByID(Resource):
             200
         )
         return response
-    
+
+#######################
+# error handling
+
+@app.errorhandler(InternalServerError)
+def code_500(error):
+    print("this worked!")
+    print(error)
+    response = make_response(error, 500)
+
+    return response
 
 #######################
 # resources
@@ -430,6 +449,8 @@ api.add_resource(Logout, "/logout")
 
 api.add_resource(CheckSession, "/checkSession")
 api.add_resource(ClearSession, "/clearSession")
+
+app.register_error_handler(500, code_500)
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

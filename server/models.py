@@ -1,5 +1,6 @@
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
 from config import db, bcrypt
 
 
@@ -12,6 +13,12 @@ class Exercise_Move(db.Model):
     focus = db.Column(db.String)
     description = db.Column(db.String)
     video_link = db.Column(db.String)
+
+    @validates("name")
+    def check_name(self, key, address):
+        if address == "":
+            return ValueError("Please input a name")
+        return address
 
     crossfit_classes = db.relationship("Crossfit_Class", back_populates="exercise_move", cascade = "all, delete-orphan")
     workout_plans = association_proxy("crossfit_classes", "workout_plan", creator = lambda data: Crossfit_Class(workout_plan = data) )
