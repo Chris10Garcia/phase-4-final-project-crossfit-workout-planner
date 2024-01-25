@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {useHistory } from "react-router-dom"
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -12,6 +12,9 @@ import {
 
 function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, clearFormValues }) {
   const history = useHistory()
+
+  // for all forms i need to add this
+  const [apiError, setApiError] = useState({})  
 
   const formSchema = yup.object().shape({
     name: yup.string()
@@ -45,18 +48,19 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
       .then( r => {
         if (r.ok){
           r.json().then(data => {
+            console.log(data)
             setRefresh(!refresh)
             history.push(`/exercise_moves/${data.id}` )
             setFormData(data)
+            setApiError({})   // for all forms i need to add this
           })
         } else {
           r.json().then( err => {
-            // console.log("this is working")
-            console.log(err)
+            setApiError(err)   // for all forms i need to add this
           })
         }
       })
-      .catch(e => console.log("how about now?"))
+      // .catch(e => console.log("how about now?"))
 
     } else {
       fetch(`${values.id}`, {
@@ -68,10 +72,11 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
         if (r.ok){
           r.json().then(data => {
             setRefresh(!refresh)
-            
+            setApiError({})   // for all forms i need to add this
           })
         } else {
-          r.json().then(err => console.log(err))
+          r.json().then(err => {
+            setApiError(err)})   // for all forms i need to add this
         }
       })
       
@@ -85,7 +90,7 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
     initialValues: formData,
     onSubmit: values => submitData(values),
     enableReinitialize: true,
-    // validationSchema: formSchema
+    validationSchema: formSchema
   });
 
   function clearForm(){
@@ -112,6 +117,7 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
         <b><p style={{color: "red"}}>{formik.errors.video_link}</p></b>
 
         <FormUI.Button type="submit">Submit</FormUI.Button>
+        <b><p style={{color: "red"}}>{apiError.errors}</p></b>
         <DividerUI />
 
         <FormUI.Button type="button" onClick={clearForm}>Clear Form</FormUI.Button>

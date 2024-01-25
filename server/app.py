@@ -173,10 +173,15 @@ class CoachesByID(Resource):
             200
         )
         return response
-    
+  
+  
     def patch(self, id):
         coach = Coach.query.filter(Coach.id == id).first()
         
+        # TO DO
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
+        # update records + update children          
         [setattr(coach, attr, request.json.get(attr)) for attr in request.json]
 
         db.session.add(coach)
@@ -211,6 +216,10 @@ class ScheduledClassesIndex(Resource):
         del sch_data["coach"]
         del sch_data["workout_plan"]
 
+        # TO DO
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
+        # update records + update children
         new_schedule = Schedule(**sch_data)
 
         new_schedule.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
@@ -249,6 +258,10 @@ class ScheduledClassesByID(Resource):
         del sch_data["coach"]
         del sch_data["workout_plan"]  
 
+        # TO DO
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
+        # update records + update children
         [setattr(scheduledclass, attr, sch_data[attr]) for attr in sch_data]
 
         scheduledclass.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
@@ -298,6 +311,10 @@ class WorkoutPlansIndex(Resource):
         del wp_data["id"]
         del wp_data["exercise_moves"]
         
+        # TO DO
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
+        # update records + update children
         new_workout_plan = Workout_Plan(**wp_data)
 
         # Need to pull the object. Can't just use the ID number
@@ -338,6 +355,9 @@ class WorkoutPlansByID(Resource):
         del wp_data["exercise_moves"]
         workout_plan.exercise_moves.clear()
 
+        # TO DO
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
         # update records + update children
         [setattr(workout_plan, attr, wp_data[attr]) for attr in wp_data]
         [workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
@@ -370,25 +390,15 @@ class ExerciseMovesIndex(Resource):
         em_data = request.get_json()
         del em_data["id"]
 
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
         try: 
             new_exercise_move = Exercise_Move(**em_data)
             db.session.add(new_exercise_move)
             db.session.commit()
         except Exception as e:
-            # print (e)
-            # print(dir(e))
-            # for error in e.params:
-            #     if error != "":
-            #         print (error)
-            # print(e.params)
-            
-            # response = make_response(str(e), 400)
-            
-            # return response
-            print(e.args)
-            test = str(e)
-            print(e)
-            return {"message" :  test}, 500
+            error_message = str(e)
+            return {"errors" :  error_message }, 400
 
         response = make_response(
             exercise_move_schema.dump(new_exercise_move),
@@ -415,7 +425,15 @@ class ExerciseMovesByID(Resource):
 
         ## this is prone to error if the record doesn't exist
         exercise_move = Exercise_Move.query.filter(Exercise_Move.id == id).first()
-        [setattr(exercise_move, attr, request.json.get(attr)) for attr in request.json]
+
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
+        try:
+            [setattr(exercise_move, attr, request.json.get(attr)) for attr in request.json]
+
+        except Exception as e:
+            error_message = str(e)
+            return {"errors" :  error_message }, 400        
 
         db.session.add(exercise_move)
         db.session.commit()

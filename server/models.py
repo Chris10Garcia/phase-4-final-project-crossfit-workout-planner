@@ -14,23 +14,30 @@ class Exercise_Move(db.Model):
     description = db.Column(db.String)
     video_link = db.Column(db.String)
 
+    # for all models i need to add validates like this 
     @validates("name")
     def check_name(self, key, address):
-        if address == "":
+        if address == "" or address == None:
             raise Exception("Please input a name")
         return address
 
     @validates("focus")
-    def check_name(self, key, address):
+    def check_focus(self, key, address):
         if address == "":
             raise Exception("Please input a focus")
         return address
     
-    # @validates("description")
-    # def check_name(self, key, address):
-    #     if address == "":
-    #         raise ValueError("Please input a description")
-    #     return address
+    @validates("description")
+    def check_description(self, key, address):
+        if address == "" or address == None:
+            raise Exception("Please input a description")
+        return address
+
+    @validates("video_link")
+    def check_video_link(self, key, address):
+        if address == "":
+            raise Exception("Please input a video link")
+        return address
 
     crossfit_classes = db.relationship("Crossfit_Class", back_populates="exercise_move", cascade = "all, delete-orphan")
     workout_plans = association_proxy("crossfit_classes", "workout_plan", creator = lambda data: Crossfit_Class(workout_plan = data) )
