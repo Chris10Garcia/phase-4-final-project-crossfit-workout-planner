@@ -56,6 +56,24 @@ class Coach(db.Model):
     username = db.Column(db.String)
     _password_hash = db.Column(db.String)
 
+    @validates("name")
+    def check_name(self, key, address):
+        if address == "":
+            raise Exception("Please include a name")
+        return address
+    
+    @validates("age")
+    def check_age(self, key, address):
+        if address == "":
+            raise Exception("Please include an age")
+        return address
+
+    @validates("picture")
+    def check_picture(self, key, address):
+        if address == "":
+            raise Exception("Please include a picture")
+        return address
+
     schedules = db.relationship("Schedule", back_populates="coach")
     workout_plans = association_proxy("schedules", "workout_plan", )
 

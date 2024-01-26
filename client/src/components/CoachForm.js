@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {useHistory } from "react-router-dom"
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -12,6 +12,8 @@ import {
 
 function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFormValues }) {
   const history = useHistory()
+
+  const [apiError, setApiError] = useState({}) 
 
   const formSchema = yup.object().shape({
     name: yup.string()
@@ -46,7 +48,7 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
           })
         } else {
           r.json().then( err => {
-            console.log(err)
+            setApiError(err)
           })
         }
       })
@@ -62,10 +64,11 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
         if (r.ok){
           r.json().then(data => {
             setRefresh(!refresh)
-            
+            console.log("this fired")
           })
         } else {
-          r.json().then(err => console.log(err))
+          r.json().then(err => {
+            setApiError(err)})
         }
       })
     }
@@ -82,6 +85,7 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
 
   function clearForm(){
     setFormData(clearFormValues)
+    setApiError({})
   }
 
   return (
@@ -101,6 +105,7 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
         <b><p style={{color: "red"}}>{formik.errors.picture}</p></b>
 
         <FormUI.Button type="submit">Submit</FormUI.Button>
+        <b><p style={{color: "red"}}>{apiError.errors}</p></b>
         <DividerUI />
 
         <FormUI.Button type="button" onClick={clearForm}>Clear Form</FormUI.Button>

@@ -149,11 +149,15 @@ class CoachesIndex(Resource):
 
         del ch_data["id"]
 
-        new_coach = Coach(**ch_data)
+        try:
+            new_coach = Coach(**ch_data)
+            db.session.add(new_coach)
+            db.session.commit()
 
-        db.session.add(new_coach)
-        db.session.commit()
-
+        except Exception as e:
+            error_message = str(e)
+            return {"errors" :  error_message }, 400
+        
         response = make_response(
             coach_schema.dump(new_coach),
             201
@@ -178,14 +182,15 @@ class CoachesByID(Resource):
     def patch(self, id):
         coach = Coach.query.filter(Coach.id == id).first()
         
-        # TO DO
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
-        # update records + update children          
-        [setattr(coach, attr, request.json.get(attr)) for attr in request.json]
+        try:        
+            [setattr(coach, attr, request.json.get(attr)) for attr in request.json]
 
-        db.session.add(coach)
-        db.session.commit()
+            db.session.add(coach)
+            db.session.commit()
+
+        except Exception as e:
+            error_message = str(e)
+            return {"errors" :  error_message }, 400        
 
         response = make_response(
             coach_schema.dump(coach),

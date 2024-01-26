@@ -95,6 +95,7 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
 
   function clearForm(){
     setFormData(clearFormValues)
+    setApiError({})
   }
 
   return (
