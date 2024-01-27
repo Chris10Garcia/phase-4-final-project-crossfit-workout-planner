@@ -107,6 +107,24 @@ class Workout_Plan(db.Model):
     exercise_moves = association_proxy("crossfit_classes", "exercise_move", creator = lambda data: Crossfit_Class(exercise_move = data) )
     coaches = association_proxy("schedules", "coach",)
 
+    @validates("name")
+    def check_name(self, key, address):
+        if address == "":
+            raise Exception("Please include a name")
+        return address
+    
+    @validates("difficulty")
+    def check_difficulty(self, key, address):
+        if address == "":
+            raise Exception("Please include a difficulty")
+        return address
+
+    @validates("description")
+    def check_description(self, key, address):
+        if address == "" or address == None:
+            raise Exception("Please input a description")
+        return address
+
     def __repr__(self):
         return f"<Workout Plan: {self.name}, ID: {self.id}>"
     
