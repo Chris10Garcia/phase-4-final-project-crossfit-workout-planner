@@ -65,6 +65,7 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
         if (r.ok){
           r.json().then(data => {
             setRefresh(!refresh)
+            setApiError({})
           })
         } else {
           r.json().then(err => {
