@@ -320,11 +320,17 @@ class WorkoutPlansIndex(Resource):
         # for patching and posting, i need
         #   try / except when creating or setting the object
         # update records + update children
-        new_workout_plan = Workout_Plan(**wp_data)
+       
+        try:
+            new_workout_plan = Workout_Plan(**wp_data)
 
         # Need to pull the object. Can't just use the ID number
-        exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
-        [new_workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
+            exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
+            [new_workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
+
+        except Exception as e:
+            error_message = str(e)
+            return {"errors" :  error_message }, 400        
 
         db.session.add(new_workout_plan)
         db.session.commit()
@@ -364,12 +370,19 @@ class WorkoutPlansByID(Resource):
         # for patching and posting, i need
         #   try / except when creating or setting the object
         # update records + update children
-        [setattr(workout_plan, attr, wp_data[attr]) for attr in wp_data]
-        [workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
 
-        # commit into the DB
-        db.session.add(workout_plan)
-        db.session.commit()
+        try:
+            [setattr(workout_plan, attr, wp_data[attr]) for attr in wp_data]
+            [workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
+
+            # commit into the DB
+            db.session.add(workout_plan)
+            db.session.commit()
+        
+        except Exception as e:
+            error_message = str(e)
+            return {"errors" :  error_message }, 400        
+
 
         response = make_response(
             workout_plan_schema.dump(workout_plan),

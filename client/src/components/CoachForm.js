@@ -45,6 +45,7 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
             setRefresh(!refresh)
             history.push(`/coaches/${data.id}`)
             setFormData(data)
+            setApiError({})
           })
         } else {
           r.json().then( err => {
@@ -64,7 +65,6 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
         if (r.ok){
           r.json().then(data => {
             setRefresh(!refresh)
-            console.log("this fired")
           })
         } else {
           r.json().then(err => {

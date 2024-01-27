@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as yup from "yup";
 import {
   Grid as GridUI,
@@ -12,6 +12,8 @@ import { useHistory } from "react-router-dom";
 function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, moves, clearFormValues }) {
 
   const history = useHistory()
+
+  const [apiError, setApiError] = useState({})
 
   const formSchema = yup.object().shape({
     name: yup.string()
@@ -53,9 +55,11 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
               setRefresh(!refresh)
               history.push(`/workout_plans/${data.id}`)
               setFormData(data)
+              setApiError({})
           })
         } else {
-          r.json().then(err => console.log(err))
+          r.json().then(err => {
+            setApiError(err)})
         }
       })
 
@@ -68,9 +72,12 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
       })
       .then ( r => {
         if (r.ok){
-          r.json().then(data => setRefresh(!refresh))
+          r.json().then(data => {
+            setRefresh(!refresh)
+            setApiError({})
+        })
         } else {
-          r.json().then(err => console.log(err))
+          r.json().then(err => setApiError(err))
         }
       })                  
     }
@@ -82,7 +89,7 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
       <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit ${formData.name}` : `Add a new ${title}`}</HeaderUI>
       
       <Formik onSubmit={(data)=> submitData(data)} initialValues={formData} enableReinitialize = { true } validationSchema={formSchema} >
-      
+      {/* <Formik onSubmit={(data)=> submitData(data)} initialValues={formData} enableReinitialize = { true }> */}
         { formik => (
           <FormUI onSubmit={formik.handleSubmit} >
             {}
@@ -137,7 +144,7 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
 
           <DividerUI />
           <FormUI.Button type="submit">Submit</FormUI.Button>
-        
+          <b><p style={{color: "red"}}>{apiError.errors}</p></b>
           <DividerUI />
           { formData.id === ""  ? "" 
                                 : <FormUI.Button type="button" onClick={clearForm}>Click to Clear and Add New</FormUI.Button> }
