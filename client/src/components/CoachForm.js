@@ -28,7 +28,6 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
     picture: yup.string()
       .url("Please provide a proper url for the picture")
       ,
-    
   });
 
   function submitData(values){
@@ -104,6 +103,9 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
 
         <FormUI.Field label="Picture" control="input" type="url" name="picture" onChange={formik.handleChange} value={formik.values.picture}/>
         <b><p style={{color: "red"}}>{formik.errors.picture}</p></b>
+
+        {/* <FormUI.Field label="Password" control="input" type="password" name="password_hash" onChange={formik.handleChange} value={formik.values.password_hash}/>
+        <b><p style={{color: "red"}}>{formik.errors.password_hash}</p></b> */}
 
         <FormUI.Button type="submit">Submit</FormUI.Button>
         <b><p style={{color: "red"}}>{apiError.errors}</p></b>

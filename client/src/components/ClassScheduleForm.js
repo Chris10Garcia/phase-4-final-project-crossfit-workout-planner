@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 
@@ -10,6 +10,7 @@ import {
 
 
 function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, plans, coaches, days, clearFormValues }) {
+  const [apiError, setApiError] = useState({})
 
   const hours = []
   for (let i = 800; i < 1800; i = i + 100){
@@ -35,6 +36,7 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
 
   function clearForm(){
     setFormData(clearFormValues)  
+    setApiError({})
   }
 
   function submitData(data){
@@ -49,9 +51,10 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
           r.json().then(data => {
             setRefresh(!refresh)
             setFormData(data)
+            setApiError({})
           })
         } else {
-          r.json().then(err => console.log(err))
+          r.json().then(err => setApiError(err))
         }
       })
 
@@ -66,9 +69,10 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
           r.json().then(data => {
             setRefresh(!refresh)
             setFormData(data)
+            setApiError({})
             })
         } else {
-          r.json().then(err => console.log(err))
+          r.json().then(err => setApiError(err))
         }
       })                  
     }
@@ -79,6 +83,7 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
       <CardUI.Content>
         <HeaderUI as="h2">{formData.id !== "" ? `Form to Edit Class Schedule ID: ${formData.id}` : `Add a new ${title}`}</HeaderUI>
         <Formik onSubmit= {submitData} initialValues={formData} enableReinitialize = {true} validationSchema={formSchema}>
+        {/* <Formik onSubmit= {submitData} initialValues={formData} enableReinitialize = {true} > */}
           { formik => ( 
             <FormUI onSubmit={formik.handleSubmit} >
 
@@ -112,6 +117,7 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
               <br />
 
               <FormUI.Button type="submit" label="Submit">Submit</FormUI.Button>
+              <b><p style={{color: "red"}}>{apiError.errors}</p></b>
               <DividerUI />
               
               { formData.id === "" ? "" : <FormUI.Button type="button" onClick={clearForm}>Click to Clear and Add New</FormUI.Button> }

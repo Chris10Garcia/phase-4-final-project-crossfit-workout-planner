@@ -156,6 +156,18 @@ class Schedule(db.Model):
     coach = db.relationship("Coach", back_populates="schedules",)
     workout_plan = db.relationship("Workout_Plan", back_populates="schedules",)
     
+    @validates("day")
+    def check_day(self, key, address):
+        if address == "":
+            raise Exception("Please include a day")
+        return address
+
+    @validates("hour")
+    def check_hour(self, key, address):
+        if address == "":
+            raise Exception("Please include an hour")
+        return address
+
     def __repr__(self):
         return f"Day: {self.day}, Hour: {self.hour}"
     

@@ -225,14 +225,19 @@ class ScheduledClassesIndex(Resource):
         # for patching and posting, i need
         #   try / except when creating or setting the object
         # update records + update children
-        new_schedule = Schedule(**sch_data)
+        try:
+            new_schedule = Schedule(**sch_data)
 
-        new_schedule.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
-        new_schedule.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
+            new_schedule.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
+            new_schedule.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
 
-        db.session.add(new_schedule)
-        db.session.commit()
+            db.session.add(new_schedule)
+            db.session.commit()
 
+        except Exception as e:
+            error_message = str(e)
+            return {"errors" :  error_message }, 400   
+        
         response = make_response(
             schedule_schema.dump(new_schedule),
             201
@@ -267,13 +272,19 @@ class ScheduledClassesByID(Resource):
         # for patching and posting, i need
         #   try / except when creating or setting the object
         # update records + update children
-        [setattr(scheduledclass, attr, sch_data[attr]) for attr in sch_data]
+        try:
 
-        scheduledclass.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
-        scheduledclass.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
+            [setattr(scheduledclass, attr, sch_data[attr]) for attr in sch_data]
 
-        db.session.add(scheduledclass)
-        db.session.commit()
+            scheduledclass.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
+            scheduledclass.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
+
+            db.session.add(scheduledclass)
+            db.session.commit()
+
+        except Exception as e:
+            error_message = str(e)
+            return {"errors" :  error_message }, 400   
 
         response = make_response(
             schedule_schema.dump(scheduledclass),
@@ -316,15 +327,10 @@ class WorkoutPlansIndex(Resource):
         del wp_data["id"]
         del wp_data["exercise_moves"]
         
-        # TO DO
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
-        # update records + update children
        
         try:
             new_workout_plan = Workout_Plan(**wp_data)
 
-        # Need to pull the object. Can't just use the ID number
             exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
             [new_workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
 
@@ -365,11 +371,6 @@ class WorkoutPlansByID(Resource):
         # delete data and attr that can cause issues when creating new record
         del wp_data["exercise_moves"]
         workout_plan.exercise_moves.clear()
-
-        # TO DO
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
-        # update records + update children
 
         try:
             [setattr(workout_plan, attr, wp_data[attr]) for attr in wp_data]
