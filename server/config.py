@@ -23,6 +23,7 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 
+# Using socket.io, this part most likely will be replaced
 # Instantiate REST API
 ma = Marshmallow(app)
 api = Api(app)

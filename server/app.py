@@ -9,7 +9,7 @@ from sqlalchemy import exc
 from config import app, db, api, ma
 from models import Coach, Workout_Plan, Exercise_Move, Schedule
 
-
+# MIGHT BE REPLACE THIS ENTIRE SECTION
 ########################################################################
 # SCHEMA PLANS
 ########################################################################
