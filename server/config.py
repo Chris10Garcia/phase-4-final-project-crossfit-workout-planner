@@ -1,4 +1,6 @@
 from flask import Flask
+from flask_socketio import join_room, leave_room, send, SocketIO
+
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -23,13 +25,19 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 
-# Using socket.io, this part most likely will be replaced
 # Instantiate REST API
-ma = Marshmallow(app)
-api = Api(app)
+ma = Marshmallow(app)   ### REMOVE EVENTUALLY
+api = Api(app)          ### REMOVE EVENTUALLY
 
 # Instantiate Encryption
 bcrypt = Bcrypt(app)
 
 # Instantiate CORS
+# CORS(app, resources={r"/*":{"origins":"*"}})
+
+# socketio = SocketIO(app, cors_allowed_origins="*")
+
+
 CORS(app)
+
+socketio = SocketIO(app)

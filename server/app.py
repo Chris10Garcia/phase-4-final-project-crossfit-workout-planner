@@ -6,8 +6,14 @@ from marshmallow import fields
 from werkzeug.exceptions import InternalServerError
 from sqlalchemy import exc
 
-from config import app, db, api, ma
+from config import app, db, api, ma, socketio
 from models import Coach, Workout_Plan, Exercise_Move, Schedule
+
+
+
+
+
+
 
 # MIGHT BE REPLACE THIS ENTIRE SECTION
 ########################################################################
@@ -497,6 +503,24 @@ api.add_resource(ClearSession, "/clearSession")
 
 app.register_error_handler(400, code_500)
 
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
 
+# if __name__ == '__main__':
+#     app.run(port=5555, debug=True)
+
+
+
+
+@app.route("/test", methods=["GET", "POST"])
+def home():
+    coaches = Coach.query.all()
+
+    response = make_response(coaches_schema.dump(coaches), 200)
+    return response
+
+
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected!")
+
+if __name__ == '__main__':
+    socketio.run(app, debug=True, port=5555)
