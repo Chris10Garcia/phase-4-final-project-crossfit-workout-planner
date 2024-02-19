@@ -35,7 +35,7 @@ export function LogInForm() {
   // }
 
   async function submitLogIn(data){
-    return socket.emit("login", data)
+    socket.emit("login", data)
      
   }
 
@@ -46,7 +46,8 @@ export function LogInForm() {
       <Formik initialValues={logInForm} onSubmit={(values, actions)=> {
         const result = submitLogIn(values)
         result.then(r => {
-          console.log(r.io)
+          console.log(socket.handshake)
+          console.log(r)
           // if (r.ok) {
           //   r.json().then(data => setUser(data));
           // } else {

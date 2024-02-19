@@ -531,8 +531,14 @@ def handle_connect(auth):
 
     refresh_all_data()
 
+def response_ok():
+    return True
+
+def response_bad():
+    return False
+
 @socketio.on("login")
-def handle_longin(data):
+def handle_login(data):
     print(data)
 
     errors = {}
@@ -546,11 +552,12 @@ def handle_longin(data):
     if not password or password == "":
         errors["password"] = "Blank password, please supply password"
 
-    if len(errors):
-        
-        socketio.emit("login", )
-        pass 
-    
+# need to fix thi
+    # if len(errors):
+    #     socketio.emit("login", errors, response_bad)
+    #     pass 
+
+
     user = Coach.query.filter(Coach.username == username ).first()
 
     if not user:
@@ -563,7 +570,8 @@ def handle_longin(data):
             errors["password"] = "Incorrect user or password"
     
     if len(errors):
-        return errors, 401
+        socketio.emit("login", errors)
+        return
 
 
     session["user_id"] = user.id
