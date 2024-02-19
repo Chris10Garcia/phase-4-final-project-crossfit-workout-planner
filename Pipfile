@@ -16,6 +16,7 @@ flask-marshmallow = "0.15.0"
 marshmallow-sqlalchemy = "0.29.0"
 flask-bcrypt = "1.0.1"
 sqlalchemy = "2.0.21"
+flask-socketio = "*"
 
 [requires]
 python_full_version = "3.8.13"

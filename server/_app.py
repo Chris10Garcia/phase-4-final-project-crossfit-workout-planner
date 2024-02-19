@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import request, make_response, session, redirect
+from flask import request, make_response, session, render_template
 from flask_restful import Resource
 from marshmallow import fields
 from werkzeug.exceptions import InternalServerError
