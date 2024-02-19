@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from flask import request, make_response, session, redirect
+from flask import request, make_response, session, redirect, jsonify
+from flask_socketio import emit, send
 from flask_restful import Resource
 from marshmallow import fields
 from werkzeug.exceptions import InternalServerError
@@ -510,7 +511,7 @@ app.register_error_handler(400, code_500)
 
 
 
-@app.route("/test", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def home():
     coaches = Coach.query.all()
 
@@ -521,6 +522,30 @@ def home():
 @socketio.on("connect")
 def handle_connect():
     print("Client connected!")
+    # print(request.sid)
+    # session = 1
+    print(session)
+    coaches = Coach.query.all()
+    workout_plans = Workout_Plan.query.all()
+    exercise_moves = Exercise_Move.query.all()
+    schedules = Schedule.query.all()
+
+    print(request)
+    emit( "*", {"data": f"id: {request.sid} is connected"})
+    emit("coaches", coaches_schema.dump(coaches))
+    emit("workout_plans", workout_plans_schema.dump(workout_plans))
+
+
+
+# @socketio.on("connection")
+# def connection(data):
+    
+#     print("Client connection!!!!!")
+#     coaches = Coach.query.all()
+
+#     response = make_response(coaches_schema.dump(coaches), 200)
+#     socketio.emit("connection", response)
+#     # return response
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=5555)

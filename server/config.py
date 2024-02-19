@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_socketio import join_room, leave_room, send, SocketIO
+from flask_socketio import SocketIO
 
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -33,11 +33,11 @@ api = Api(app)          ### REMOVE EVENTUALLY
 bcrypt = Bcrypt(app)
 
 # Instantiate CORS
-# CORS(app, resources={r"/*":{"origins":"*"}})
+CORS(app, resources={r"/*":{"origins":"*"}})
 
-# socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 
-CORS(app)
+# CORS(app)
 
-socketio = SocketIO(app)
+# socketio = SocketIO(app)

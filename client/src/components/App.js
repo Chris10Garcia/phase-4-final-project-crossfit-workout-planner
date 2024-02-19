@@ -1,5 +1,7 @@
-import React, { useEffect, useState, createContext } from "react";
+import React, { useEffect, useState, createContext, useRef } from "react";
 import { Switch, Route } from "react-router-dom";
+
+import { io } from "socket.io-client"
 
 import Header from "./Header";
 import ClassSchedule from "./ClassSchedule";
@@ -16,6 +18,11 @@ import { LogInForm } from "./LogInForm";
 
 const CurrentUserContext = createContext(null)
 
+const socket = io("localhost:5555", {
+  transports: ["websocket"],
+  cors: { origin: "*",},
+  // withCredentials: true
+})
 
 function App() {
   const [coaches, setCoaches] = useState([])
@@ -26,33 +33,66 @@ function App() {
 
   const [user, setUser] = useState(null)
 
+  // const socketRef = useRef()
+  // socketRef.current = socket
+  const [socketInstance, setSocketInstance] = useState("")
+
 
   useEffect(()=>{
-
-    fetch("/checkSession")
-      .then( r => {
-        if (r.ok){
-          r.json().then(data => setUser(data))
-        }
-      } )
+    
+    setSocketInstance(socket)
       
-    fetch("/workout_plans")
-      .then( r => r.json())
-      .then( d => setPlans(d))
+    socket.on("*", (data)=>{
+        console.log(data)
+      })
+      // socket.on("connect", data => console.log(socketInstance.id))
+    // socket.on("connection", data => console.log(data))
+    
+    // setSocketInstance(socket)
+    // console.log(socketInstance)
+    // // socket.on("connect", )
+    // // const socket = io("localhost:5555", {
+    // //   transports: ["websocket"],
+    // //   cors: {
+    // //     origin: "http://localhost:3000",
+    // //   }
+    // // })
 
-    fetch("/schedules")
-      .then( r => r.json())
-      .then( d => setSchClasses(d))
+    // 
+    // console.log(socket)
+    // socket.on("connect", (data) => {
+    //   console.log("got up to here")
+    //   console.log(data)
+    // })
 
-    fetch("/coaches")
-      .then( r => r.json())
-      .then( d => setCoaches(d))
+  }, [socketInstance])
 
-    fetch("/exercise_moves")
-      .then( r => r.json())
-      .then( d => setMoves(d))
+  // useEffect(()=>{
 
-  }, [refresh])
+  //   fetch("/checkSession")
+  //     .then( r => {
+  //       if (r.ok){
+  //         r.json().then(data => setUser(data))
+  //       }
+  //     } )
+      
+  //   fetch("/workout_plans")
+  //     .then( r => r.json())
+  //     .then( d => setPlans(d))
+
+  //   fetch("/schedules")
+  //     .then( r => r.json())
+  //     .then( d => setSchClasses(d))
+
+  //   fetch("/coaches")
+  //     .then( r => r.json())
+  //     .then( d => setCoaches(d))
+
+  //   fetch("/exercise_moves")
+  //     .then( r => r.json())
+  //     .then( d => setMoves(d))
+
+  // }, [refresh])
 
   return (
   <CurrentUserContext.Provider value={{user, setUser}}>
