@@ -520,22 +520,68 @@ def home():
 
 
 @socketio.on("connect")
-def handle_connect():
+def handle_connect(auth):
     print("Client connected!")
     # print(request.sid)
-    # session = 1
-    print(session)
+    # session["1"] = 1
+    # print(request.sid)
+    # print(session)
+    emit( "*", {"data": f"id: {request.sid} is connected"})
+
+
+    refresh_all_data()
+
+@socketio.on("login")
+def handle_longin(data):
+    print(data)
+
+    errors = {}
+
+    username = data["username"] if "username" in data else None
+    password = data["password"] if "password" in data else None
+
+    if not username or username == "":
+        errors["username"] = "Blank username, please supply username"
+        
+    if not password or password == "":
+        errors["password"] = "Blank password, please supply password"
+
+    if len(errors):
+        
+        socketio.emit("login", )
+        pass 
+    
+    user = Coach.query.filter(Coach.username == username ).first()
+
+    if not user:
+        errors["username"] = "Incorrect user or password"
+        errors["password"] = "Incorrect user or password"
+    else:
+        
+        if not user.authenticate(password):
+            errors["username"] = "Incorrect user or password"
+            errors["password"] = "Incorrect user or password"
+    
+    if len(errors):
+        return errors, 401
+
+
+    session["user_id"] = user.id
+    session["username"] = user.username
+
+    socketio.emit("login", coach_schema.dump(user))
+
+
+def refresh_all_data():
     coaches = Coach.query.all()
     workout_plans = Workout_Plan.query.all()
     exercise_moves = Exercise_Move.query.all()
     schedules = Schedule.query.all()
 
-    print(request)
-    emit( "*", {"data": f"id: {request.sid} is connected"})
     emit("coaches", coaches_schema.dump(coaches))
     emit("workout_plans", workout_plans_schema.dump(workout_plans))
-
-
+    emit("exercise_moves", exercise_moves_schema.dump(exercise_moves))
+    emit("schedules", schedules_schema.dump(schedules))
 
 # @socketio.on("connection")
 # def connection(data):

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useRef } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import { io } from "socket.io-client"
@@ -15,14 +15,18 @@ import {
   } from 'semantic-ui-react'
 import { LogInForm } from "./LogInForm";
 
-
-const CurrentUserContext = createContext(null)
-
 const socket = io("localhost:5555", {
   transports: ["websocket"],
   cors: { origin: "*",},
-  // withCredentials: true
+  withCredentials: true
 })
+
+const SocketContext = createContext(socket)
+
+const CurrentUserContext = createContext(null)
+
+
+
 
 function App() {
   const [coaches, setCoaches] = useState([])
@@ -33,39 +37,24 @@ function App() {
 
   const [user, setUser] = useState(null)
 
-  // const socketRef = useRef()
-  // socketRef.current = socket
-  const [socketInstance, setSocketInstance] = useState("")
+  const [socketInstance, setSocketInstance] = useState()
 
 
+  
   useEffect(()=>{
     
-    setSocketInstance(socket)
-      
+    // setSocketInstance(socket)
+    
     socket.on("*", (data)=>{
         console.log(data)
       })
-      // socket.on("connect", data => console.log(socketInstance.id))
-    // socket.on("connection", data => console.log(data))
-    
-    // setSocketInstance(socket)
-    // console.log(socketInstance)
-    // // socket.on("connect", )
-    // // const socket = io("localhost:5555", {
-    // //   transports: ["websocket"],
-    // //   cors: {
-    // //     origin: "http://localhost:3000",
-    // //   }
-    // // })
 
-    // 
-    // console.log(socket)
-    // socket.on("connect", (data) => {
-    //   console.log("got up to here")
-    //   console.log(data)
-    // })
+    socket.on("coaches", async data => setCoaches(data))
+    socket.on("schedules", async data => setSchClasses(data))
+    socket.on("workout_plans", async data => setPlans(data))
+    socket.on("exercise_moves", async data => setMoves(data))
 
-  }, [socketInstance])
+  }, [refresh])
 
   // useEffect(()=>{
 
@@ -95,39 +84,41 @@ function App() {
   // }, [refresh])
 
   return (
-  <CurrentUserContext.Provider value={{user, setUser}}>
-    <SegmentUI.Group>
-      <Header />
-      <Switch>
-        <Route exact path = "/">
-          { user ? <ClassSchedule sch_classes = {sch_classes} plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh} /> : <LogInForm />}
-        </Route>
-        <Route path = "/schedules">
-          <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
-        </Route>
-        <Route path = "/workout_plans" > 
-          <WorkoutPlan plans = { plans } moves={ moves } refresh={refresh} setRefresh ={setRefresh}/>
-        </Route>
-        <Route path = "/exercise_moves" >
-          <ExerciseMove moves = { moves } refresh={refresh} setRefresh ={setRefresh} />
-        </Route>
-        <Route path = "/coaches" >
-          <Coach coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
-        </Route>
+  <SocketContext.Provider value = {{socket}}>
+    <CurrentUserContext.Provider value={{user, setUser}}>
+      <SegmentUI.Group>
+        <Header />
+        <Switch>
+          <Route exact path = "/">
+            { user ? <ClassSchedule sch_classes = {sch_classes} plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh} /> : <LogInForm />}
+          </Route>
+          <Route path = "/schedules">
+            <ClassSchedule sch_classes = { sch_classes } plans = { plans } coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
+          </Route>
+          <Route path = "/workout_plans" > 
+            <WorkoutPlan plans = { plans } moves={ moves } refresh={refresh} setRefresh ={setRefresh}/>
+          </Route>
+          <Route path = "/exercise_moves" >
+            <ExerciseMove moves = { moves } refresh={refresh} setRefresh ={setRefresh} />
+          </Route>
+          <Route path = "/coaches" >
+            <Coach coaches = {coaches} refresh={refresh} setRefresh ={setRefresh}/>
+          </Route>
 
-        {/* NOT TO BE GRADED. PURPOSE OF THIS IS TO ENSURE CODE FOR BLOG WORKS */}
-        <Route path = "/blog" >
-          <SegmentUI>
-            <BlogApp  />
-          </SegmentUI>
-        </Route>
+          {/* NOT TO BE GRADED. PURPOSE OF THIS IS TO ENSURE CODE FOR BLOG WORKS */}
+          <Route path = "/blog" >
+            <SegmentUI>
+              <BlogApp  />
+            </SegmentUI>
+          </Route>
 
-      </Switch>
-    </ SegmentUI.Group>
-  </CurrentUserContext.Provider>
+        </Switch>
+      </ SegmentUI.Group>
+    </CurrentUserContext.Provider>
+  </SocketContext.Provider>
   )
 
 }
 
 export default App;
-export {CurrentUserContext}
+export {CurrentUserContext, SocketContext}

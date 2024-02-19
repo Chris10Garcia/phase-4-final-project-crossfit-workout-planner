@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Formik } from "formik";
-import { CurrentUserContext } from "./App";
+import { CurrentUserContext, SocketContext } from "./App";
 import { 
   Segment as SegmentUI,
   Form as FormUI
@@ -9,6 +9,7 @@ import * as yup from "yup";
 
 export function LogInForm() {
   const { setUser } = useContext(CurrentUserContext);
+  const {socket} = useContext(SocketContext)
 
   const logInForm = { username : "", password : ""}
 
@@ -25,12 +26,17 @@ export function LogInForm() {
       ,
   });
 
+  // async function submitLogIn(data){
+  //   return fetch("/login", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(data)
+  //   })
+  // }
+
   async function submitLogIn(data){
-    return fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
+    return socket.emit("login", data)
+     
   }
 
   return (
@@ -40,12 +46,14 @@ export function LogInForm() {
       <Formik initialValues={logInForm} onSubmit={(values, actions)=> {
         const result = submitLogIn(values)
         result.then(r => {
-          if (r.ok) {
-            r.json().then(data => setUser(data));
-          } else {
-            r.json().then(err => actions.setErrors(err));
-          }
+          console.log(r.io)
+          // if (r.ok) {
+          //   r.json().then(data => setUser(data));
+          // } else {
+          //   r.json().then(err => actions.setErrors(err));
+          // }
         });
+
       } }
       
       validationSchema={formSchema}>
