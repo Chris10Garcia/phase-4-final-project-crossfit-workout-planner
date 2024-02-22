@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Formik } from "formik";
+import { Formik, setNestedObjectValues } from "formik";
 import { CurrentUserContext, SocketContext } from "./App";
 import { 
   Segment as SegmentUI,
@@ -35,24 +35,24 @@ export function LogInForm() {
   // }
 
   async function submitLogIn(data){
+    socket.emit("login", data, result => {
+      if (result.ok){
+        setUser(result.user)
+        console.log(result)
 
-    // await new Promise (resolve => {
-    //     socket.emit("login", data, (test) => {
-    //       resolve( console.log(test))
-    //       socket.on("login", data => {
-    //         console.log(data)
-    //       })
-    //       }
-    //       )
-    //     }
-    // )
-
-    await socket.emit ("login", data, test => {
-      console.group(test.ok)
-      return "hello"
+      } else {
+        // actions.setErrors(result.errors)
+      } 
     })
+    // const test = await socket.emit ("login", data, abc => {
+    //     console.log(abc.ok)
+    //     console.log(abc.user)
+    //     return abc
+    //   // return "hello"
+    // })
+    // return test
 
-    await socket.on("login", data => console.log(data))
+    // await socket.on("login", data => console.log(data))
 
 
   //   await socket.on("login", data => {
@@ -69,7 +69,7 @@ export function LogInForm() {
       <Formik initialValues={logInForm} onSubmit={(values, actions)=> {
         const result = submitLogIn(values)
         result.then(r => {
-
+          // console.log(r)
           // if (r.ok) {
           //   r.json().then(data => setUser(data));
           // } else {

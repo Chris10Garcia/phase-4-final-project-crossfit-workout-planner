@@ -543,16 +543,20 @@ def response_bad():
 def handle_login(data):
     print(data)
 
+
+    results = {}
+    user = None
     errors = {}
+    status = {}
 
     username = data["username"] if "username" in data else None
     password = data["password"] if "password" in data else None
 
-    # if not username or username == "":
-    #     errors["username"] = "Blank username, please supply username"
+    if not username or username == "":
+        errors["username"] = "Blank username, please supply username"
         
-    # if not password or password == "":
-    #     errors["password"] = "Blank password, please supply password"
+    if not password or password == "":
+        errors["password"] = "Blank password, please supply password"
 
 # need to fix thi
     # if len(errors):
@@ -586,8 +590,12 @@ def handle_login(data):
         print(test)
         return "woah"
 
-    socketio.emit("login", coach_schema.dump(user), callback=test)
-    return { "ok" : True}
+    # socketio.emit("login", coach_schema.dump(user), callback=test)
+
+    results["ok"] = True
+    results["user"] = coach_schema.dump(user)
+    results["errors"] = errors
+    return results
     
 
 def refresh_all_data():
