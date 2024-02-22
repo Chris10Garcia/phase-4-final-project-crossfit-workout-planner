@@ -18,7 +18,8 @@ import { LogInForm } from "./LogInForm";
 const socket = io("localhost:5555", {
   transports: ["websocket"],
   cors: { origin: "*",},
-  withCredentials: true
+  withCredentials: true,
+  auth : { token : null}
 })
 
 const SocketContext = createContext(socket)

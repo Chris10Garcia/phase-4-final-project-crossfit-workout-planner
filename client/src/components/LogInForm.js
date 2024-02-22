@@ -35,8 +35,31 @@ export function LogInForm() {
   // }
 
   async function submitLogIn(data){
-    socket.emit("login", data)
-     
+
+    // await new Promise (resolve => {
+    //     socket.emit("login", data, (test) => {
+    //       resolve( console.log(test))
+    //       socket.on("login", data => {
+    //         console.log(data)
+    //       })
+    //       }
+    //       )
+    //     }
+    // )
+
+    await socket.emit ("login", data, test => {
+      console.group(test.ok)
+      return "hello"
+    })
+
+    await socket.on("login", data => console.log(data))
+
+
+  //   await socket.on("login", data => {
+  //     console.log("user log in")
+  //     console.log(data)})
+  //     return "yes"
+
   }
 
   return (
@@ -46,8 +69,7 @@ export function LogInForm() {
       <Formik initialValues={logInForm} onSubmit={(values, actions)=> {
         const result = submitLogIn(values)
         result.then(r => {
-          console.log(socket.handshake)
-          console.log(r)
+
           // if (r.ok) {
           //   r.json().then(data => setUser(data));
           // } else {
