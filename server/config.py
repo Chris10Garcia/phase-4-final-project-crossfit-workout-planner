@@ -35,8 +35,8 @@ bcrypt = Bcrypt(app)
 # Instantiate CORS
 CORS(app, resources={r"/*":{"origins":"*"}})
 
-socketio = SocketIO(app, cors_allowed_origins="*")
-# socketio = SocketIO(app, cors_allowed_origins="*", manage_session=False)
+# socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", manage_session=False)
 
 # CORS(app)
 

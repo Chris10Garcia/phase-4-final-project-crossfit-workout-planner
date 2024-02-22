@@ -26,39 +26,18 @@ export function LogInForm() {
       ,
   });
 
-  // async function submitLogIn(data){
-  //   return fetch("/login", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(data)
-  //   })
-  // }
 
-  async function submitLogIn(data){
+  async function submitLogIn(data, actions){
     socket.emit("login", data, result => {
+      console.log(result)
       if (result.ok){
         setUser(result.user)
-        console.log(result)
 
       } else {
-        // actions.setErrors(result.errors)
+        console.log(result.errors)
+        actions.setErrors(result.errors)
       } 
     })
-    // const test = await socket.emit ("login", data, abc => {
-    //     console.log(abc.ok)
-    //     console.log(abc.user)
-    //     return abc
-    //   // return "hello"
-    // })
-    // return test
-
-    // await socket.on("login", data => console.log(data))
-
-
-  //   await socket.on("login", data => {
-  //     console.log("user log in")
-  //     console.log(data)})
-  //     return "yes"
 
   }
 
@@ -67,19 +46,11 @@ export function LogInForm() {
     <SegmentUI>
       <h1>Welcome and log in here</h1>
       <Formik initialValues={logInForm} onSubmit={(values, actions)=> {
-        const result = submitLogIn(values)
-        result.then(r => {
-          // console.log(r)
-          // if (r.ok) {
-          //   r.json().then(data => setUser(data));
-          // } else {
-          //   r.json().then(err => actions.setErrors(err));
-          // }
-        });
-
+          submitLogIn(values, actions)
       } }
       
-      validationSchema={formSchema}>
+      // validationSchema={formSchema} ENABLE THIS AGAIN ONCE DEBUGGING IS DONE
+      >
         { formik => (
           <FormUI onSubmit={formik.handleSubmit}>
             <label>Username</label>

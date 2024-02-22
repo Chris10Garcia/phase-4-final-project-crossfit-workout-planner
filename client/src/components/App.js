@@ -19,7 +19,7 @@ const socket = io("localhost:5555", {
   transports: ["websocket"],
   cors: { origin: "*",},
   withCredentials: true,
-  auth : { token : null}
+  // auth : { token : null},
 })
 
 const SocketContext = createContext(socket)
@@ -46,14 +46,19 @@ function App() {
     
     // setSocketInstance(socket)
     
-    socket.on("*", (data)=>{
-        console.log(data)
-      })
+    // socket.on("connect", (data)=>{
+    //     console.log(data)
+    //   })
 
     socket.on("coaches", async data => setCoaches(data))
     socket.on("schedules", async data => setSchClasses(data))
     socket.on("workout_plans", async data => setPlans(data))
     socket.on("exercise_moves", async data => setMoves(data))
+
+    // socket.on("session", data => {
+    //   console.log(data)
+    // })
+
 
   }, [refresh])
 

@@ -525,7 +525,8 @@ def handle_connect(auth):
     # print(request.sid)
     # session["1"] = 1
     # print(request.sid)
-    # print(session)
+
+
     emit( "*", {"data": f"id: {request.sid} is connected"})
 
 
@@ -538,64 +539,56 @@ def response_bad():
     return False
 
 
+@socketio.on("logout")
+def handle_logout():
+    pass
 
 @socketio.on("login")
 def handle_login(data):
     print(data)
 
-
-    results = {}
-    user = None
-    errors = {}
-    status = {}
+    result = {
+        "user" : None,
+        "errors" : {},
+        "ok" : False
+            }
 
     username = data["username"] if "username" in data else None
     password = data["password"] if "password" in data else None
 
     if not username or username == "":
-        errors["username"] = "Blank username, please supply username"
+        result["errors"]["username"] = "Blank username, please supply username"
         
     if not password or password == "":
-        errors["password"] = "Blank password, please supply password"
+        result["errors"]["password"] = "Blank password, please supply password"
 
-# need to fix thi
-    # if len(errors):
-    #     callback (error)
-    #     socketio.emit("login", errors, response_bad)
-    #     pass 
+    if len(result["errors"]):
+        return result
 
 
     user = Coach.query.filter(Coach.username == username ).first()
 
-    # if not user:
-    #     errors["username"] = "Incorrect user or password"
-    #     errors["password"] = "Incorrect user or password"
-    # else:
-        
-    #     if not user.authenticate(password):
-    #         errors["username"] = "Incorrect user or password"
-    #         errors["password"] = "Incorrect user or password"
+    if not user:
+        result["errors"]["username"] = "Incorrect user or password"
+        result["errors"]["password"] = "Incorrect user or password"
     
-    # if len(errors):
-    #     socketio.emit("login", errors)
-    #     return
+    else:
+        if not user.authenticate(password):
+            result["errors"]["username"] = "Incorrect user or password"
+            result["errors"]["password"] = "Incorrect user or password"
+    
+    if len(result["errors"]):
+        return result
 
 
     session["user_id"] = user.id
     session["username"] = user.username 
 
+    # print(session)
 
-    def test(test):
-        print("this fired!!!")
-        print(test)
-        return "woah"
-
-    # socketio.emit("login", coach_schema.dump(user), callback=test)
-
-    results["ok"] = True
-    results["user"] = coach_schema.dump(user)
-    results["errors"] = errors
-    return results
+    result["ok"] = True
+    result["user"] = coach_schema.dump(user)
+    return result
     
 
 def refresh_all_data():

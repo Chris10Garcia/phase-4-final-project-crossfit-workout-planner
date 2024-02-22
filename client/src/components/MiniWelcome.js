@@ -21,16 +21,20 @@ function MiniWelcome() {
     );
   }
 
+  // function logout() {
+  //   fetch("/logout", {
+  //     method: "DELETE",
+  //     headers: { "Content-Type": "application/json" }
+  //   })
+  //     .then(r => {
+  //       setUser(null)
+  //       history.push("/")
+  //     })
+  //     .catch(err => console.log(err));
+  // }
+
   function logout() {
-    fetch("/logout", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" }
-    })
-      .then(r => {
-        setUser(null)
-        history.push("/")
-      })
-      .catch(err => console.log(err));
+    setUser(null)
   }
 
   return (
