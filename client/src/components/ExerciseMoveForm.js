@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {useHistory } from "react-router-dom"
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -8,10 +8,12 @@ import {
   Header as HeaderUI,
   Form as FormUI, Divider as DividerUI
 } from "semantic-ui-react";
+import { SocketContext } from "./App";
 
 
 function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, clearFormValues }) {
   const history = useHistory()
+  const { socket } = useContext(SocketContext)
 
   // for all forms i need to add this
   const [apiError, setApiError] = useState({})  
@@ -40,46 +42,28 @@ function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, c
 
   function submitData(values){
     if (values.id === ""){
-      fetch("/exercise_moves", {
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(values)
-      })
-      .then( r => {
-        if (r.ok){
-          r.json().then(data => {
-            console.log(data)
+      socket.emit("new_exercise_moves", values, result => {
+        if (result.ok){
             setRefresh(!refresh)
-            history.push(`/exercise_moves/${data.id}` )
-            setFormData(data)
-            setApiError({})   // for all forms i need to add this
-          })
+            history.push(`/exercise_moves/${result.data.id}` )
+            setFormData(result.data)
+            setApiError({})   // for all forms i need to add this          
         } else {
-          r.json().then( err => {
-            setApiError(err)   // for all forms i need to add this
-          })
+          setApiError(result.errors)
         }
-      })
-      // .catch(e => console.log("how about now?"))
-
-    } else {
-      fetch(`${values.id}`, {
-        method : "PATCH",
-        headers : { "Content-Type" : "application/json"},
-        body : JSON.stringify(values)
-      })
-      .then( r => {
-        if (r.ok){
-          r.json().then(data => {
-            setRefresh(!refresh)
-            setApiError({})   // for all forms i need to add this
-          })
-        } else {
-          r.json().then(err => {
-            setApiError(err)})   // for all forms i need to add this
-        }
-      })
+        })
       
+    } else {
+      socket.emit("update_exercise_move", values, result => {
+        if (result.ok){
+            setRefresh(!refresh)
+            history.push(`/exercise_moves/${result.data.id}` )
+            setFormData(result.data)
+            setApiError({})   // for all forms i need to add this          
+        } else {
+          setApiError(result.errors)
+        }
+        })
     }
 
     setFormData(values);

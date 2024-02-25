@@ -403,35 +403,6 @@ class WorkoutPlansByID(Resource):
 #######################
 # /exercise_moves
 
-class ExerciseMovesIndex(Resource):
-    def get(self):
-        exercise_moves = Exercise_Move.query.all()
-        response = make_response(
-            exercise_moves_schema.dump(exercise_moves),
-            200
-        )
-        return response
-    
-    def post(self):
-        em_data = request.get_json()
-        del em_data["id"]
-
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
-        try: 
-            new_exercise_move = Exercise_Move(**em_data)
-            db.session.add(new_exercise_move)
-            db.session.commit()
-        except Exception as e:
-            error_message = str(e)
-            return {"errors" :  error_message }, 400
-
-        response = make_response(
-            exercise_move_schema.dump(new_exercise_move),
-            201
-        )
-
-        return response
 
 
 #######################
@@ -493,7 +464,6 @@ api.add_resource(ScheduledClassesByID, "/schedules/<int:id>")
 api.add_resource(WorkoutPlansIndex, "/workout_plans", endpoint="workout_plans")
 api.add_resource(WorkoutPlansByID, "/workout_plans/<int:id>")
 
-api.add_resource(ExerciseMovesIndex, "/exercise_moves")
 api.add_resource(ExerciseMovesByID, "/exercise_moves/<int:id>")
 
 api.add_resource(Login, "/login")
@@ -522,21 +492,66 @@ def home():
 @socketio.on("connect")
 def handle_connect(auth):
     print("Client connected!")
-    # print(request.sid)
-    # session["1"] = 1
-    # print(request.sid)
-
-
     emit( "*", {"data": f"id: {request.sid} is connected"})
-
 
     refresh_all_data()
 
-def response_ok():
-    return True
+@socketio.on("update_exercise_move")
+def handle_update_exercise_move(data):
+    result = {
+        "data" : None,
+        "errors" : {},
+        "ok" : False
+            }
+    exercise_move = Exercise_Move.query.filter(Exercise_Move.id == data["id"]).first()
 
-def response_bad():
-    return False
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
+
+    try:
+        [setattr(exercise_move, attr, data.get(attr)) for attr in data]
+
+    except Exception as e:
+        error_message = str(e)
+        result["errors"] = error_message      
+        return result
+
+    db.session.add(exercise_move)
+    db.session.commit()
+
+
+    result["data"] = exercise_move_schema.dump(exercise_move)
+    result["ok"] = True
+    refresh_all_data()
+    return result
+
+@socketio.on("new_exercise_moves")
+def handle_new_exercise_moves(data):
+    print(data)
+    result = {
+        "data" : None,
+        "errors" : {},
+        "ok" : False
+            }
+    
+    del data["id"]
+
+        # for patching and posting, i need
+        #   try / except when creating or setting the object
+    try: 
+        new_exercise_move = Exercise_Move(**data)
+        db.session.add(new_exercise_move)
+        db.session.commit()
+    except Exception as e:
+        error_message = str(e)
+        result["errors"] =  error_message
+        return result
+
+
+    result["ok"] = True
+    result["data"] = exercise_move_schema.dump(new_exercise_move)
+    refresh_all_data()
+    return result
 
 
 @socketio.on("logout")
@@ -545,8 +560,6 @@ def handle_logout():
 
 @socketio.on("login")
 def handle_login(data):
-    print(data)
-
     result = {
         "user" : None,
         "errors" : {},

@@ -34,7 +34,6 @@ export function LogInForm() {
         setUser(result.user)
 
       } else {
-        console.log(result.errors)
         actions.setErrors(result.errors)
       } 
     })
@@ -48,8 +47,7 @@ export function LogInForm() {
       <Formik initialValues={logInForm} onSubmit={(values, actions)=> {
           submitLogIn(values, actions)
       } }
-      
-      // validationSchema={formSchema} ENABLE THIS AGAIN ONCE DEBUGGING IS DONE
+      validationSchema={formSchema} ENABLE THIS AGAIN ONCE DEBUGGING IS DONE
       >
         { formik => (
           <FormUI onSubmit={formik.handleSubmit}>
