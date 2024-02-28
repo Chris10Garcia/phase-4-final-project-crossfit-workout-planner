@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Formik, setNestedObjectValues } from "formik";
+import { Formik } from "formik";
 import { CurrentUserContext, SocketContext } from "./App";
 import { 
   Segment as SegmentUI,

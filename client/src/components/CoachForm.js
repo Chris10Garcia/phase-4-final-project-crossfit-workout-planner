@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {useHistory } from "react-router-dom"
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -8,10 +8,13 @@ import {
   Header as HeaderUI,
   Form as FormUI, Divider as DividerUI
 } from "semantic-ui-react";
+import { SocketContext } from "./App";
 
 
 function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFormValues }) {
   const history = useHistory()
+
+  const {socket} = useContext(SocketContext)
 
   const [apiError, setApiError] = useState({}) 
 
@@ -33,42 +36,26 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
   function submitData(values){
 
     if (values.id === ""){
-      fetch("/coaches", {
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(values)
-      })
-      .then( r => {
-        if (r.ok){
-          r.json().then(data => {
-            setRefresh(!refresh)
-            history.push(`/coaches/${data.id}`)
-            setFormData(data)
-            setApiError({})
-          })
+      socket.emit("new_coach", values, result => {
+        if (result.ok){
+          setRefresh(!refresh)
+          history.push(`/coaches/${result.data.id}`)
+          setFormData(result.data)
+          setApiError({})
         } else {
-          r.json().then( err => {
-            setApiError(err)
-          })
+          setApiError(result.error)
         }
+
       })
-
-
     } else {
-      fetch(`${values.id}`, {
-        method : "PATCH",
-        headers : { "Content-Type" : "application/json"},
-        body : JSON.stringify(values)
-      })
-      .then( r => {
-        if (r.ok){
-          r.json().then(data => {
-            setRefresh(!refresh)
-            setApiError({})
-          })
+      socket.emit("update_coach", values, result => {
+        if (result.ok){
+          setRefresh(!refresh)
+          history.push(`/coaches/${result.data.id}`)
+          setFormData(result.data)
+          setApiError({})
         } else {
-          r.json().then(err => {
-            setApiError(err)})
+          setApiError(result.errors)
         }
       })
     }

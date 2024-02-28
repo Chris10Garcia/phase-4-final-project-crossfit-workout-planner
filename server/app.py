@@ -140,74 +140,6 @@ class Logout (Resource):
 
  
 #######################
-# /coaches 
-
-class CoachesIndex(Resource):
-    def get(self):
-        coaches = Coach.query.all()
-        response = make_response(
-            coaches_schema.dump(coaches),
-            200
-        )
-        return response
-    
-    def post(self):
-        ch_data = request.get_json()
-
-        del ch_data["id"]
-
-        try:
-            new_coach = Coach(**ch_data)
-            db.session.add(new_coach)
-            db.session.commit()
-
-        except Exception as e:
-            error_message = str(e)
-            return {"errors" :  error_message }, 400
-        
-        response = make_response(
-            coach_schema.dump(new_coach),
-            201
-        )
-
-        return response
-
-
-#######################
-# /coaches/id
-
-class CoachesByID(Resource):
-    def get(self, id):
-        coach = Coach.query.filter(Coach.id == id).first()
-        response = make_response(
-            coach_schema.dump(coach),
-            200
-        )
-        return response
-  
-  
-    def patch(self, id):
-        coach = Coach.query.filter(Coach.id == id).first()
-        
-        try:        
-            [setattr(coach, attr, request.json.get(attr)) for attr in request.json]
-
-            db.session.add(coach)
-            db.session.commit()
-
-        except Exception as e:
-            error_message = str(e)
-            return {"errors" :  error_message }, 400        
-
-        response = make_response(
-            coach_schema.dump(coach),
-            200
-        )
-        
-        return response
-
-
-#######################
 # /schedules
 
 class ScheduledClassesIndex(Resource):
@@ -405,41 +337,7 @@ class WorkoutPlansByID(Resource):
 
 
 
-#######################
-# /exercise_moves/id
 
-class ExerciseMovesByID(Resource):
-    def get(self, id):
-        exercise_move = Exercise_Move.query.filter(Exercise_Move.id == id).first()
-        response = make_response(
-            exercise_move_schema.dump(exercise_move),
-            200
-        )
-        return response
-    
-    
-    def patch(self, id):
-
-        ## this is prone to error if the record doesn't exist
-        exercise_move = Exercise_Move.query.filter(Exercise_Move.id == id).first()
-
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
-        try:
-            [setattr(exercise_move, attr, request.json.get(attr)) for attr in request.json]
-
-        except Exception as e:
-            error_message = str(e)
-            return {"errors" :  error_message }, 400        
-
-        db.session.add(exercise_move)
-        db.session.commit()
-
-        response = make_response(
-            exercise_move_schema.dump(exercise_move),
-            200
-        )
-        return response
 
 #######################
 # error handling
@@ -455,16 +353,11 @@ def code_500(error):
 #######################
 # resources
 
-api.add_resource(CoachesIndex,"/coaches")
-api.add_resource(CoachesByID,"/coaches/<int:id>")
-
 api.add_resource(ScheduledClassesIndex, "/schedules")
 api.add_resource(ScheduledClassesByID, "/schedules/<int:id>")
 
 api.add_resource(WorkoutPlansIndex, "/workout_plans", endpoint="workout_plans")
 api.add_resource(WorkoutPlansByID, "/workout_plans/<int:id>")
-
-api.add_resource(ExerciseMovesByID, "/exercise_moves/<int:id>")
 
 api.add_resource(Login, "/login")
 api.add_resource(Logout, "/logout")
@@ -505,9 +398,6 @@ def handle_update_exercise_move(data):
             }
     exercise_move = Exercise_Move.query.filter(Exercise_Move.id == data["id"]).first()
 
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
-
     try:
         [setattr(exercise_move, attr, data.get(attr)) for attr in data]
 
@@ -527,7 +417,6 @@ def handle_update_exercise_move(data):
 
 @socketio.on("new_exercise_moves")
 def handle_new_exercise_moves(data):
-    print(data)
     result = {
         "data" : None,
         "errors" : {},
@@ -553,6 +442,56 @@ def handle_new_exercise_moves(data):
     refresh_all_data()
     return result
 
+
+@socketio.on("update_coach")
+def handle_update_coach(data):
+    result = {
+        "data" : None,
+        "errors" : {},
+        "ok" : False
+            }
+    
+    coach = Coach.query.filter(Coach.id == data["id"]).first()
+
+    try:
+        [setattr(coach, attr, data.get(attr)) for attr in data]
+
+    except Exception as e:
+        error_message = str(e)
+        result["errors"] = error_message      
+        return result
+    
+    db.session.add(coach)
+    db.session.commit()
+
+    result["data"] = coach_schema.dump(coach)
+    result["ok"] = True
+    refresh_all_data()
+    return result
+
+@socketio.on("new_coach")
+def handle_new_coach(data):
+    result = {
+            "data" : None,
+            "errors" : {},
+            "ok" : False
+                }
+    
+    del data["id"]
+
+    try:
+        new_coach = Coach(**data)
+        db.session.add(new_coach)
+        db.session.commit()
+    except Exception as e:
+        error_message = str(e)
+        result["errors"] = error_message
+        return result
+    
+    result["ok"] = True
+    result["data"] = coach_schema.dump(new_coach)
+    refresh_all_data()
+    return result
 
 @socketio.on("logout")
 def handle_logout():
