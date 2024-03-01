@@ -64,7 +64,7 @@ workout_plans_schema = Workout_Plan_Schema(many=True)
 ########################################################################
 
 #######################
-# /Sessions
+# /Sessionsß
 
 class ClearSession(Resource):
     def get(self):
@@ -247,97 +247,6 @@ class ScheduledClassesByID(Resource):
         return response
 
 
-#######################
-# /workout_plans
-
-class WorkoutPlansIndex(Resource):
-    def get(self):
-        workout_plans = Workout_Plan.query.all()
-        response = make_response(
-            workout_plans_schema.dump(workout_plans),
-            200
-        )
-        return response
-    
-    def post(self):
-        wp_data = request.get_json()
-        exercise_moves = wp_data["exercise_moves"]
-
-        del wp_data["id"]
-        del wp_data["exercise_moves"]
-        
-       
-        try:
-            new_workout_plan = Workout_Plan(**wp_data)
-
-            exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
-            [new_workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
-
-        except Exception as e:
-            error_message = str(e)
-            return {"errors" :  error_message }, 400        
-
-        db.session.add(new_workout_plan)
-        db.session.commit()
-
-        response = make_response(
-            workout_plan_schema.dump(new_workout_plan),
-            201
-        )
-
-        return response
-
-
-#######################
-# /workout_plans/id
-
-class WorkoutPlansByID(Resource):
-    def get(self, id):
-        workout_plan = Workout_Plan.query.filter(Workout_Plan.id == id).first()
-        response = make_response(
-            workout_plan_schema.dump(workout_plan),
-            200
-        )
-        return response
-    
-    def patch(self, id):
-        # get record from db + json data + childrens
-        workout_plan = Workout_Plan.query.filter(Workout_Plan.id == id).first()
-        wp_data = request.get_json()
-        exercise_moves = wp_data["exercise_moves"]
-        exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
-        
-        # delete data and attr that can cause issues when creating new record
-        del wp_data["exercise_moves"]
-        workout_plan.exercise_moves.clear()
-
-        try:
-            [setattr(workout_plan, attr, wp_data[attr]) for attr in wp_data]
-            [workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
-
-            # commit into the DB
-            db.session.add(workout_plan)
-            db.session.commit()
-        
-        except Exception as e:
-            error_message = str(e)
-            return {"errors" :  error_message }, 400        
-
-
-        response = make_response(
-            workout_plan_schema.dump(workout_plan),
-            200
-        )
-
-        return response
-
-
-#######################
-# /exercise_moves
-
-
-
-
 
 #######################
 # error handling
@@ -355,9 +264,6 @@ def code_500(error):
 
 api.add_resource(ScheduledClassesIndex, "/schedules")
 api.add_resource(ScheduledClassesByID, "/schedules/<int:id>")
-
-api.add_resource(WorkoutPlansIndex, "/workout_plans", endpoint="workout_plans")
-api.add_resource(WorkoutPlansByID, "/workout_plans/<int:id>")
 
 api.add_resource(Login, "/login")
 api.add_resource(Logout, "/logout")
@@ -388,6 +294,74 @@ def handle_connect(auth):
     emit( "*", {"data": f"id: {request.sid} is connected"})
 
     refresh_all_data()
+
+@socketio.on("update_workout_plan")
+def handle_update_workout_plan(data):
+    result = {
+        "data" : None,
+        "errors" : {},
+        "ok" : False
+            }
+    workout_plan = Workout_Plan.query.filter(Workout_Plan.id == data["id"]).first()
+    exercise_moves = data["exercise_moves"]
+    exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
+
+    del data["exercise_moves"]
+    workout_plan.exercise_moves.clear()
+
+    try:
+        [setattr(workout_plan, attr, data[attr]) for attr in data]
+        [workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
+
+
+        db.session.add(workout_plan)
+        db.session.commit()
+
+    except Exception as e:
+        error_message = str(e)
+        result["errors"] = error_message
+        return result
+    
+    result["data"] = workout_plan_schema.dump(workout_plan)
+    result["ok"] = True
+    
+    refresh_all_data()
+    return result
+
+@socketio.on("new_workout_plan")
+def handle_new_workout_plan(data):
+    result = {
+        "data" : None,
+        "errors" : {},
+        "ok" : False
+            }
+    
+    exercise_moves = data["exercise_moves"]
+
+    del data["id"]
+    del data["exercise_moves"]
+    
+
+    try:
+        new_workout_plan = Workout_Plan(**data)
+
+        exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]
+        [new_workout_plan.exercise_moves.append(exercise_move) for exercise_move in exercise_moves]
+        
+        db.session.add(new_workout_plan)
+        db.session.commit()
+
+    except Exception as e:
+        error_message = str(e)
+        result["errors"] = error_message
+        return result
+    
+    result["data"] = workout_plan_schema.dump(new_workout_plan)
+    result["ok"] = True
+
+    refresh_all_data()
+    return result
+
 
 @socketio.on("update_exercise_move")
 def handle_update_exercise_move(data):

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import * as yup from "yup";
 import {
   Grid as GridUI,
@@ -8,8 +8,10 @@ import {
 } from "semantic-ui-react";
 import { FieldArray, Formik } from "formik";
 import { useHistory } from "react-router-dom";
+import { SocketContext } from "./App";
 
 function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, moves, clearFormValues }) {
+  const {socket} = useContext(SocketContext)
 
   const history = useHistory()
 
@@ -42,44 +44,32 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
     setFormData(clearFormValues)  
   }
 
-  function submitData(data){
-    if (data.id === ""){
-      fetch("/workout_plans", {
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(data)
-      })
-      .then ( r => {
-        if (r.ok){
-          r.json().then(data => {
-              setRefresh(!refresh)
-              history.push(`/workout_plans/${data.id}`)
-              setFormData(data)
-              setApiError({})
-          })
-        } else {
-          r.json().then(err => {
-            setApiError(err)})
-        }
+  function submitData(values){
+
+    if (values.id === ""){
+      socket.emit("new_workout_plan", values, result => {
+        if (result.ok) {
+          setRefresh(!refresh)
+          history.push(`/workout_plans/${result.data.id}`)
+          setFormData(result.data)
+          setApiError({})
+      } else {
+          setApiError(result.error)
+      }
       })
 
     } else {
 
-      fetch(`${data.id}`, {
-        method: "PATCH",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(data)
-      })
-      .then ( r => {
-        if (r.ok){
-          r.json().then(data => {
-            setRefresh(!refresh)
-            setApiError({})
-        })
-        } else {
-          r.json().then(err => setApiError(err))
-        }
-      })                  
+      socket.emit("update_workout_plan", values, result =>{
+        if (result.ok) {
+          setRefresh(!refresh)
+          history.push(`/workout_plans/${result.data.id}`)
+          setFormData(result.data)
+          setApiError({})
+      } else {
+          setApiError(result.error)
+      }
+      })               
     }
   }
 
