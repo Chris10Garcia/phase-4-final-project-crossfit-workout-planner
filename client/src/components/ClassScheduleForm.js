@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 
@@ -7,10 +7,13 @@ import {
   Form as FormUI, Divider as DividerUI,
   Card as CardUI
 } from "semantic-ui-react";
+import { SocketContext } from "./App";
 
 
 function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, plans, coaches, days, clearFormValues }) {
   const [apiError, setApiError] = useState({})
+
+  const {socket} = useContext(SocketContext)
 
   const hours = []
   for (let i = 800; i < 1800; i = i + 100){
@@ -41,40 +44,27 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
 
   function submitData(data){
     if (data.id === ""){
-      fetch("/schedules", {
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(data)
-      })
-      .then ( r => {
-        if (r.ok){
-          r.json().then(data => {
-            setRefresh(!refresh)
-            setFormData(data)
-            setApiError({})
-          })
+      socket.emit("new_schedule", data, result => {
+        if (result.ok) {
+          setRefresh(!refresh)
+          setFormData(result.data)
+          setApiError({})
         } else {
-          r.json().then(err => setApiError(err))
+          setApiError(result.errors)
         }
       })
-
+  
     } else {
-      fetch(`/schedules/${data.id}`, {
-        method: "PATCH",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(data)
-      })
-      .then ( r => {
-        if (r.ok){
-          r.json().then(data => {
-            setRefresh(!refresh)
-            setFormData(data)
-            setApiError({})
-            })
+      socket.emit("update_schedule", data, result => {
+        if (result.ok) {
+          setRefresh(!refresh)
+          setFormData(result.data)
+          setApiError({})
         } else {
-          r.json().then(err => setApiError(err))
+          setApiError(result.errors)
         }
-      })                  
+      })
+              
     }
   }
 

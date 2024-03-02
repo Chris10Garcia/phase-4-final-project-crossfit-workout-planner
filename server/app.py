@@ -138,132 +138,11 @@ class Logout (Resource):
         return response
  
 
- 
-#######################
-# /schedules
 
-class ScheduledClassesIndex(Resource):
-    def get(self):
-        scheduledclasses = Schedule.query.all()
-        response = make_response(
-            schedules_schema.dump(scheduledclasses),
-            200
-        )
-        return response
-    
-    def post(self):
-        sch_data = request.get_json()
-        coach_data = sch_data["coach"]
-        workout_plan_data = sch_data["workout_plan"]
-
-        del sch_data["id"]
-        del sch_data["coach"]
-        del sch_data["workout_plan"]
-
-        # TO DO
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
-        # update records + update children
-        try:
-            new_schedule = Schedule(**sch_data)
-
-            new_schedule.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
-            new_schedule.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
-
-            db.session.add(new_schedule)
-            db.session.commit()
-
-        except Exception as e:
-            error_message = str(e)
-            return {"errors" :  error_message }, 400   
-        
-        response = make_response(
-            schedule_schema.dump(new_schedule),
-            201
-        )
-
-        return response
-
-
-#######################
-# /schedules/id
-
-class ScheduledClassesByID(Resource):
-    def get(self, id):
-        scheduledclass = Schedule.query.filter(Schedule.id == id).first()
-        response = make_response(
-            schedule_schema.dump(scheduledclass),
-            200
-        )
-        return response
-
-    def patch(self, id):
-
-        scheduledclass = Schedule.query.filter(Schedule.id == id).first()
-        sch_data = request.get_json()
-        coach_data = sch_data["coach"]
-        workout_plan_data = sch_data["workout_plan"]
-
-        del sch_data["coach"]
-        del sch_data["workout_plan"]  
-
-        # TO DO
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
-        # update records + update children
-        try:
-
-            [setattr(scheduledclass, attr, sch_data[attr]) for attr in sch_data]
-
-            scheduledclass.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
-            scheduledclass.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
-
-            db.session.add(scheduledclass)
-            db.session.commit()
-
-        except Exception as e:
-            error_message = str(e)
-            return {"errors" :  error_message }, 400   
-
-        response = make_response(
-            schedule_schema.dump(scheduledclass),
-            200
-        )
-
-        return response
-    
-    def delete(self, id):
-
-        scheduledclass = Schedule.query.filter(Schedule.id == id).first()
-        
-        db.session.delete(scheduledclass)
-        db.session.commit()
-
-        response = make_response(
-            {"message": "Sucessful deletion of record"},
-            202
-        )
-
-        return response
-
-
-
-#######################
-# error handling
-
-@app.errorhandler(InternalServerError)
-def code_500(error):
-    print("this worked!")
-    print(error)
-    response = make_response(error, 500)
-
-    return response
 
 #######################
 # resources
 
-api.add_resource(ScheduledClassesIndex, "/schedules")
-api.add_resource(ScheduledClassesByID, "/schedules/<int:id>")
 
 api.add_resource(Login, "/login")
 api.add_resource(Logout, "/logout")
@@ -271,29 +150,119 @@ api.add_resource(Logout, "/logout")
 api.add_resource(CheckSession, "/checkSession")
 api.add_resource(ClearSession, "/clearSession")
 
-app.register_error_handler(400, code_500)
 
 
-# if __name__ == '__main__':
-#     app.run(port=5555, debug=True)
+# @app.route("/", methods=["GET", "POST"])
+# def home():
+#     coaches = Coach.query.all()
 
-
-
-
-@app.route("/", methods=["GET", "POST"])
-def home():
-    coaches = Coach.query.all()
-
-    response = make_response(coaches_schema.dump(coaches), 200)
-    return response
+#     response = make_response(coaches_schema.dump(coaches), 200)
+#     return response
 
 
 @socketio.on("connect")
-def handle_connect(auth):
+def handle_connect():
     print("Client connected!")
     emit( "*", {"data": f"id: {request.sid} is connected"})
 
     refresh_all_data()
+
+@socketio.on("new_schedule")
+def handle_new_schedule(data):
+    result = {
+        "data" : None,
+        "errors" : {},
+        "ok" : False
+            }
+    
+    coach_data = data["coach"]
+    workout_plan_data = data["workout_plan"]
+
+    del data["id"]
+    del data["coach"]
+    del data["workout_plan"]
+
+    try:
+        new_schedule = Schedule(**data)
+        db.session.add(new_schedule)
+        db.session.commit()
+
+        new_schedule.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
+        new_schedule.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
+
+        db.session.add(new_schedule)
+        db.session.commit()
+
+    except Exception as e:
+        error_message = str(e)
+        result["errors"] = error_message
+        return result
+
+    result["data"] = schedule_schema.dump(new_schedule)
+    result["ok"] = True
+
+    refresh_all_data()
+    return result
+
+@socketio.on("delete_schedule")
+def handle_delete_schedule(data):
+
+    result = {
+        "data" : None,
+        "errors" : {},
+        "ok" : False
+            }
+    
+    scheduledclass = Schedule.query.filter(Schedule.id == data["id"]).first()
+    
+    db.session.delete(scheduledclass)
+    db.session.commit()
+
+    result["ok"] = True
+
+    refresh_all_data()
+    return result
+        
+
+@socketio.on("update_schedule")
+def handle_update_schedule(data):
+    result = {
+        "data" : None,
+        "errors" : {},
+        "ok" : False
+            }
+
+
+    scheduledclass = Schedule.query.filter(Schedule.id == data["id"]).first()
+
+    coach_data = data["coach"]
+    workout_plan_data = data["workout_plan"]
+
+    del data["coach"]
+    del data["workout_plan"]  
+
+    try:
+
+        [setattr(scheduledclass, attr, data[attr]) for attr in data]
+
+
+        scheduledclass.workout_plan = Workout_Plan.query.filter(Workout_Plan.id == workout_plan_data["id"]).first()
+        scheduledclass.coach = Coach.query.filter(Coach.id == coach_data["id"]).first()
+        
+        db.session.add(scheduledclass)
+        db.session.commit()
+
+    except Exception as e:
+
+        error_message = str(e)
+        result["errors"] = error_message
+        return result
+
+    result["data"] = schedule_schema.dump(scheduledclass)
+    result["ok"] = True
+
+    refresh_all_data()
+    return result
 
 @socketio.on("update_workout_plan")
 def handle_update_workout_plan(data):
@@ -302,6 +271,7 @@ def handle_update_workout_plan(data):
         "errors" : {},
         "ok" : False
             }
+    
     workout_plan = Workout_Plan.query.filter(Workout_Plan.id == data["id"]).first()
     exercise_moves = data["exercise_moves"]
     exercise_moves = [Exercise_Move.query.filter(Exercise_Move.id == exercise_move["id"]).first() for exercise_move in exercise_moves]

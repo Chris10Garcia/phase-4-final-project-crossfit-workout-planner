@@ -43,7 +43,7 @@ function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFor
           setFormData(result.data)
           setApiError({})
         } else {
-          setApiError(result.error)
+          setApiError(result.errors)
         }
 
       })

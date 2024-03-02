@@ -54,7 +54,7 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
           setFormData(result.data)
           setApiError({})
       } else {
-          setApiError(result.error)
+          setApiError(result.errors)
       }
       })
 
@@ -67,7 +67,7 @@ function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, mo
           setFormData(result.data)
           setApiError({})
       } else {
-          setApiError(result.error)
+          setApiError(result.errors)
       }
       })               
     }

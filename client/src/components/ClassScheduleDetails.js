@@ -8,13 +8,13 @@ import {
   Divider as DividerUI,
   Button as ButtonUI
 } from 'semantic-ui-react';
-import { CurrentUserContext } from "./App";
+import { CurrentUserContext, SocketContext } from "./App";
 import { useHistory } from "react-router-dom";
 
 function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData, refresh, setRefresh, formData }) {
   const {user} = useContext(CurrentUserContext)
 
-
+  const {socket} = useContext(SocketContext)
 
   const history = useHistory()
   const location = history.location.pathname
@@ -29,20 +29,22 @@ function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData,
   }
 
   function deleteButton(class_detail){
-    fetch(`/schedules/${class_detail.id}`, {
-      method: "DELETE",
-      headers: {"Content-Type" : "application/json"},
-    })
-    .then(r => r.json())
-    .then(d => setRefresh(!refresh))
-    .catch(err => console.log(err))
-    setFormData({
-      id : "",
-      day: "",
-      hour: "",
-      coach: {id: "", name: ""},
-      workout_plan: {id: "", name : "", difficulty : ""}
-    })
+
+    socket.emit("delete_schedule", class_detail, result => {
+      if (result.ok){
+        setRefresh(!refresh)
+      } else {
+        console.log(result.errors)
+      }
+
+      setFormData({
+        id : "",
+        day: "",
+        hour: "",
+        coach: {id: "", name: ""},
+        workout_plan: {id: "", name : "", difficulty : ""}
+      })
+    } )
   }
 
 
