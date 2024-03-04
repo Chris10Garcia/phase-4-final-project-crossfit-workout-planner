@@ -11,12 +11,6 @@ from config import app, db, api, ma, socketio
 from models import Coach, Workout_Plan, Exercise_Move, Schedule
 
 
-
-
-
-
-
-# MIGHT BE REPLACE THIS ENTIRE SECTION
 ########################################################################
 # SCHEMA PLANS
 ########################################################################
@@ -58,106 +52,6 @@ exercise_moves_schema = Exercise_Move_Schema(many=True)
 workout_plan_schema = Workout_Plan_Schema()
 workout_plans_schema = Workout_Plan_Schema(many=True)
 
-
-########################################################################
-# RESTful API VIEW ROUTES
-########################################################################
-
-#######################
-# /Sessionsß
-
-class ClearSession(Resource):
-    def get(self):
-        session["user_id"] = None
-        session["username"] = None
-        return {"message": "session cleared"}, 204
-    
-class CheckSession(Resource):
-    def get(self):
-        user_id = session["user_id"] if "user_id" in session else None
-
-        if user_id:
-            user = Coach.query.filter(Coach.id == user_id).first()
-            return coach_schema.dump(user), 200
-        
-        return {"message": "Unauthorized, you are currently not logged in"}, 401
-
-#######################
-# /Login and Out 
-class Login(Resource):
-    def post(self):
-        errors = {}
-        user_data = request.get_json()
-
-        username = user_data["username"] if "username" in user_data else None
-        password = user_data["password"] if "password" in user_data else None
-
-        if not username or username == "":
-            errors["username"] = "Blank username, please supply username"
-            
-        if not password or password == "":
-            errors["password"] = "Blank password, please supply password"
-
-        if len(errors):
-            return errors, 401
-        
-        user = Coach.query.filter(Coach.username == username ).first()
-
-        if not user:
-            errors["username"] = "Incorrect user or password"
-            errors["password"] = "Incorrect user or password"
-        else:
-            
-            if not user.authenticate(password):
-                errors["username"] = "Incorrect user or password"
-                errors["password"] = "Incorrect user or password"
-        
-        if len(errors):
-            return errors, 401
-
-
-        session["user_id"] = user.id
-        session["username"] = user.username
-        response = make_response(
-            coach_schema.dump(user),
-            200
-        )
-        return response
-
-class Logout (Resource):
-    def delete(self):
-
-        user_id = session["user_id"] if "user_id" in session else None
-
-        if not user_id or user_id == "":
-            response = make_response ({"message": "No users are logged in"}, 401)
-        else:
-            session["user_id"] = None
-            response =  {}, 204
-
-        return response
- 
-
-
-
-#######################
-# resources
-
-
-api.add_resource(Login, "/login")
-api.add_resource(Logout, "/logout")
-
-api.add_resource(CheckSession, "/checkSession")
-api.add_resource(ClearSession, "/clearSession")
-
-
-
-# @app.route("/", methods=["GET", "POST"])
-# def home():
-#     coaches = Coach.query.all()
-
-#     response = make_response(coaches_schema.dump(coaches), 200)
-#     return response
 
 
 @socketio.on("connect")
@@ -264,6 +158,7 @@ def handle_update_schedule(data):
     refresh_all_data()
     return result
 
+
 @socketio.on("update_workout_plan")
 def handle_update_workout_plan(data):
     result = {
@@ -369,8 +264,7 @@ def handle_new_exercise_moves(data):
     
     del data["id"]
 
-        # for patching and posting, i need
-        #   try / except when creating or setting the object
+
     try: 
         new_exercise_move = Exercise_Move(**data)
         db.session.add(new_exercise_move)

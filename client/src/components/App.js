@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import { io } from "socket.io-client"
@@ -18,8 +18,7 @@ import { LogInForm } from "./LogInForm";
 const socket = io("localhost:5555", {
   transports: ["websocket"],
   cors: { origin: "*",},
-  withCredentials: true,
-  // auth : { token : null},
+
 })
 
 const SocketContext = createContext(socket)
@@ -37,8 +36,6 @@ function App() {
   const [refresh, setRefresh] = useState(false)
 
   const [user, setUser] = useState(null)
-
-  const [socketInstance, setSocketInstance] = useState()
 
 
   
