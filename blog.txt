@@ -1,0 +1,15 @@
+
+
+
+topic: React Context
+
+
+- in React, to pass data, you need to go from parent to child
+- for some components, that is ok
+- for other components, you need to drill very fall down, and that can be problematic
+
+
+
+
+
+- 
