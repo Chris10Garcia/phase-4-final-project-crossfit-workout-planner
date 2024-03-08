@@ -13,7 +13,7 @@ import { SocketContext } from "./App";
 function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, plans, coaches, days, clearFormValues }) {
   const [apiError, setApiError] = useState({})
 
-  const {socket} = useContext(SocketContext)
+  const socket = useContext(SocketContext)
 
   const hours = []
   for (let i = 800; i < 1800; i = i + 100){

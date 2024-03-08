@@ -13,7 +13,7 @@ import { SocketContext } from "./App";
 
 function ExerciseMoveForm({ title, formData, setFormData, refresh, setRefresh, clearFormValues }) {
   const history = useHistory()
-  const { socket } = useContext(SocketContext)
+  const socket = useContext(SocketContext)
 
   // for all forms i need to add this
   const [apiError, setApiError] = useState({})  

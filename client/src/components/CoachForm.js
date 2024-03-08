@@ -14,7 +14,7 @@ import { SocketContext } from "./App";
 function CoachForm({ title, formData, setFormData, refresh, setRefresh, clearFormValues }) {
   const history = useHistory()
 
-  const {socket} = useContext(SocketContext)
+  const socket = useContext(SocketContext)
 
   const [apiError, setApiError] = useState({}) 
 

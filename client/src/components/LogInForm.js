@@ -9,7 +9,7 @@ import * as yup from "yup";
 
 export function LogInForm() {
   const { setUser } = useContext(CurrentUserContext);
-  const {socket} = useContext(SocketContext)
+  const socket = useContext(SocketContext)
 
   const logInForm = { username : "", password : ""}
 
@@ -29,7 +29,6 @@ export function LogInForm() {
 
   async function submitLogIn(data, actions){
     socket.emit("login", data, result => {
-      console.log(result)
       if (result.ok){
         setUser(result.user)
 

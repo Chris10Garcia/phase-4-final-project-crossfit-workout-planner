@@ -8,8 +8,13 @@ topic: React Context
 - for some components, that is ok
 - for other components, you need to drill very fall down, and that can be problematic
 
+- context allows you to pass data as far deep as you like without having to drill the data all the way down
+- to do this, you need to use createContext() and useContext()
 
 
+- createContext does exactly what it sounds like, creates a Context object. the value you provide is the default value as a "last resort".
+- wrap the component with contextObject.Provider. This provides the context object to the component and all child components regardless of level
+- value prop: the value all the compoments that are wrapped will read. The value can be any type (object, string, etc)
 
-
-- 
+- useContext is a react hook that lets you read and subscribe to context you created via createContext
+- it searches for the closest context.provider above

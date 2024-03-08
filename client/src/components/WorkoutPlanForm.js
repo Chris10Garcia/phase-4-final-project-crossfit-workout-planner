@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import { SocketContext } from "./App";
 
 function WorkoutPlanForm({ title, formData, setFormData, refresh, setRefresh, moves, clearFormValues }) {
-  const {socket} = useContext(SocketContext)
+  const socket = useContext(SocketContext)
 
   const history = useHistory()
 

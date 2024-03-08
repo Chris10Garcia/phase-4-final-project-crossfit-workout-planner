@@ -14,7 +14,7 @@ import { useHistory } from "react-router-dom";
 function ClassScheduleDetails({ day, sch_classes, setDisplayButton, setFormData, refresh, setRefresh, formData }) {
   const {user} = useContext(CurrentUserContext)
 
-  const {socket} = useContext(SocketContext)
+  const socket = useContext(SocketContext)
 
   const history = useHistory()
   const location = history.location.pathname

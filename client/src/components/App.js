@@ -52,41 +52,12 @@ function App() {
     socket.on("workout_plans",  data => setPlans(data))
     socket.on("exercise_moves",  data => setMoves(data))
 
-    // socket.on("session", data => {
-    //   console.log(data)
-    // })
 
   }, [refresh])
 
-  // useEffect(()=>{
-
-  //   fetch("/checkSession")
-  //     .then( r => {
-  //       if (r.ok){
-  //         r.json().then(data => setUser(data))
-  //       }
-  //     } )
-      
-  //   fetch("/workout_plans")
-  //     .then( r => r.json())
-  //     .then( d => setPlans(d))
-
-  //   fetch("/schedules")
-  //     .then( r => r.json())
-  //     .then( d => setSchClasses(d))
-
-  //   fetch("/coaches")
-  //     .then( r => r.json())
-  //     .then( d => setCoaches(d))
-
-  //   fetch("/exercise_moves")
-  //     .then( r => r.json())
-  //     .then( d => setMoves(d))
-
-  // }, [refresh])
 
   return (
-  <SocketContext.Provider value = {{socket}}>
+  <SocketContext.Provider value = {socket}>
     <CurrentUserContext.Provider value={{user, setUser}}>
       <SegmentUI.Group>
         <Header />

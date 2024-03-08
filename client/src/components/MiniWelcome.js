@@ -28,13 +28,14 @@ function MiniWelcome() {
   //   })
   //     .then(r => {
   //       setUser(null)
-  //       history.push("/")
+        // history.push("/")
   //     })
   //     .catch(err => console.log(err));
   // }
 
   function logout() {
     setUser(null)
+    history.push("/")
   }
 
   return (
