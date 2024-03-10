@@ -57,9 +57,10 @@ workout_plans_schema = Workout_Plan_Schema(many=True)
 @socketio.on("connect")
 def handle_connect():
     print("Client connected!")
-    emit( "*", {"data": f"id: {request.sid} is connected"})
+    emit( "connected", {"data": f"id: {request.sid} is connected"})
 
     refresh_all_data()
+
 
 @socketio.on("new_schedule")
 def handle_new_schedule(data):

@@ -1,36 +1,19 @@
-
-
-
-topic: React Context
-
-
-- in React, to pass data, you need to go from parent to child
-- for some components, that is ok
-- for other components, you need to drill very fall down, and that can be problematic
-
-- context allows you to pass data as far deep as you like without having to drill the data all the way down
-- to do this, you need to use createContext() and useContext()
-
-
-- createContext does exactly what it sounds like, creates a Context object. the value you provide is the default value as a "last resort".
-- wrap the component with contextObject.Provider. This provides the context object to the component and all child components regardless of level
-- value prop: the value all the compoments that are wrapped will read. The value can be any type (object, string, etc)
-
-- useContext is a react hook that lets you read and subscribe to context you created via createContext
-- it searches for the closest context.provider
-
-
-so for our example
-
-
-
-
 topic: socketio for flask
 
 - socketio is an event driven library that allows for realtime, bi-directional commuication between server and clinet.
 - it is mostly used for chat applications but for my project, I used it to replace the HTTP server client communication.
+- I decided to write my phase 5 project blog on how to impliment socket io with my technology stack
 
-- my project uses react on the frontend and python, flask, sqlalchemy and marshamallow on the backend
+- a few key points
+-   i already have a functioning full stack app
+- my project technology stack uses
+-   uses react on the frontend
+-   python, flask, sqlalchemy with sqlite, and marshamallow on the backend
+
+
+my goal with using socketio was to replce the communication between the front end and back end but keep as much of my project logic intact and the same. This means replacing all fetch requests (GET, POST, PATCH, and DELETE) with socketio connections but still keep how my project processes that data on the front end and back end.
+
+setting up socketio
 
 backend
 - Flask was a requirement for my phase 5 project so i used the flask-socketio package. 
@@ -45,12 +28,14 @@ backend
 - you need to insntiate a socketio object, pass your app into it, and set the cors settings
 - and instead of running "app.run(port=5555, debug=True)" you instead run "socketio.run(app, debug=True, port=5555)"
 
+
+# config file
 from flask import Flask
 from flask_socketio import SocketIO
 from flask_cors import CORS
 
 
-# Instantiate app, set attributes
+# Instantiate app
 app = Flask(__name__)
 
 # Instantiate CORS
@@ -59,17 +44,269 @@ CORS(app, resources={r"/*":{"origins":"*"}})
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 
+# app file
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=5555)
 
 
 now you have a socketio server running on the backend
 
-lets write code to have the server connect to the front end
+Front end
+lets set up the front end
+install the package, npm install socket.io-client
+
+now to establish your front end connection, you instantiate a socketio object
+
+const socket = io("localhost:5555", {
+  transports: ["websocket"],
+  cors: { origin: "*",},
+
+})
+
+there are some settings to pass, 
+- the first is the domain to connect to. We're passing our local host backend address here 
+- second, we're passing a dictionary of settings
+-   socketio uses both websockets and http, where the latter is a backup. to ensure my project uses websockets, i configured it to only establish that connection. this is optional / dependant on what your project goals are
+-   cors: setting the cors settings
+
+note that with each instance of the socket object, a new connection is established. I wanted to have one connection so i established this socket in the App component as a global variable. I then used react context to pass this object directly to child components that recieve and send data.
+
+
+start your react app and the connection is now establish.
+
+
+to ensure and test that your connection works, lets include the following:
+
+
+on the backend app.py file:
+
 @socketio.on("connect")
 def handle_connect():
     print("Client connected!")
-    emit( "*", {"data": f"id: {request.sid} is connected"})
+    emit( "connected", {"data": f"id: {request.sid} is connected"})
 
-socketio uses decorators and events to send and transimit data
+socketio for python and flask uses decorators to register events
+
+one special event is called "connect". so calling socketio.on("connect") event dectorator wrapped around a function will call that function every time a connection is established.
+
+here, everytime we connect on the backend, we print out on our terminal "client connected"
+next we emit data back
+
+emit is a socketio function that sends data to the name of the room you are sending that data to. the next argument is the data you're sending. socketio JSOINIFY your data automatically so you do not need to call that function. 
+
+so here, we are sending data to the front end to a room called "connected". Please note, do not use special key word events such as connect or disconnect as it will cause bugs to occur.
+
+on the front end,
+
+    socket.on("connected", (data)=>{
+        console.log(data)
+      })
+
+the socket.on is similar to the backend where the first arugment is the name of the room. the second argument is a callback function, the data is passed and you can perform whichever action you want. in our case, we recieve the socket id and it gets printed out in the console log. This will indicate to us that the connection was established
+
+Converting my application
+
+In my app, a fetch get request is performed within the useeffect hook to get all of my apps data from the backend. I replaced these fetch requests:
+
+original: 
+ fetch("/workout_plans")
+      .then( r => r.json())
+      .then( d => setPlans(d))
+
+    fetch("/schedules")
+      .then( r => r.json())
+      .then( d => setSchClasses(d))
+
+    fetch("/coaches")
+      .then( r => r.json())
+      .then( d => setCoaches(d))
+
+    fetch("/exercise_moves")
+      .then( r => r.json())
+      .then( d => setMoves(d))
+
+to: 
+    socket.on("coaches",  data => setCoaches(data))
+    socket.on("schedules",  data => setSchClasses(data))
+    socket.on("workout_plans",  data => setPlans(data))
+    socket.on("exercise_moves",  data => setMoves(data))
+
+the socketio is listening to these four rooms for data.
+
+on the back end. i created a function that pulls all of my data from the DB. note, the objects from my DB needs to be serialized. I used flask marshamallow and marshamallow to serailize these DB records and include or exclude specific relationships and fields. if your data from the backend doesn't have complex relationships that require some type of serialization, you may pass them directly.
+
+the data is then emitted to the rooms i specified.
+
+def refresh_all_data():
+    coaches = Coach.query.all()
+    workout_plans = Workout_Plan.query.all()
+    exercise_moves = Exercise_Move.query.all()
+    schedules = Schedule.query.all()
+
+    emit("coaches", coaches_schema.dump(coaches))
+    emit("workout_plans", workout_plans_schema.dump(workout_plans))
+    emit("exercise_moves", exercise_moves_schema.dump(exercise_moves))
+    emit("schedules", schedules_schema.dump(schedules))
+
+
+so when the front end and back end connects, within the on "connect" event, i call on this refresh function. all of the records are pulled, the data is serialized, and it is then emitted to these rooms.
+
+on the front end, these rooms are being listened to, and when the data is recieved, the object data is passed to the state variables established, updating the front end's various views. Since these rooms are within the useEffect, the app re-renders again but not infinately. Everything else on my App compoment stays the same.
+
+
+Next, all components with the sufix Form utilize fetch requests for patching, or posting data. Additinoally within the ClassScheduleDetail component for fetching delete requests. These compoments logic are dependant on acknolwedgements, and socketio allows you to provide this when data is emitted.
+
+Utilizing the CoachForm as an example, previousily when a form data is submitted, there were two routes: if the form was submitting a new object or updating an existing object. and within each of those two routes, if the response was ok, to perform various actions involving refreshing the component and setting the page to show the object or to display the error from the backend as to why it didn't work.
+
+previousily:
+  function submitData(values){
+
+    if (values.id === ""){
+      fetch("/coaches", {
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify(values)
+      })
+      .then( r => {
+        if (r.ok){
+          r.json().then(data => {
+            setRefresh(!refresh)
+            history.push(`/coaches/${data.id}`)
+            setFormData(data)
+            setApiError({})
+          })
+        } else {
+          r.json().then( err => {
+            setApiError(err)
+          })
+        }
+      })
+
+
+    } else {
+      fetch(`${values.id}`, {
+        method : "PATCH",
+        headers : { "Content-Type" : "application/json"},
+        body : JSON.stringify(values)
+      })
+      .then( r => {
+        if (r.ok){
+          r.json().then(data => {
+            setRefresh(!refresh)
+            setApiError({})
+          })
+        } else {
+          r.json().then(err => {
+            setApiError(err)})
+        }
+      })
+    }
+  }
+
+All of my components that processed data like this all follow the same logic pattern. I replaced these fetch requests with the following on the front end:
+
+function submitData(values){
+
+    if (values.id === ""){
+      socket.emit("new_coach", values, result => {
+        if (result.ok){
+          setRefresh(!refresh)
+          history.push(`/coaches/${result.data.id}`)
+          setFormData(result.data)
+          setApiError({})
+        } else {
+          setApiError(result.errors)
+        }
+
+      })
+    } else {
+        socket.emit("update_coach", values, result => {
+        if (result.ok){
+          setRefresh(!refresh)
+          history.push(`/coaches/${result.data.id}`)
+          setFormData(result.data)
+          setApiError({})
+        } else {
+          setApiError(result.errors)
+        }
+      })
+    }
+}
+
+Above, the socket.emit function has three arguments: the name of the room, the data we are transmitting, and an optional acknowledgement. The acknolwedgement we have to design and set up on the backend so that my app maintains the same code logic as before.
+
+on the backend, i originally had API routes to handle get / post requests and get / patch / delete requests. Using socketio, i got rid of the following:
+
+class CoachesIndex(Resource):
+    def get(self):
+        coaches = Coach.query.all()
+        response = make_response(
+            coaches_schema.dump(coaches),
+            200
+        )
+        return response
+    
+    def post(self):
+        ch_data = request.get_json()
+
+        del ch_data["id"]
+
+        try:
+            new_coach = Coach(**ch_data)
+            db.session.add(new_coach)
+            db.session.commit()
+
+        except Exception as e:
+            error_message = str(e)
+            return {"errors" :  error_message }, 400
+        
+        response = make_response(
+            coach_schema.dump(new_coach),
+            201
+        )
+
+        return response
+
+
+i register events that correspond to the front end's emitting response, one for new objects being created, and another for objects being updated. for the coach path i created the following: 
+
+
+@socketio.on("new_coach")
+def handle_new_coach(data):
+    result = {
+            "data" : None,
+            "errors" : {},
+            "ok" : False
+                }
+    
+    del data["id"]
+
+    try:
+        new_coach = Coach(**data)
+        db.session.add(new_coach)
+        db.session.commit()
+    except Exception as e:
+        error_message = str(e)
+        result["errors"] = error_message
+        return result
+    
+    result["ok"] = True
+    result["data"] = coach_schema.dump(new_coach)
+    refresh_all_data()
+    return result
+
+
+the data from the front end can be recieved as a parameter within your function where as before the data is recieved from the request object and pulled using get_json() function. there are some other changes as well:
+- i create a result dictionary. here i mimic some of the response attributes the front end is dependant on. 
+- if creating and submitting the data was successful to the DB, i call on that refresh_all_data function. when it runs, it emits data to the rooms i specified however nothing is done yet... lastly i return the result dictionary.
+- On the front end, the compoment reads if the response is ok. if so then it functions similarly to previous way where  i cause a change on the depdency array that the useeffect utilizes (refresh variable). this causes the code within it to run, allowing the rooms to be read, and for my app to update.
+
+
+
+Thank you for reading my blog. While not the most common use of socketio, impliment this technology was fun and interesting. I hope others who are on this journey can utilize some of the things i learned
+
+
+
+
+
 

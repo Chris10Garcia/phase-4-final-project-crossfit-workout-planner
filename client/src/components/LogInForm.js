@@ -27,7 +27,7 @@ export function LogInForm() {
   });
 
 
-  async function submitLogIn(data, actions){
+  function submitLogIn(data, actions){
     socket.emit("login", data, result => {
       if (result.ok){
         setUser(result.user)

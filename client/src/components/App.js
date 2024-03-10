@@ -37,15 +37,14 @@ function App() {
 
   const [user, setUser] = useState(null)
 
-
+  socket.on("connected", (data)=>{
+    console.log(data)
+  })
   
   useEffect(()=>{
     
     // setSocketInstance(socket)
     
-    // socket.on("connect", (data)=>{
-    //     console.log(data)
-    //   })
 
     socket.on("coaches",  data => setCoaches(data))
     socket.on("schedules",  data => setSchClasses(data))
