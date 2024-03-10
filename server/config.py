@@ -3,7 +3,6 @@ from flask_socketio import SocketIO
 
 from flask_cors import CORS
 from flask_migrate import Migrate
-from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_marshmallow import Marshmallow
@@ -24,10 +23,8 @@ metadata = MetaData(naming_convention={
 db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
+ma = Marshmallow(app)
 
-# Instantiate REST API
-ma = Marshmallow(app)   ### REMOVE EVENTUALLY
-api = Api(app)          ### REMOVE EVENTUALLY
 
 # Instantiate Encryption
 bcrypt = Bcrypt(app)
@@ -35,9 +32,6 @@ bcrypt = Bcrypt(app)
 # Instantiate CORS
 CORS(app, resources={r"/*":{"origins":"*"}})
 
-# socketio = SocketIO(app, cors_allowed_origins="*")
-socketio = SocketIO(app, cors_allowed_origins="*", manage_session=False)
+socketio = SocketIO(app, cors_allowed_origins="*")
+# socketio = SocketIO(app, cors_allowed_origins="*", manage_session=False)
 
-# CORS(app)
-
-# socketio = SocketIO(app)

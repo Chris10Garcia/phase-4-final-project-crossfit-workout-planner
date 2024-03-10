@@ -7,7 +7,7 @@ from marshmallow import fields
 from werkzeug.exceptions import InternalServerError
 from sqlalchemy import exc
 
-from config import app, db, api, ma, socketio
+from config import app, db, ma, socketio
 from models import Coach, Workout_Plan, Exercise_Move, Schedule
 
 

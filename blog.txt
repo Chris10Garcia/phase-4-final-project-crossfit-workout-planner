@@ -17,4 +17,59 @@ topic: React Context
 - value prop: the value all the compoments that are wrapped will read. The value can be any type (object, string, etc)
 
 - useContext is a react hook that lets you read and subscribe to context you created via createContext
-- it searches for the closest context.provider above
+- it searches for the closest context.provider
+
+
+so for our example
+
+
+
+
+topic: socketio for flask
+
+- socketio is an event driven library that allows for realtime, bi-directional commuication between server and clinet.
+- it is mostly used for chat applications but for my project, I used it to replace the HTTP server client communication.
+
+- my project uses react on the frontend and python, flask, sqlalchemy and marshamallow on the backend
+
+backend
+- Flask was a requirement for my phase 5 project so i used the flask-socketio package. 
+- I am using a python virtual shell to install my packages, so i ran the following command in terminal
+-   pyenv install flask-socketio
+- however, you may also run
+-   pip install flask-socketio
+
+- on the server side, you instantiate your flask app and configure it as you normally do, but with flask socketio you need to do the following additional things
+
+- you need to edit your CORS and set your resources to " "
+- you need to insntiate a socketio object, pass your app into it, and set the cors settings
+- and instead of running "app.run(port=5555, debug=True)" you instead run "socketio.run(app, debug=True, port=5555)"
+
+from flask import Flask
+from flask_socketio import SocketIO
+from flask_cors import CORS
+
+
+# Instantiate app, set attributes
+app = Flask(__name__)
+
+# Instantiate CORS
+CORS(app, resources={r"/*":{"origins":"*"}})
+
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+
+if __name__ == '__main__':
+    socketio.run(app, debug=True, port=5555)
+
+
+now you have a socketio server running on the backend
+
+lets write code to have the server connect to the front end
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected!")
+    emit( "*", {"data": f"id: {request.sid} is connected"})
+
+socketio uses decorators and events to send and transimit data
+
