@@ -59,7 +59,7 @@ def handle_connect():
     print("Client connected!")
     emit( "connected", {"data": f"id: {request.sid} is connected"})
 
-    refresh_all_data()
+    # refresh_all_data()
 
 
 @socketio.on("new_schedule")
@@ -96,7 +96,7 @@ def handle_new_schedule(data):
     result["data"] = schedule_schema.dump(new_schedule)
     result["ok"] = True
 
-    refresh_all_data()
+    # # refresh_all_data()
     return result
 
 @socketio.on("delete_schedule")
@@ -115,7 +115,7 @@ def handle_delete_schedule(data):
 
     result["ok"] = True
 
-    refresh_all_data()
+    # # refresh_all_data()
     return result
         
 
@@ -156,7 +156,6 @@ def handle_update_schedule(data):
     result["data"] = schedule_schema.dump(scheduledclass)
     result["ok"] = True
 
-    refresh_all_data()
     return result
 
 
@@ -191,7 +190,7 @@ def handle_update_workout_plan(data):
     result["data"] = workout_plan_schema.dump(workout_plan)
     result["ok"] = True
     
-    refresh_all_data()
+    # # refresh_all_data()
     return result
 
 @socketio.on("new_workout_plan")
@@ -225,7 +224,7 @@ def handle_new_workout_plan(data):
     result["data"] = workout_plan_schema.dump(new_workout_plan)
     result["ok"] = True
 
-    refresh_all_data()
+    # # refresh_all_data()
     return result
 
 
@@ -252,7 +251,7 @@ def handle_update_exercise_move(data):
 
     result["data"] = exercise_move_schema.dump(exercise_move)
     result["ok"] = True
-    refresh_all_data()
+    # # refresh_all_data()
     return result
 
 @socketio.on("new_exercise_moves")
@@ -278,7 +277,7 @@ def handle_new_exercise_moves(data):
 
     result["ok"] = True
     result["data"] = exercise_move_schema.dump(new_exercise_move)
-    refresh_all_data()
+    # # refresh_all_data()
     return result
 
 
@@ -305,7 +304,7 @@ def handle_update_coach(data):
 
     result["data"] = coach_schema.dump(coach)
     result["ok"] = True
-    refresh_all_data()
+    # # refresh_all_data()
     return result
 
 @socketio.on("new_coach")
@@ -329,7 +328,7 @@ def handle_new_coach(data):
     
     result["ok"] = True
     result["data"] = coach_schema.dump(new_coach)
-    refresh_all_data()
+    # # refresh_all_data()
     return result
 
 @socketio.on("logout")
@@ -382,7 +381,21 @@ def handle_login(data):
     return result
     
 
-def refresh_all_data():
+# def refresh_all_data():
+#     coaches = Coach.query.all()
+#     workout_plans = Workout_Plan.query.all()
+#     exercise_moves = Exercise_Move.query.all()
+#     schedules = Schedule.query.all()
+
+#     emit("coaches", coaches_schema.dump(coaches))
+#     emit("workout_plans", workout_plans_schema.dump(workout_plans))
+#     emit("exercise_moves", exercise_moves_schema.dump(exercise_moves))
+#     emit("schedules", schedules_schema.dump(schedules))
+
+
+# this solved the issue!
+@socketio.on("refresh")
+def refresh():
     coaches = Coach.query.all()
     workout_plans = Workout_Plan.query.all()
     exercise_moves = Exercise_Move.query.all()

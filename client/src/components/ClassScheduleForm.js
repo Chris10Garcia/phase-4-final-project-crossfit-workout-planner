@@ -46,8 +46,8 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     if (data.id === ""){
       socket.emit("new_schedule", data, result => {
         if (result.ok) {
-          setRefresh(!refresh)
           setFormData(result.data)
+          setRefresh(!refresh)
           setApiError({})
         } else {
           setApiError(result.errors)
@@ -57,8 +57,8 @@ function ClassScheduleForm({ title, formData, setFormData, refresh, setRefresh, 
     } else {
       socket.emit("update_schedule", data, result => {
         if (result.ok) {
-          setRefresh(!refresh)
           setFormData(result.data)
+          setRefresh(!refresh)
           setApiError({})
         } else {
           setApiError(result.errors)

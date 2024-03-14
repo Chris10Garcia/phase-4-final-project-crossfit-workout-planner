@@ -35,21 +35,32 @@ function App() {
   const [plans, setPlans] = useState([])
   const [refresh, setRefresh] = useState(false)
 
+  // for testing purposes
+  // const [user, setUser] = useState(
+  //   {id: 1, name: 'Chris Garcia', age: 33, picture: 'https://avatars.githubusercontent.com/u/10578405?v=4', username: 'chrisgarcia'}
+  // )
+
+
   const [user, setUser] = useState(null)
 
   socket.on("connected", (data)=>{
     console.log(data)
   })
   
+
   useEffect(()=>{
     
     // setSocketInstance(socket)
-    
 
-    socket.on("coaches",  data => setCoaches(data))
-    socket.on("schedules",  data => setSchClasses(data))
-    socket.on("workout_plans",  data => setPlans(data))
-    socket.on("exercise_moves",  data => setMoves(data))
+    // this solves the issue
+    socket.emit("refresh", ()=>{
+      setRefresh(!refresh)
+    })
+
+    socket.on("coaches",  data => setCoaches([...data]))
+    socket.on("schedules",  data => setSchClasses([...data]))
+    socket.on("workout_plans",  data => setPlans([...data]))
+    socket.on("exercise_moves",  data => setMoves([...data]))
 
 
   }, [refresh])
