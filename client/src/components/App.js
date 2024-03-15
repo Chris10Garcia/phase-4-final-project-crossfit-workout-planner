@@ -54,13 +54,14 @@ function App() {
 
     // this solves the issue
     socket.emit("refresh", ()=>{
+      socket.on("coaches",  data => setCoaches([...data]))
+      socket.on("schedules",  data => setSchClasses([...data]))
+      socket.on("workout_plans",  data => setPlans([...data]))
+      socket.on("exercise_moves",  data => setMoves([...data]))
       setRefresh(!refresh)
     })
 
-    socket.on("coaches",  data => setCoaches([...data]))
-    socket.on("schedules",  data => setSchClasses([...data]))
-    socket.on("workout_plans",  data => setPlans([...data]))
-    socket.on("exercise_moves",  data => setMoves([...data]))
+
 
 
   }, [refresh])
